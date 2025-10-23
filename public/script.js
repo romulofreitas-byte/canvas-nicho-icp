@@ -635,14 +635,15 @@ class CanvasAutomatizado {
         };
         
         this.precos = {
-            'trafego-pago': { micro: 1500, pequeno: 3000, medio: 6000, grande: 12000 },
-            'midias-sociais': { micro: 800, pequeno: 1500, medio: 3000, grande: 6000 },
-            'desenvolvimento-sites': { micro: 2000, pequeno: 4000, medio: 8000, grande: 15000 },
-            'automacao-whatsapp': { micro: 1200, pequeno: 2500, medio: 5000, grande: 10000 },
-            'mapeamento-processo': { micro: 1000, pequeno: 2000, medio: 4000, grande: 8000 },
-            'estruturacao-atendimento': { micro: 1500, pequeno: 3000, medio: 6000, grande: 12000 },
-            'estrategia-marketing': { micro: 2500, pequeno: 5000, medio: 10000, grande: 20000 },
-            'consultoria': { micro: 500, pequeno: 1000, medio: 2500, grande: 5000 }
+            'trafego-pago': { micro: 400, pequeno: 800, medio: 2000, grande: 4000 },
+            'midias-sociais': { micro: 300, pequeno: 600, medio: 1500, grande: 3000 },
+            'desenvolvimento-sites': { micro: 800, pequeno: 1500, medio: 3500, grande: 7000 },
+            'automacao-whatsapp': { micro: 250, pequeno: 500, medio: 1200, grande: 2500 },
+            'mapeamento-processo': { micro: 200, pequeno: 400, medio: 1000, grande: 2000 },
+            'estruturacao-atendimento': { micro: 300, pequeno: 600, medio: 1500, grande: 3000 },
+            'estrategia-marketing': { micro: 500, pequeno: 1000, medio: 2500, grande: 5000 },
+            'consultoria': { micro: 300, pequeno: 600, medio: 1500, grande: 3000 },
+            'google-meu-negocio': { micro: 200, pequeno: 400, medio: 1000, grande: 2000 }
         };
         
         this.init();
@@ -655,15 +656,17 @@ class CanvasAutomatizado {
     }
     
     setupEventListeners() {
-        // Nichos
-        document.querySelectorAll('input[name="nichos"]').forEach(checkbox => {
-            checkbox.addEventListener('change', () => this.updateNichos());
-        });
+        // Nichos - Select múltiplo
+        const nichoSelect = document.getElementById('nichoSelect');
+        if (nichoSelect) {
+            nichoSelect.addEventListener('change', () => this.updateNichos());
+        }
         
-        // Dores
-        document.querySelectorAll('input[name="dores"]').forEach(checkbox => {
-            checkbox.addEventListener('change', () => this.updateDores());
-        });
+        // Dores - Select múltiplo
+        const doresSelect = document.getElementById('doresSelect');
+        if (doresSelect) {
+            doresSelect.addEventListener('change', () => this.updateDores());
+        }
         
         // Canais
         document.querySelectorAll('input[name="canais"]').forEach(checkbox => {
@@ -718,18 +721,32 @@ class CanvasAutomatizado {
     
     updateNichos() {
         const selecionados = [];
-        const checkboxes = document.querySelectorAll('input[name="nichos"]:checked');
+        const select = document.getElementById('nichoSelect');
+        const customDiv = document.querySelector('.nicho-custom');
         
-        checkboxes.forEach(checkbox => {
-            if (checkbox.value === 'outro') {
-                const custom = document.getElementById('nichoCustom').value.trim();
-                if (custom) {
-                    selecionados.push(custom);
-                }
-            } else {
-                selecionados.push(this.nichos[checkbox.value].nome);
+        if (select) {
+            const opcoesSelecionadas = Array.from(select.selectedOptions);
+            const temOutro = opcoesSelecionadas.some(option => option.value === 'outro');
+            
+            // Mostrar/ocultar campo custom
+            if (customDiv) {
+                customDiv.style.display = temOutro ? 'block' : 'none';
             }
-        });
+            
+            opcoesSelecionadas.forEach(option => {
+                if (option.value === 'outro') {
+                    const custom = document.getElementById('nichoCustom').value.trim();
+                    if (custom) {
+                        selecionados.push(custom);
+                    }
+                } else {
+                    const nicho = this.nichos[option.value];
+                    if (nicho) {
+                        selecionados.push(`${nicho.icon} ${nicho.nome}`);
+                    }
+                }
+            });
+        }
         
         this.updateLista('listaNichos', selecionados, 'nicho-selecionado');
         this.updateResumo();
@@ -738,18 +755,32 @@ class CanvasAutomatizado {
     
     updateDores() {
         const selecionadas = [];
-        const checkboxes = document.querySelectorAll('input[name="dores"]:checked');
+        const select = document.getElementById('doresSelect');
+        const customDiv = document.querySelector('.dor-custom');
         
-        checkboxes.forEach(checkbox => {
-            if (checkbox.value === 'outra') {
-                const custom = document.getElementById('dorCustom').value.trim();
-                if (custom) {
-                    selecionadas.push(custom);
-                }
-            } else {
-                selecionadas.push(this.dores[checkbox.value]);
+        if (select) {
+            const opcoesSelecionadas = Array.from(select.selectedOptions);
+            const temOutra = opcoesSelecionadas.some(option => option.value === 'outra');
+            
+            // Mostrar/ocultar campo custom
+            if (customDiv) {
+                customDiv.style.display = temOutra ? 'block' : 'none';
             }
-        });
+            
+            opcoesSelecionadas.forEach(option => {
+                if (option.value === 'outra') {
+                    const custom = document.getElementById('dorCustom').value.trim();
+                    if (custom) {
+                        selecionadas.push(custom);
+                    }
+                } else {
+                    const dor = this.dores[option.value];
+                    if (dor) {
+                        selecionadas.push(`${dor.icon} ${dor.nome}`);
+                    }
+                }
+            });
+        }
         
         this.updateLista('listaDores', selecionadas, 'dor-selecionada');
         this.updateResumo();
@@ -865,16 +896,16 @@ class CanvasAutomatizado {
         let faixa, estimativa;
         if (score <= 8) {
             faixa = 'Micro';
-            estimativa = 'R$ 2k - R$ 8k/mês';
+            estimativa = 'R$ 5k/mês (3-5% = R$ 150-250 em marketing)';
         } else if (score <= 12) {
             faixa = 'Pequeno';
-            estimativa = 'R$ 8k - R$ 30k/mês';
+            estimativa = 'R$ 25k/mês (3-5% = R$ 750-1.250)';
         } else if (score <= 16) {
             faixa = 'Médio';
-            estimativa = 'R$ 30k - R$ 100k/mês';
+            estimativa = 'R$ 125k/mês (3-5% = R$ 3.750-6.250)';
         } else {
             faixa = 'Grande';
-            estimativa = 'R$ 100k+/mês';
+            estimativa = 'R$ 300k+/mês (3-5% = R$ 9k-15k)';
         }
         
         document.getElementById('capacidadeEstimada').innerHTML = `

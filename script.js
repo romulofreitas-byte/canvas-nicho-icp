@@ -670,6 +670,7 @@ class CanvasAutomatizado {
     }
     
     updateServicos() {
+        console.log('🔧 updateServicos: Iniciando...');
         const checkboxes = document.querySelectorAll('input[name="servicos"]:checked');
         const selecionados = [];
         
@@ -685,11 +686,15 @@ class CanvasAutomatizado {
                 texto += ` (${detalhe})`;
             }
             selecionados.push(texto);
+            console.log(`🔧 updateServicos: Serviço adicionado: ${texto}`);
         });
         
         this.servicosSelecionados = selecionados;
+        console.log('🔧 updateServicos: Serviços selecionados:', selecionados);
+        
         this.updateResumo();
         this.calcularPrecificacao();
+        console.log('✅ updateServicos: Concluído');
     }
     
     updateOutrosServicos() {
@@ -727,14 +732,22 @@ class CanvasAutomatizado {
     }
     
     calcularCapacidadeEstrutura() {
+        console.log('🔧 calcularCapacidadeEstrutura: Iniciando...');
         const estruturaFisica = document.querySelector('input[name="estruturaFisica"]:checked')?.value;
         const tamanhoEquipe = document.querySelector('input[name="tamanhoEquipe"]:checked')?.value;
         const volumeClientes = document.querySelector('input[name="volumeClientes"]:checked')?.value;
         const ticketMedio = document.querySelector('input[name="ticketMedio"]:checked')?.value;
         const investeMarketing = document.querySelector('input[name="investeMarketing"]:checked')?.value;
         
+        console.log('🔧 calcularCapacidadeEstrutura: Valores coletados:', {
+            estruturaFisica, tamanhoEquipe, volumeClientes, ticketMedio, investeMarketing
+        });
+        
         if (!estruturaFisica || !tamanhoEquipe || !volumeClientes || !ticketMedio || !investeMarketing) {
-            document.getElementById('capacidadeEstimada').innerHTML = '<span class="capacidade-texto">Responda todas as perguntas</span>';
+            const elemento = document.getElementById('capacidadeEstimada');
+            if (elemento) {
+                elemento.innerHTML = '<span class="capacidade-texto">Responda todas as perguntas</span>';
+            }
             return;
         }
         
@@ -761,30 +774,45 @@ class CanvasAutomatizado {
         const investScores = { '0': 1, '500': 2, '500-2000': 3, '2000-5000': 4, '5000+': 5 };
         score += investScores[investeMarketing] || 1;
         
+        console.log('🔧 calcularCapacidadeEstrutura: Score calculado:', score);
+        
         // Determinar faixa baseada no score
-        let faixa, estimativa;
+        let faixa, estimativa, capacidadeKey;
         if (score <= 8) {
             faixa = 'Micro';
             estimativa = 'R$ 5k/mês (3-5% = R$ 150-250 em marketing)';
+            capacidadeKey = 'micro';
         } else if (score <= 12) {
             faixa = 'Pequeno';
             estimativa = 'R$ 25k/mês (3-5% = R$ 750-1.250)';
+            capacidadeKey = 'pequeno';
         } else if (score <= 16) {
             faixa = 'Médio';
             estimativa = 'R$ 125k/mês (3-5% = R$ 3.750-6.250)';
+            capacidadeKey = 'medio';
         } else {
             faixa = 'Grande';
             estimativa = 'R$ 300k+/mês (3-5% = R$ 9k-15k)';
+            capacidadeKey = 'grande';
         }
         
-        document.getElementById('capacidadeEstimada').innerHTML = `
+        const elemento = document.getElementById('capacidadeEstimada');
+        if (elemento) {
+            elemento.innerHTML = `
             <span class="capacidade-texto">${faixa}</span>
             <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
         `;
+        }
         
-        // Não atualizar elemento inexistente
+        // Atualizar capacidade financeira detectada na precificação
+        const capacidadeDetectada = document.getElementById('capacidadeDetectada');
+        if (capacidadeDetectada) {
+            capacidadeDetectada.innerHTML = `<span class="capacidade-texto">${faixa}</span>`;
+        }
         
-        this.capacidadeFinanceira = faixa.toLowerCase();
+        this.capacidadeFinanceira = capacidadeKey;
+        console.log('✅ calcularCapacidadeEstrutura: Capacidade definida como:', capacidadeKey);
+        
         this.updateResumo();
         this.calcularPrecificacao();
     }
@@ -799,10 +827,16 @@ class CanvasAutomatizado {
     }
     
     calcularPrecificacao() {
-        if (!this.capacidadeFinanceira) return;
+        console.log('🔧 calcularPrecificacao: Iniciando...');
+        console.log('🔧 calcularPrecificacao: Capacidade financeira:', this.capacidadeFinanceira);
+        
+        if (!this.capacidadeFinanceira) {
+            console.log('⚠️ calcularPrecificacao: Capacidade financeira não definida');
+            return;
+        }
         
         const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(cb => cb.value);
-        const outrosSelecionados = Array.from(document.querySelectorAll('input[name="outrosServicos"]:checked')).map(cb => cb.value);
+        console.log('🔧 calcularPrecificacao: Serviços selecionados:', servicosSelecionados);
         
         let total = 0;
         const servicosIncluidos = [];
@@ -817,41 +851,34 @@ class CanvasAutomatizado {
                 preco: preco,
                 icon: servicoInfo ? servicoInfo.icon : '📦'
             });
-        });
-        
-        // Calcular outros serviços
-        outrosSelecionados.forEach(servico => {
-            const preco = this.precos[servico] ? this.precos[servico][this.capacidadeFinanceira] : 0;
-            total += preco;
-            const servicoInfo = this.outrosServicos[servico];
-            servicosIncluidos.push({
-                nome: servicoInfo ? servicoInfo.nome : servico,
-                preco: preco,
-                icon: servicoInfo ? servicoInfo.icon : '📦'
-            });
+            console.log(`🔧 calcularPrecificacao: ${servico} = R$ ${preco}`);
         });
         
         // Aplicar multiplicador do nicho
-        const nichosSelecionados = Array.from(document.querySelectorAll('input[name="nichos"]:checked')).map(cb => cb.value);
+        const nichoSelecionado = document.querySelector('input[name="nicho"]:checked');
         let multiplicadorNicho = 1;
         
-        nichosSelecionados.forEach(nicho => {
-            if (nicho !== 'outro' && this.nichos[nicho]) {
-                multiplicadorNicho = Math.max(multiplicadorNicho, this.nichos[nicho].multiplicador);
-            }
-        });
+        if (nichoSelecionado && nichoSelecionado.value !== 'outro' && this.nichos[nichoSelecionado.value]) {
+            multiplicadorNicho = this.nichos[nichoSelecionado.value].multiplicador;
+            console.log(`🔧 calcularPrecificacao: Multiplicador do nicho ${nichoSelecionado.value}: ${multiplicadorNicho}`);
+        }
         
         total *= multiplicadorNicho;
+        console.log(`🔧 calcularPrecificacao: Total calculado: R$ ${total}`);
         
         // Calcular jornadas
         const enxuta = Math.round(total * 0.6);
         const padrao = Math.round(total * 0.8);
         const completa = Math.round(total);
         
+        console.log(`🔧 calcularPrecificacao: Jornadas - Enxuta: R$ ${enxuta}, Padrão: R$ ${padrao}, Completa: R$ ${completa}`);
+        
         // Atualizar interface
         this.atualizarResultadoPrecificacao(servicosIncluidos, total);
         this.atualizarJornadas(enxuta, padrao, completa);
         this.atualizarResumoJornadas(enxuta, padrao, completa);
+        
+        console.log('✅ calcularPrecificacao: Concluído');
     }
     
     atualizarResultadoPrecificacao(servicosIncluidos, total) {
@@ -949,11 +976,21 @@ class CanvasAutomatizado {
         }
         
         // Capacidade
-        const capacidade = this.capacidadeFinanceira || 'Não definida';
+        let capacidadeTexto = 'Não definida';
+        if (this.capacidadeFinanceira) {
+            const capacidadeMap = {
+                'micro': 'Micro (até R$ 5k/mês)',
+                'pequeno': 'Pequeno (R$ 5k-25k/mês)',
+                'medio': 'Médio (R$ 25k-125k/mês)',
+                'grande': 'Grande (acima R$ 125k/mês)'
+            };
+            capacidadeTexto = capacidadeMap[this.capacidadeFinanceira] || this.capacidadeFinanceira;
+        }
+        
         const elementoCapacidade = document.getElementById('resumoCapacidade');
         if (elementoCapacidade) {
-            elementoCapacidade.textContent = capacidade;
-            console.log('✅ updateResumo: Capacidade atualizada:', capacidade);
+            elementoCapacidade.textContent = capacidadeTexto;
+            console.log('✅ updateResumo: Capacidade atualizada:', capacidadeTexto);
         } else {
             console.error('❌ updateResumo: Elemento resumoCapacidade não encontrado');
         }

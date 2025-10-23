@@ -25,7 +25,7 @@ class LeadCapture {
         try {
             // Usar as configurações do config.js
             if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-                this.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+                this.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
                 console.log('✅ Supabase inicializado com sucesso');
             } else {
                 console.warn('⚠️ Configurações do Supabase não encontradas');
@@ -157,11 +157,6 @@ class LeadCapture {
     
     hideModal() {
         this.modal.classList.add('hidden');
-    }
-    
-    logout() {
-        localStorage.removeItem('canvas-auth');
-        this.showModal();
     }
 }
 

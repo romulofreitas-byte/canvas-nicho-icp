@@ -789,40 +789,6 @@ class CanvasAutomatizado {
                 customDiv.style.display = 'none';
             }
         }
-    updateDoresResumo() {
-        const selecionadas = document.querySelectorAll('input[name="dores"]:checked');
-        const customDiv = document.querySelector('.dor-custom');
-        
-        const temOutra = Array.from(selecionadas).some(cb => cb.value === 'outra');
-        
-        // Mostrar/ocultar campo custom
-        if (customDiv) {
-            customDiv.style.display = temOutra ? 'block' : 'none';
-        }
-        
-        const textos = [];
-        selecionadas.forEach(checkbox => {
-            if (checkbox.value === 'outra') {
-                const custom = document.getElementById('dorCustom').value.trim();
-                if (custom) {
-                    textos.push(custom);
-                }
-            } else {
-                const dor = this.dores[checkbox.value];
-                textos.push(dor ? `${dor.icon} ${dor.nome}` : checkbox.nextElementSibling.textContent);
-            }
-        });
-        
-        const container = document.getElementById('doresSelecionadas');
-        if (textos.length > 0) {
-            container.innerHTML = textos.map(texto => `<span class="tag">${texto}</span>`).join(' ');
-        } else {
-            container.textContent = 'Selecione as dores acima';
-        }
-        
-        this.updateResumo();
-        this.calcularPrecificacao();
-    }
     
     updateDores() {
         const selecionadas = [];
@@ -1129,6 +1095,41 @@ class CanvasAutomatizado {
         const servicos = this.servicosSelecionados || [];
         const servicosTexto = servicos.length > 0 ? servicos.join(', ') : 'Nenhum serviço selecionado';
         document.getElementById('resumoServicos').textContent = servicosTexto;
+    }
+    
+    updateDoresResumo() {
+        const selecionadas = document.querySelectorAll('input[name="dores"]:checked');
+        const customDiv = document.querySelector('.dor-custom');
+        
+        const temOutra = Array.from(selecionadas).some(cb => cb.value === 'outra');
+        
+        // Mostrar/ocultar campo custom
+        if (customDiv) {
+            customDiv.style.display = temOutra ? 'block' : 'none';
+        }
+        
+        const textos = [];
+        selecionadas.forEach(checkbox => {
+            if (checkbox.value === 'outra') {
+                const custom = document.getElementById('dorCustom').value.trim();
+                if (custom) {
+                    textos.push(custom);
+                }
+            } else {
+                const dor = this.dores[checkbox.value];
+                textos.push(dor ? `${dor.icon} ${dor.nome}` : checkbox.nextElementSibling.textContent);
+            }
+        });
+        
+        const container = document.getElementById('doresSelecionadas');
+        if (textos.length > 0) {
+            container.innerHTML = textos.map(texto => `<span class="tag">${texto}</span>`).join(' ');
+        } else {
+            container.textContent = 'Selecione as dores acima';
+        }
+        
+        this.updateResumo();
+        this.calcularPrecificacao();
     }
     
     updateAllSelections() {

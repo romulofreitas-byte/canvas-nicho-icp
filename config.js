@@ -24,6 +24,8 @@ const CANVAS_PASSWORD = 'mundopodium';
 
 // Expor configuração
 window.SUPABASE_CONFIG = SUPABASE_CONFIG;
+window.SUPABASE_URL = SUPABASE_CONFIG.URL;
+window.SUPABASE_ANON_KEY = SUPABASE_CONFIG.ANON_KEY;
 window.CANVAS_PASSWORD = CANVAS_PASSWORD;
 
 function validarConfiguracao() {

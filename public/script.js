@@ -16,6 +16,9 @@ class PasswordAuth {
     }
     
     init() {
+        // Debug: mostrar informações do localStorage
+        console.log('LocalStorage canvas-auth:', localStorage.getItem('canvas-auth'));
+        
         // Verificar se já está autenticado
         if (!this.isAuthenticated()) {
             this.showModal();
@@ -25,6 +28,22 @@ class PasswordAuth {
         
         // Listener para o form
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        // Adicionar botão de debug (apenas em desenvolvimento)
+        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
+            this.addDebugButton();
+        }
+    }
+    
+    addDebugButton() {
+        const debugBtn = document.createElement('button');
+        debugBtn.textContent = '🔧 Debug: Limpar Auth';
+        debugBtn.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 9999; background: #ff6b6b; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;';
+        debugBtn.onclick = () => {
+            localStorage.removeItem('canvas-auth');
+            location.reload();
+        };
+        document.body.appendChild(debugBtn);
     }
     
     isAuthenticated() {
@@ -46,7 +65,11 @@ class PasswordAuth {
     handleSubmit(event) {
         event.preventDefault();
         
-        const password = this.passwordInput.value;
+        const password = this.passwordInput.value.trim();
+        
+        console.log('Senha digitada:', password);
+        console.log('Senha correta:', this.correctPassword);
+        console.log('Comparação:', password === this.correctPassword);
         
         if (password === this.correctPassword) {
             // Salvar autenticação (30 dias)

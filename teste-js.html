@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste JavaScript</title>
+</head>
+<body>
+    <h1>Teste de JavaScript</h1>
+    <div id="teste">Carregando...</div>
+    
+    <script>
+        console.log('🔧 Teste JavaScript iniciado');
+        
+        try {
+            // Teste básico
+            const teste = document.getElementById('teste');
+            if (teste) {
+                teste.textContent = '✅ JavaScript funcionando!';
+                console.log('✅ JavaScript funcionando!');
+            }
+        } catch (error) {
+            console.error('❌ Erro no JavaScript:', error);
+            document.getElementById('teste').textContent = '❌ Erro: ' + error.message;
+        }
+    </script>
+</body>
+</html>

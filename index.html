@@ -883,30 +883,49 @@
         </div>
     </div>
 
-    <!-- Modal de Senha -->
-    <div id="passwordModal" class="modal">
+    <!-- Modal de Captura de Leads -->
+    <div id="leadModal" class="modal">
         <div class="modal-content">
             <div class="modal-header">
-                <h2>🏁 Canvas Exclusivo - Método Pódium</h2>
-                <p>Digite a senha para acessar</p>
+                <h2>🚀 Canvas de Nicho e ICP - Método Pódium</h2>
+                <p>Preencha seus dados para acessar gratuitamente</p>
             </div>
             
-            <form id="passwordForm" class="password-form">
+            <form id="leadForm" class="lead-form">
                 <div class="form-group">
-                    <label for="password">Senha de Acesso</label>
-                    <input type="password" id="password" name="password" placeholder="Digite a senha" required>
+                    <label for="leadName">Nome Completo *</label>
+                    <input type="text" id="leadName" name="name" placeholder="Seu nome completo" required>
                 </div>
                 
-                <button type="submit" class="btn-unlock">🔓 Acessar Canvas</button>
+                <div class="form-group">
+                    <label for="leadEmail">E-mail *</label>
+                    <input type="email" id="leadEmail" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="leadPhone">WhatsApp *</label>
+                    <input type="tel" id="leadPhone" name="phone" placeholder="(11) 99999-9999" required>
+                </div>
+                
+                <div class="form-group checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="leadTerms" name="terms" required>
+                        <span class="checkmark"></span>
+                        Aceito receber conteúdos e atualizações do Método Pódium
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-unlock">🎯 Acessar Canvas Gratuitamente</button>
             </form>
             
             <div class="modal-footer">
-                <p>Entre em contato com a equipe Pódium se você não tem a senha</p>
+                <p>✨ <strong>100% Gratuito</strong> • Seus dados estão seguros conosco</p>
             </div>
         </div>
     </div>
     
     <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="script.js"></script>
     

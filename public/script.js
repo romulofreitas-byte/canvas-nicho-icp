@@ -4,21 +4,38 @@
  */
 
 // ========================================
-// CLASSE: Password Authentication
+// CLASSE: Lead Capture
 // ========================================
-class PasswordAuth {
+class LeadCapture {
     constructor() {
-        this.modal = document.getElementById('passwordModal');
-        this.form = document.getElementById('passwordForm');
-        this.passwordInput = document.getElementById('password');
-        this.correctPassword = window.CANVAS_PASSWORD || 'mundopodium';
+        this.modal = document.getElementById('leadModal');
+        this.form = document.getElementById('leadForm');
+        this.nameInput = document.getElementById('leadName');
+        this.emailInput = document.getElementById('leadEmail');
+        this.phoneInput = document.getElementById('leadPhone');
+        this.termsInput = document.getElementById('leadTerms');
+        
+        // Configurar Supabase
+        this.supabase = null;
+        this.initSupabase();
         this.init();
     }
     
+    initSupabase() {
+        try {
+            // Usar as configurações do config.js
+            if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
+                this.supabase = supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
+                console.log('✅ Supabase inicializado com sucesso');
+            } else {
+                console.warn('⚠️ Configurações do Supabase não encontradas');
+            }
+        } catch (error) {
+            console.error('❌ Erro ao inicializar Supabase:', error);
+        }
+    }
+    
     init() {
-        // Debug: mostrar informações do localStorage
-        console.log('LocalStorage canvas-auth:', localStorage.getItem('canvas-auth'));
-        
         // Verificar se já está autenticado
         if (!this.isAuthenticated()) {
             this.showModal();
@@ -29,25 +46,24 @@ class PasswordAuth {
         // Listener para o form
         this.form.addEventListener('submit', (e) => this.handleSubmit(e));
         
-        // Adicionar botão de debug (apenas em desenvolvimento)
-        if (window.location.hostname === 'localhost' || window.location.hostname === '127.0.0.1') {
-            this.addDebugButton();
-        }
+        // Máscara para telefone
+        this.phoneInput.addEventListener('input', (e) => this.formatPhone(e));
     }
     
-    addDebugButton() {
-        const debugBtn = document.createElement('button');
-        debugBtn.textContent = '🔧 Debug: Limpar Auth';
-        debugBtn.style.cssText = 'position: fixed; top: 10px; right: 10px; z-index: 9999; background: #ff6b6b; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer;';
-        debugBtn.onclick = () => {
-            localStorage.removeItem('canvas-auth');
-            location.reload();
-        };
-        document.body.appendChild(debugBtn);
+    formatPhone(event) {
+        let value = event.target.value.replace(/\D/g, '');
+        if (value.length >= 11) {
+            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
+        } else if (value.length >= 7) {
+            value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
+        } else if (value.length >= 3) {
+            value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
+        }
+        event.target.value = value;
     }
     
     isAuthenticated() {
-        const authData = localStorage.getItem('canvas-auth');
+        const authData = localStorage.getItem('canvas-lead-auth');
         if (!authData) return false;
         
         const parsed = JSON.parse(authData);
@@ -55,44 +71,83 @@ class PasswordAuth {
         
         // Verificar se ainda está dentro do prazo (30 dias)
         if (new Date() > expiryDate) {
-            localStorage.removeItem('canvas-auth');
+            localStorage.removeItem('canvas-lead-auth');
             return false;
         }
         
         return true;
     }
     
-    handleSubmit(event) {
+    async handleSubmit(event) {
         event.preventDefault();
         
-        const password = this.passwordInput.value.trim();
+        const formData = {
+            name: this.nameInput.value.trim(),
+            email: this.emailInput.value.trim(),
+            phone: this.phoneInput.value.trim(),
+            terms: this.termsInput.checked,
+            created_at: new Date().toISOString(),
+            source: 'canvas-nicho-icp'
+        };
         
-        console.log('Senha digitada:', password);
-        console.log('Senha correta:', this.correctPassword);
-        console.log('Comparação:', password === this.correctPassword);
+        // Validações
+        if (!formData.name || !formData.email || !formData.phone) {
+            alert('❌ Por favor, preencha todos os campos obrigatórios.');
+            return;
+        }
         
-        if (password === this.correctPassword) {
-            // Salvar autenticação (30 dias)
+        if (!formData.terms) {
+            alert('❌ Você deve aceitar receber conteúdos do Método Pódium.');
+            return;
+        }
+        
+        // Validar email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(formData.email)) {
+            alert('❌ Por favor, insira um e-mail válido.');
+            return;
+        }
+        
+        try {
+            // Salvar no Supabase
+            if (this.supabase) {
+                const { data, error } = await this.supabase
+                    .from('leads')
+                    .insert([formData]);
+                
+                if (error) {
+                    console.error('Erro ao salvar no Supabase:', error);
+                    // Continuar mesmo com erro no Supabase
+                } else {
+                    console.log('✅ Lead salvo no Supabase:', data);
+                }
+            }
+            
+            // Salvar autenticação local (30 dias)
             const expiryDate = new Date();
             expiryDate.setDate(expiryDate.getDate() + 30);
             
-            localStorage.setItem('canvas-auth', JSON.stringify({
+            localStorage.setItem('canvas-lead-auth', JSON.stringify({
                 authenticated: true,
+                lead: formData,
                 expiry: expiryDate.toISOString(),
                 date: new Date().toISOString()
             }));
             
             this.hideModal();
-            alert('✅ Acesso liberado! Bem-vindo ao Canvas de Nicho e ICP.');
+            alert('✅ Acesso liberado! Bem-vindo ao Canvas de Nicho e ICP, ' + formData.name + '!');
             
             // Track analytics
             if (typeof window.va === 'function') {
-                window.va('track', 'Canvas Unlocked');
+                window.va('track', 'Lead Captured', {
+                    lead_name: formData.name,
+                    lead_email: formData.email
+                });
             }
-        } else {
-            alert('❌ Senha incorreta! Tente novamente.');
-            this.passwordInput.value = '';
-            this.passwordInput.focus();
+            
+        } catch (error) {
+            console.error('Erro ao processar lead:', error);
+            alert('❌ Ocorreu um erro. Tente novamente.');
         }
     }
     
@@ -585,7 +640,7 @@ function limparDados() {
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
     // Inicializar autenticação
-    window.passwordAuth = new PasswordAuth();
+    window.leadCapture = new LeadCapture();
     
     // Inicializar canvas
     window.canvas = new CanvasNichoICP();
@@ -1108,7 +1163,7 @@ function exportarPDF() {
 
 // Atualizar inicialização para incluir CanvasAutomatizado
 document.addEventListener('DOMContentLoaded', function() {
-    new PasswordAuth();
+    new LeadCapture();
     new CanvasNichoICP();
     
     // Inicializar canvas automatizado

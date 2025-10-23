@@ -407,7 +407,7 @@ body {
     margin-bottom: 5px;
 }
 
-/* Modal de Senha */
+/* Modal de Captura de Leads */
 .modal {
     display: flex;
     position: fixed;
@@ -454,8 +454,53 @@ body {
     font-weight: bold;
 }
 
-.password-form {
+.lead-form {
     margin-bottom: 20px;
+}
+
+.lead-form .form-group {
+    margin-bottom: 20px;
+}
+
+.lead-form .form-group label {
+    display: block;
+    margin-bottom: 8px;
+    font-weight: 600;
+    color: #2c3e50;
+}
+
+.lead-form .form-group input {
+    width: 100%;
+    padding: 12px;
+    border: 2px solid #e9ecef;
+    border-radius: 6px;
+    font-size: 16px;
+    transition: border-color 0.3s ease;
+}
+
+.lead-form .form-group input:focus {
+    outline: none;
+    border-color: #667eea;
+}
+
+.checkbox-group {
+    margin: 20px 0;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: flex-start;
+    gap: 10px;
+    cursor: pointer;
+    font-size: 14px;
+    line-height: 1.4;
+}
+
+.checkbox-label input[type="checkbox"] {
+    margin: 0;
+    width: 18px;
+    height: 18px;
+    accent-color: #667eea;
 }
 
 .form-group {

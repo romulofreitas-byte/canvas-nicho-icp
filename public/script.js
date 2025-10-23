@@ -630,6 +630,7 @@ class CanvasAutomatizado {
         console.log('🔧 updateNichoResumo: Iniciando...');
         const selecionado = document.querySelector('input[name="nicho"]:checked');
         const customDiv = document.querySelector('.nicho-custom');
+        const resumoTexto = document.getElementById('nichoSelecionadoTexto');
         
         if (selecionado) {
             console.log('🔧 updateNichoResumo: Nicho selecionado:', selecionado.value);
@@ -640,6 +641,19 @@ class CanvasAutomatizado {
                 customDiv.style.display = temOutro ? 'block' : 'none';
             }
             
+            let textoNicho = '';
+            if (temOutro) {
+                const custom = document.getElementById('nichoCustom')?.value.trim();
+                textoNicho = custom || 'Outro nicho (especifique)';
+            } else {
+                textoNicho = this.nichos[selecionado.value]?.nome || selecionado.value;
+            }
+            
+            if (resumoTexto) {
+                resumoTexto.textContent = textoNicho;
+                console.log('✅ updateNichoResumo: Texto atualizado:', textoNicho);
+            }
+            
             this.updateResumo();
             this.calcularPrecificacao();
         } else {
@@ -647,23 +661,35 @@ class CanvasAutomatizado {
             if (customDiv) {
                 customDiv.style.display = 'none';
             }
+            if (resumoTexto) {
+                resumoTexto.textContent = 'Selecione um nicho acima';
+            }
         }
     }
     
     updateCanais() {
+        console.log('🔧 updateCanais: Iniciando...');
         const selecionados = [];
         const checkboxes = document.querySelectorAll('input[name="canais"]:checked');
         
         checkboxes.forEach(checkbox => {
             if (checkbox.value === 'outro') {
-                const custom = document.getElementById('canalCustom').value.trim();
-                if (custom) {
-                    selecionados.push(custom);
-                }
+                const custom = document.getElementById('canalCustom')?.value.trim();
+                if (custom) selecionados.push(custom);
             } else {
                 selecionados.push(this.canais[checkbox.value]);
             }
         });
+        
+        const lista = document.getElementById('canaisSelecionadosLista');
+        if (lista) {
+            if (selecionados.length === 0) {
+                lista.innerHTML = '<p>Selecione os canais acima</p>';
+            } else {
+                lista.innerHTML = selecionados.map(c => `<span class="tag">${c}</span>`).join('');
+                console.log('✅ updateCanais: Canais atualizados:', selecionados);
+            }
+        }
         
         this.updateLista('listaCanais', selecionados, 'canal-selecionado');
         this.updateResumo();
@@ -676,18 +702,20 @@ class CanvasAutomatizado {
         
         checkboxes.forEach(checkbox => {
             const labelElement = checkbox.parentElement.querySelector('.servico-nome');
-            const detalheElement = checkbox.parentElement.querySelector('.servico-input');
-            
             const label = labelElement ? labelElement.textContent : checkbox.value;
-            const detalhe = detalheElement ? detalheElement.value.trim() : '';
-            
-            let texto = label;
-            if (detalhe) {
-                texto += ` (${detalhe})`;
-            }
-            selecionados.push(texto);
-            console.log(`🔧 updateServicos: Serviço adicionado: ${texto}`);
+            selecionados.push(label);
+            console.log(`🔧 updateServicos: Serviço adicionado: ${label}`);
         });
+        
+        const lista = document.getElementById('servicosSelecionadosLista');
+        if (lista) {
+            if (selecionados.length === 0) {
+                lista.innerHTML = '<p>Selecione os serviços acima</p>';
+            } else {
+                lista.innerHTML = selecionados.map(s => `<span class="tag">${s}</span>`).join('');
+                console.log('✅ updateServicos: Serviços atualizados:', selecionados);
+            }
+        }
         
         this.servicosSelecionados = selecionados;
         console.log('🔧 updateServicos: Serviços selecionados:', selecionados);
@@ -799,9 +827,37 @@ class CanvasAutomatizado {
         const elemento = document.getElementById('capacidadeEstimada');
         if (elemento) {
             elemento.innerHTML = `
-            <span class="capacidade-texto">${faixa}</span>
-            <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
-        `;
+                <span class="capacidade-texto">${faixa}</span>
+                <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
+            `;
+        }
+        
+        // Adicionar cálculo SEBRAE (3-5% do faturamento)
+        const calculoSebrae = document.getElementById('calculoSebrae');
+        if (calculoSebrae) {
+            let faturamentoMin, faturamentoMax;
+            if (faixa === 'Micro') {
+                faturamentoMin = 5000;
+                faturamentoMax = 5000;
+            } else if (faixa === 'Pequeno') {
+                faturamentoMin = 5000;
+                faturamentoMax = 25000;
+            } else if (faixa === 'Médio') {
+                faturamentoMin = 25000;
+                faturamentoMax = 125000;
+            } else {
+                faturamentoMin = 125000;
+                faturamentoMax = 300000;
+            }
+            
+            const investMin3 = Math.round(faturamentoMin * 0.03);
+            const investMax5 = Math.round(faturamentoMax * 0.05);
+            
+            calculoSebrae.innerHTML = `
+                <strong>Cálculo SEBRAE (3-5% do faturamento):</strong><br>
+                Investimento sugerido em marketing: R$ ${investMin3.toLocaleString('pt-BR')} - R$ ${investMax5.toLocaleString('pt-BR')}/mês
+            `;
+            console.log('✅ calcularCapacidadeEstrutura: Cálculo SEBRAE adicionado');
         }
         
         // Atualizar capacidade financeira detectada na precificação
@@ -882,8 +938,12 @@ class CanvasAutomatizado {
     }
     
     atualizarResultadoPrecificacao(servicosIncluidos, total) {
+        console.log('🔧 atualizarResultadoPrecificacao: Atualizando...', servicosIncluidos);
         const container = document.getElementById('resultadoPrecificacao');
-        if (!container) return;
+        if (!container) {
+            console.error('❌ Elemento resultadoPrecificacao não encontrado');
+            return;
+        }
         
         if (servicosIncluidos.length === 0) {
             container.innerHTML = '<p>Selecione os serviços para ver a precificação sugerida</p>';
@@ -907,6 +967,7 @@ class CanvasAutomatizado {
         </div>`;
         
         container.innerHTML = html;
+        console.log('✅ atualizarResultadoPrecificacao: Precificação atualizada');
     }
     
     atualizarJornadas(enxuta, padrao, completa) {
@@ -1009,8 +1070,10 @@ class CanvasAutomatizado {
     }
     
     updateDoresResumo() {
+        console.log('🔧 updateDoresResumo: Iniciando...');
         const selecionadas = document.querySelectorAll('input[name="dores"]:checked');
         const customDiv = document.querySelector('.dor-custom');
+        const lista = document.getElementById('doresSelecionadasLista');
         
         const temOutra = Array.from(selecionadas).some(cb => cb.value === 'outra');
         
@@ -1019,8 +1082,22 @@ class CanvasAutomatizado {
             customDiv.style.display = temOutra ? 'block' : 'none';
         }
         
+        if (selecionadas.length === 0) {
+            if (lista) lista.innerHTML = '<p>Selecione as dores acima</p>';
+        } else {
+            const doresTexto = Array.from(selecionadas).map(d => {
+                if (d.value === 'outra') {
+                    return document.getElementById('dorCustom')?.value.trim() || 'Outra dor';
+                }
+                return this.dores[d.value] || d.value;
+            });
+            if (lista) {
+                lista.innerHTML = doresTexto.map(d => `<span class="tag">${d}</span>`).join('');
+                console.log('✅ updateDoresResumo: Dores atualizadas:', doresTexto);
+            }
+        }
+        
         this.updateResumo();
-        this.calcularPrecificacao();
     }
     
     updateDores() {

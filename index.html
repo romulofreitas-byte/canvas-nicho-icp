@@ -261,6 +261,7 @@
                     
                     <div class="nicho-resumo" id="nichoResumo">
                         <h5>✅ Nicho Selecionado:</h5>
+                        <p id="nichoSelecionadoTexto">Selecione um nicho acima</p>
                     </div>
                 </div>
 
@@ -341,6 +342,7 @@
                     
                     <div class="dores-resumo" id="doresResumo">
                         <h5>✅ Dores Selecionadas:</h5>
+                        <div id="doresSelecionadasLista">Selecione as dores acima</div>
                     </div>
                 </div>
 
@@ -410,6 +412,9 @@
                             <div id="capacidadeEstimada" class="capacidade-badge">
                                 <span class="capacidade-texto">Responda as perguntas acima</span>
                             </div>
+                            <div id="calculoSebrae" style="margin-top: 10px; font-size: 0.9em; color: #666;">
+                                <!-- Cálculo SEBRAE será inserido aqui -->
+                            </div>
                         </div>
                     </div>
                     
@@ -470,9 +475,9 @@
                         <h4>✅ Canais Selecionados:</h4>
                     </div>
                     
-                    <div class="canais-resumo" id="canaisResumo">
+                    <div class="canais-resumo" id="canaisResumoSecao">
                         <h5>✅ Canais Selecionados:</h5>
-                        <div id="canaisSelecionados">Selecione os canais acima</div>
+                        <div id="canaisSelecionadosLista">Selecione os canais acima</div>
                     </div>
                 </div>
 
@@ -582,8 +587,9 @@
                         </div>
                     </div>
                     
-                    <div class="servicos-selecionados" id="servicosSelecionados">
-                        <h4>✅ Serviços Selecionados:</h4>
+                    <div class="servicos-resumo" id="servicosResumoSecao">
+                        <h5>✅ Serviços Selecionados:</h5>
+                        <div id="servicosSelecionadosLista">Selecione os serviços acima</div>
                     </div>
                 </div>
 
@@ -812,7 +818,7 @@
                 </div>
 
                 <!-- SEÇÃO DE ANÁLISE -->
-                <div class="analise-section">
+                <div class="analise-section full-width">
                     <h3>✓ CHECKLIST DE VALIDAÇÃO</h3>
                     <p style="margin-bottom: 20px; color: #666;">Antes de começar a prospectar, valide esses pontos:</p>
                     
@@ -852,14 +858,10 @@
                     </div>
                 </div>
 
-            <!-- BOTÕES -->
-            <div class="button-group">
-                <button type="button" class="btn-primary" onclick="exportarPDF()">📄 Exportar como PDF</button>
-            </div>
         </form>
 
         <!-- SEÇÃO DA COMUNIDADE -->
-        <div class="community-section">
+        <div class="community-section full-width">
             <div class="community-content">
                 <div class="community-icon">📱</div>
                 <div class="community-text">

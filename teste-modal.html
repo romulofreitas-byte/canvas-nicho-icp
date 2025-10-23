@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Modal de Captura</title>
+    <link rel="stylesheet" href="public/styles.css">
+</head>
+<body>
+    <!-- Modal de Captura de Leads -->
+    <div id="leadModal" class="lead-modal">
+        <div class="lead-modal-content">
+            <div class="lead-modal-header">
+                <h2>🎯 Acesse o Canvas de Nicho e ICP</h2>
+                <p>Preencha seus dados para acessar a ferramenta completa</p>
+            </div>
+            
+            <form id="leadForm" class="lead-form">
+                <div class="form-group">
+                    <label for="leadName">Nome Completo *</label>
+                    <input type="text" id="leadName" name="name" required minlength="5" maxlength="100" placeholder="Ex: João Silva">
+                    <div class="error-message" id="nameError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="leadEmail">Email *</label>
+                    <input type="email" id="leadEmail" name="email" required>
+                    <div class="error-message" id="emailError"></div>
+                </div>
+                
+                <div class="form-group">
+                    <label for="leadPhone">Telefone/WhatsApp *</label>
+                    <input type="tel" id="leadPhone" name="phone" required minlength="10" maxlength="15">
+                    <div class="error-message" id="phoneError"></div>
+                </div>
+                
+                <div class="checkbox-group">
+                    <label class="checkbox-label">
+                        <input type="checkbox" id="leadTerms" name="terms" required>
+                        <span class="checkmark"></span>
+                        Concordo em receber informações sobre marketing digital e aceito a política de privacidade *
+                    </label>
+                    <div class="error-message" id="termsError"></div>
+                </div>
+                
+                <button type="submit" id="submitLead" class="btn-unlock">
+                    <span id="submitText">🚀 Acessar Canvas</span>
+                    <span id="submitLoading" class="loading" style="display: none;">Enviando...</span>
+                </button>
+            </form>
+            
+            <div class="lead-modal-footer">
+                <p>Seus dados estão seguros e não serão compartilhados</p>
+            </div>
+        </div>
+    </div>
+
+    <div class="container canvas-bloqueado">
+        <h1>Canvas Bloqueado - Modal deve aparecer</h1>
+        <p>Este conteúdo só deve aparecer após preencher o modal</p>
+    </div>
+
+    <script src="public/config.js"></script>
+    <script src="public/script.js"></script>
+</body>
+</html>

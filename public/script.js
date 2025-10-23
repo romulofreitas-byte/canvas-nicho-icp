@@ -1,7 +1,418 @@
 /**
  * Canvas de Nicho e ICP - Método Pódium
- * Versão: 1.0
+ * Versão: 1.1 - Com Modal de Captura de Leads
  */
+
+// ========================================
+// CLASSE: LeadCapture - Modal de Captura de Leads
+// ========================================
+class LeadCapture {
+    constructor() {
+        this.modal = document.getElementById('leadModal');
+        this.form = document.getElementById('leadForm');
+        this.submitBtn = document.getElementById('submitLead');
+        this.submitText = document.getElementById('submitText');
+        this.submitLoading = document.getElementById('submitLoading');
+        this.container = document.querySelector('.container');
+        
+        this.rateLimitAttempts = 0;
+        this.rateLimitMax = 3;
+        this.rateLimitWindow = 60000; // 1 minuto
+        
+        // Lista negra de emails comuns
+        this.blockedEmails = [
+            'test@test.com', 'email@email.com', 'fake@fake.com', 'spam@spam.com',
+            'admin@admin.com', 'user@user.com', 'example@example.com',
+            'temp@temp.com', 'demo@demo.com', 'sample@sample.com'
+        ];
+        
+        // Lista negra de nomes genéricos
+        this.blockedNames = [
+            'teste', 'test', 'usuario', 'user', 'admin', 'administrador',
+            'exemplo', 'example', 'demo', 'temp', 'temporario', 'fake',
+            'falso', 'spam', 'bot', 'automated', 'automacao'
+        ];
+        
+        this.init();
+    }
+    
+    init() {
+        // Verificar se já foi capturado na sessão
+        if (sessionStorage.getItem('leadCaptured') === 'true') {
+            this.liberarCanvas();
+            return;
+        }
+        
+        this.setupEventListeners();
+        this.setupValidation();
+        console.log('🔧 LeadCapture: Inicializado');
+    }
+    
+    setupEventListeners() {
+        // Submit do formulário
+        this.form.addEventListener('submit', (e) => {
+            e.preventDefault();
+            this.handleSubmit();
+        });
+        
+        // Validação em tempo real
+        const inputs = this.form.querySelectorAll('input');
+        inputs.forEach(input => {
+            input.addEventListener('blur', () => this.validateField(input));
+            input.addEventListener('input', () => this.clearFieldError(input));
+        });
+        
+        // Rate limiting
+        this.submitBtn.addEventListener('click', () => {
+            if (this.isRateLimited()) {
+                this.showError('Muitas tentativas. Aguarde um momento antes de tentar novamente.');
+                return false;
+            }
+        });
+    }
+    
+    setupValidation() {
+        // Máscara para telefone (apenas números)
+        const phoneInput = document.getElementById('leadPhone');
+        phoneInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+        
+        // Validação de nome (apenas letras e espaços)
+        const nameInput = document.getElementById('leadName');
+        nameInput.addEventListener('input', (e) => {
+            e.target.value = e.target.value.replace(/[^a-zA-ZÀ-ÿ\s]/g, '');
+        });
+    }
+    
+    validateField(field) {
+        const fieldName = field.name;
+        const value = field.value.trim();
+        
+        this.clearFieldError(field);
+        
+        switch (fieldName) {
+            case 'name':
+                return this.validateName(value, field);
+            case 'email':
+                return this.validateEmail(value, field);
+            case 'phone':
+                return this.validatePhone(value, field);
+            case 'terms':
+                return this.validateTerms(field);
+            default:
+                return true;
+        }
+    }
+    
+    validateName(value, field) {
+        if (!value) {
+            this.showFieldError(field, 'Nome é obrigatório');
+            return false;
+        }
+        
+        // Verificar se contém apenas letras e espaços
+        if (!/^[a-zA-ZÀ-ÿ\s]+$/.test(value)) {
+            this.showFieldError(field, 'Nome deve conter apenas letras e espaços');
+            return false;
+        }
+        
+        // Dividir o nome em partes (separadas por espaços)
+        const nameParts = value.trim().split(/\s+/).filter(part => part.length > 0);
+        
+        if (nameParts.length < 2) {
+            this.showFieldError(field, 'Por favor, informe seu nome completo (nome e sobrenome)');
+            return false;
+        }
+        
+        // Verificar se cada parte tem pelo menos 2 caracteres
+        for (const part of nameParts) {
+            if (part.length < 2) {
+                this.showFieldError(field, 'Nome e sobrenome devem ter pelo menos 2 caracteres cada');
+                return false;
+            }
+            
+            // Verificar se não está na lista negra de nomes genéricos
+            if (this.blockedNames.includes(part.toLowerCase())) {
+                this.showFieldError(field, 'Por favor, use seu nome real (não aceitamos nomes genéricos)');
+                return false;
+            }
+        }
+        
+        if (value.length > 100) {
+            this.showFieldError(field, 'Nome deve ter no máximo 100 caracteres');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    validateEmail(value, field) {
+        if (!value) {
+            this.showFieldError(field, 'Email é obrigatório');
+            return false;
+        }
+        
+        // Regex básico para email
+        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+        if (!emailRegex.test(value)) {
+            this.showFieldError(field, 'Formato de email inválido');
+            return false;
+        }
+        
+        // Verificar lista negra
+        if (this.blockedEmails.includes(value.toLowerCase())) {
+            this.showFieldError(field, 'Por favor, use um email válido');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    validatePhone(value, field) {
+        if (!value) {
+            this.showFieldError(field, 'Telefone é obrigatório');
+            return false;
+        }
+        
+        // Remover caracteres não numéricos
+        const cleanPhone = value.replace(/\D/g, '');
+        
+        if (cleanPhone.length < 10) {
+            this.showFieldError(field, 'Telefone deve ter pelo menos 10 dígitos');
+            return false;
+        }
+        
+        if (cleanPhone.length > 15) {
+            this.showFieldError(field, 'Telefone deve ter no máximo 15 dígitos');
+            return false;
+        }
+        
+        // Verificar se não é um padrão repetitivo
+        if (this.isRepetitivePattern(cleanPhone)) {
+            this.showFieldError(field, 'Por favor, use um telefone válido');
+            return false;
+        }
+        
+        return true;
+    }
+    
+    validateTerms(field) {
+        if (!field.checked) {
+            this.showFieldError(field, 'Você deve aceitar os termos para continuar');
+            return false;
+        }
+        return true;
+    }
+    
+    isRepetitivePattern(phone) {
+        // Verificar padrões como 1111111111, 2222222222, etc.
+        const firstDigit = phone[0];
+        return phone.split('').every(digit => digit === firstDigit);
+    }
+    
+    showFieldError(field, message) {
+        const errorElement = document.getElementById(`${field.name}Error`);
+        if (errorElement) {
+            errorElement.textContent = message;
+        }
+        field.classList.add('error');
+    }
+    
+    clearFieldError(field) {
+        const errorElement = document.getElementById(`${field.name}Error`);
+        if (errorElement) {
+            errorElement.textContent = '';
+        }
+        field.classList.remove('error');
+    }
+    
+    showError(message) {
+        // Criar ou atualizar elemento de erro global
+        let errorElement = document.getElementById('globalError');
+        if (!errorElement) {
+            errorElement = document.createElement('div');
+            errorElement.id = 'globalError';
+            errorElement.className = 'global-error';
+            this.form.insertBefore(errorElement, this.form.firstChild);
+        }
+        errorElement.innerHTML = `⚠️ ${message}`;
+        errorElement.style.display = 'block';
+        
+        // Auto-remover após 5 segundos
+        setTimeout(() => {
+            if (errorElement) {
+                errorElement.style.display = 'none';
+            }
+        }, 5000);
+    }
+    
+    isRateLimited() {
+        const now = Date.now();
+        const lastAttempt = localStorage.getItem('leadLastAttempt');
+        
+        if (lastAttempt) {
+            const timeDiff = now - parseInt(lastAttempt);
+            if (timeDiff < this.rateLimitWindow) {
+                return true;
+            }
+        }
+        
+        return false;
+    }
+    
+    async handleSubmit() {
+        // Validar todos os campos
+        const nameField = document.getElementById('leadName');
+        const emailField = document.getElementById('leadEmail');
+        const phoneField = document.getElementById('leadPhone');
+        const termsField = document.getElementById('leadTerms');
+        
+        const isValid = 
+            this.validateName(nameField.value.trim(), nameField) &&
+            this.validateEmail(emailField.value.trim(), emailField) &&
+            this.validatePhone(phoneField.value.trim(), phoneField) &&
+            this.validateTerms(termsField);
+        
+        if (!isValid) {
+            this.showError('Por favor, corrija os erros nos campos');
+            return;
+        }
+        
+        // Verificar rate limiting
+        if (this.isRateLimited()) {
+            this.showError('Muitas tentativas. Aguarde um momento antes de tentar novamente.');
+            return;
+        }
+        
+        // Preparar dados
+        const leadData = {
+            name: nameField.value.trim(),
+            email: emailField.value.trim().toLowerCase(),
+            phone: phoneField.value.replace(/\D/g, ''),
+            terms: termsField.checked,
+            source: 'canvas-nicho-icp'
+        };
+        
+        // Mostrar loading
+        this.setLoading(true);
+        
+        try {
+            // Enviar para Supabase
+            const success = await this.saveToSupabase(leadData);
+            
+            if (success) {
+                // Salvar timestamp da última tentativa
+                localStorage.setItem('leadLastAttempt', Date.now().toString());
+                
+                // Marcar como capturado na sessão
+                sessionStorage.setItem('leadCaptured', 'true');
+                
+                // Liberar canvas
+                this.liberarCanvas();
+                
+                console.log('✅ Lead capturado com sucesso');
+            } else {
+                this.setLoading(false);
+                this.showError('Erro ao enviar dados. Tente novamente.');
+            }
+            
+        } catch (error) {
+            console.error('❌ Erro ao capturar lead:', error);
+            this.setLoading(false);
+            this.showError('Erro de conexão. Verifique sua internet e tente novamente.');
+        }
+    }
+    
+    async saveToSupabase(data) {
+        try {
+            if (!window.SUPABASE_CONFIG) {
+                console.error('❌ Configuração do Supabase não encontrada');
+                return false;
+            }
+            
+            console.log('📤 Enviando dados para Supabase:', data);
+            
+            const response = await fetch(
+                `${window.SUPABASE_CONFIG.URL}/rest/v1/leads`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': window.SUPABASE_CONFIG.ANON_KEY,
+                        'Authorization': `Bearer ${window.SUPABASE_CONFIG.ANON_KEY}`,
+                        'Prefer': 'return=minimal'
+                    },
+                    body: JSON.stringify(data)
+                }
+            );
+            
+            console.log('📥 Resposta do Supabase:', response.status, response.statusText);
+            
+            if (response.ok || response.status === 201) {
+                // Supabase pode retornar 200 ou 201 com ou sem corpo JSON
+                // Com 'Prefer: return=minimal', não haverá corpo na resposta
+                console.log('✅ Lead salvo no Supabase com sucesso!');
+                return true;
+            } else {
+                // Tentar ler o erro como JSON
+                let errorMessage = 'Erro desconhecido';
+                try {
+                    const errorText = await response.text();
+                    console.error('❌ Resposta de erro:', errorText);
+                    
+                    if (errorText) {
+                        const errorData = JSON.parse(errorText);
+                        errorMessage = errorData.message || errorData.error || errorText;
+                    }
+                } catch (parseError) {
+                    console.error('❌ Erro ao processar resposta:', parseError);
+                }
+                
+                // Tratar erros específicos
+                if (response.status === 404) {
+                    this.showError('Tabela "leads" não encontrada no Supabase. Verifique a configuração.');
+                } else if (response.status === 409) {
+                    this.showError('Este email já foi cadastrado.');
+                } else if (response.status === 422) {
+                    this.showError('Dados inválidos. Verifique os campos.');
+                } else if (response.status === 401 || response.status === 403) {
+                    this.showError('Erro de permissão. Verifique as políticas RLS no Supabase.');
+                } else {
+                    this.showError(`Erro no servidor (${response.status}). Tente novamente.`);
+                }
+                
+                return false;
+            }
+        } catch (error) {
+            console.error('❌ Erro de conexão com Supabase:', error);
+            this.showError('Erro de conexão. Verifique sua internet e a configuração do Supabase.');
+            return false;
+        }
+    }
+    
+    setLoading(loading) {
+        if (loading) {
+            this.submitBtn.disabled = true;
+            this.submitText.style.display = 'none';
+            this.submitLoading.style.display = 'inline-flex';
+        } else {
+            this.submitBtn.disabled = false;
+            this.submitText.style.display = 'inline';
+            this.submitLoading.style.display = 'none';
+        }
+    }
+    
+    liberarCanvas() {
+        // Fechar modal com animação
+        this.modal.classList.add('hidden');
+        
+        // Chamar função global para liberar canvas
+        liberarCanvas();
+        
+        console.log('✅ Canvas liberado para uso');
+    }
+}
 
 // ========================================
 // FORMULÁRIO DE CAPTURA DE LEADS REMOVIDO
@@ -294,18 +705,18 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
     
     try {
-        // LeadCapture removido - acesso direto ao canvas
-        console.log('🔧 Pulando inicialização do LeadCapture (removido)');
+        // Inicializar LeadCapture (modal de captura)
+        console.log('🔧 Criando LeadCapture...');
+        window.leadCapture = new LeadCapture();
+        console.log('✅ LeadCapture criado:', !!window.leadCapture);
         
-        // Inicializar canvas
-        console.log('🔧 Criando CanvasNichoICP...');
-        window.canvas = new CanvasNichoICP();
-        console.log('✅ CanvasNichoICP criado:', !!window.canvas);
-        
-        // Inicializar canvas automatizado
-        console.log('🔧 Criando CanvasAutomatizado...');
-        window.canvasAutomatizado = new CanvasAutomatizado();
-        console.log('✅ CanvasAutomatizado criado:', !!window.canvasAutomatizado);
+        // Verificar se o lead já foi capturado na sessão
+        if (sessionStorage.getItem('leadCaptured') === 'true') {
+            console.log('🔧 Lead já capturado, liberando canvas...');
+            liberarCanvas();
+        } else {
+            console.log('🔧 Lead não capturado, modal será exibido');
+        }
         
         // Inicializar Vercel Analytics
         if (typeof window.va === 'function') {
@@ -314,11 +725,42 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        console.log('🎉 Inicialização completa! (sem LeadCapture)');
+        console.log('🎉 Inicialização completa!');
     } catch (error) {
         console.error('❌ Erro durante inicialização:', error);
     }
 });
+
+// Função para liberar o canvas (chamada pelo LeadCapture)
+function liberarCanvas() {
+    console.log('🔧 Liberando canvas...');
+    
+    // Remover classe de bloqueio do container
+    const container = document.querySelector('.container');
+    if (container) {
+        container.classList.remove('canvas-bloqueado');
+        container.classList.add('canvas-liberado');
+    }
+    
+    // Inicializar canvas após um pequeno delay para a animação
+    setTimeout(() => {
+        try {
+            // Inicializar canvas
+            console.log('🔧 Criando CanvasNichoICP...');
+            window.canvas = new CanvasNichoICP();
+            console.log('✅ CanvasNichoICP criado:', !!window.canvas);
+            
+            // Inicializar canvas automatizado
+            console.log('🔧 Criando CanvasAutomatizado...');
+            window.canvasAutomatizado = new CanvasAutomatizado();
+            console.log('✅ CanvasAutomatizado criado:', !!window.canvasAutomatizado);
+            
+            console.log('✅ Canvas inicializado com sucesso!');
+        } catch (error) {
+            console.error('❌ Erro ao inicializar canvas:', error);
+        }
+    }, 300);
+}
 
 // ========================================
 // CLASSE: Canvas Automatizado Completo

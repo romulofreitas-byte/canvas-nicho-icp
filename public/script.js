@@ -76,10 +76,23 @@ class LeadCapture {
     }
     
     setupValidation() {
-        // Máscara para telefone (apenas números)
+        // Máscara para telefone com formato (XX)XXXXX-XXXX
         const phoneInput = document.getElementById('leadPhone');
         phoneInput.addEventListener('input', (e) => {
-            e.target.value = e.target.value.replace(/\D/g, '');
+            let value = e.target.value.replace(/\D/g, '');
+            
+            // Aplicar máscara (XX)XXXXX-XXXX
+            if (value.length <= 2) {
+                value = `(${value}`;
+            } else if (value.length <= 7) {
+                value = `(${value.slice(0, 2)})${value.slice(2)}`;
+            } else if (value.length <= 11) {
+                value = `(${value.slice(0, 2)})${value.slice(2, 7)}-${value.slice(7)}`;
+            } else {
+                value = `(${value.slice(0, 2)})${value.slice(2, 7)}-${value.slice(7, 11)}`;
+            }
+            
+            e.target.value = value;
         });
         
         // Validação de nome (apenas letras e espaços)
@@ -204,13 +217,19 @@ class LeadCapture {
             return false;
         }
         
-        if (cleanPhone.length > 15) {
-            this.showFieldError(field, 'Telefone deve ter no máximo 15 dígitos');
+        if (cleanPhone.length > 11) {
+            this.showFieldError(field, 'Telefone deve ter no máximo 11 dígitos');
             return false;
         }
         
         // Verificar se não é um padrão repetitivo
         if (this.isRepetitivePattern(cleanPhone)) {
+            this.showFieldError(field, 'Por favor, use um telefone válido');
+            return false;
+        }
+        
+        // Verificar padrões sequenciais comuns
+        if (this.isSequentialPattern(cleanPhone)) {
             this.showFieldError(field, 'Por favor, use um telefone válido');
             return false;
         }
@@ -230,6 +249,35 @@ class LeadCapture {
         // Verificar padrões como 1111111111, 2222222222, etc.
         const firstDigit = phone[0];
         return phone.split('').every(digit => digit === firstDigit);
+    }
+    
+    isSequentialPattern(phone) {
+        // Verificar padrões sequenciais como (31)99999-9999, (11)11111-1111, etc.
+        const digits = phone.split('');
+        
+        // Verificar se todos os dígitos após o DDD são iguais
+        if (digits.length >= 4) {
+            const afterDDD = digits.slice(2);
+            const firstAfterDDD = afterDDD[0];
+            if (afterDDD.every(digit => digit === firstAfterDDD)) {
+                return true;
+            }
+        }
+        
+        // Verificar padrões como 1234567890, 9876543210
+        let isAscending = true;
+        let isDescending = true;
+        
+        for (let i = 1; i < digits.length; i++) {
+            if (parseInt(digits[i]) !== parseInt(digits[i-1]) + 1) {
+                isAscending = false;
+            }
+            if (parseInt(digits[i]) !== parseInt(digits[i-1]) - 1) {
+                isDescending = false;
+            }
+        }
+        
+        return isAscending || isDescending;
     }
     
     showFieldError(field, message) {

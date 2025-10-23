@@ -651,22 +651,19 @@ class CanvasAutomatizado {
     
     init() {
         this.setupEventListeners();
-        this.setupToggleCapacidade();
         this.updateAllSelections();
     }
     
     setupEventListeners() {
-        // Nichos - Select múltiplo
-        const nichoSelect = document.getElementById('nichoSelect');
-        if (nichoSelect) {
-            nichoSelect.addEventListener('change', () => this.updateNichos());
-        }
+        // Nichos - Radio buttons
+        document.querySelectorAll('input[name="nicho"]').forEach(radio => {
+            radio.addEventListener('change', () => this.updateNichoResumo());
+        });
         
-        // Dores - Select múltiplo
-        const doresSelect = document.getElementById('doresSelect');
-        if (doresSelect) {
-            doresSelect.addEventListener('change', () => this.updateDores());
-        }
+        // Dores - Checkboxes
+        document.querySelectorAll('input[name="dores"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => this.updateDoresResumo());
+        });
         
         // Canais
         document.querySelectorAll('input[name="canais"]').forEach(checkbox => {
@@ -678,77 +675,78 @@ class CanvasAutomatizado {
             checkbox.addEventListener('change', () => this.updateServicos());
         });
         
-        // Outros Serviços
-        document.querySelectorAll('input[name="outrosServicos"]').forEach(checkbox => {
-            checkbox.addEventListener('change', () => this.updateOutrosServicos());
-        });
-        
         // Capacidade Financeira - Radio buttons
         document.querySelectorAll('input[name="estruturaFisica"], input[name="tamanhoEquipe"], input[name="volumeClientes"], input[name="ticketMedio"], input[name="investeMarketing"]').forEach(radio => {
             radio.addEventListener('change', () => this.calcularCapacidadeEstrutura());
         });
         
-        document.querySelectorAll('input[name="capacidadeDireta"]').forEach(radio => {
-            radio.addEventListener('change', () => this.updateCapacidadeDireta());
-        });
-        
         // Campos customizados
-        document.getElementById('nichoCustom')?.addEventListener('input', () => this.updateNichos());
-        document.getElementById('dorCustom')?.addEventListener('input', () => this.updateDores());
+        document.getElementById('nichoCustom')?.addEventListener('input', () => this.updateNichoResumo());
+        document.getElementById('dorCustom')?.addEventListener('input', () => this.updateDoresResumo());
         document.getElementById('canalCustom')?.addEventListener('input', () => this.updateCanais());
     }
     
-    setupToggleCapacidade() {
-        const toggleEstrutura = document.getElementById('toggleEstrutura');
-        const toggleDireto = document.getElementById('toggleDireto');
-        const capacidadeEstrutura = document.getElementById('capacidadeEstrutura');
-        const capacidadeDireto = document.getElementById('capacidadeDireto');
-        
-        toggleEstrutura?.addEventListener('click', () => {
-            toggleEstrutura.classList.add('active');
-            toggleDireto.classList.remove('active');
-            capacidadeEstrutura.style.display = 'block';
-            capacidadeDireto.style.display = 'none';
-        });
-        
-        toggleDireto?.addEventListener('click', () => {
-            toggleDireto.classList.add('active');
-            toggleEstrutura.classList.remove('active');
-            capacidadeDireto.style.display = 'block';
-            capacidadeEstrutura.style.display = 'none';
-        });
-    }
-    
-    updateNichos() {
-        const selecionados = [];
-        const select = document.getElementById('nichoSelect');
+    updateNichoResumo() {
+        const selecionado = document.querySelector('input[name="nicho"]:checked');
         const customDiv = document.querySelector('.nicho-custom');
         
-        if (select) {
-            const opcoesSelecionadas = Array.from(select.selectedOptions);
-            const temOutro = opcoesSelecionadas.some(option => option.value === 'outro');
+        if (selecionado) {
+            const temOutro = selecionado.value === 'outro';
             
             // Mostrar/ocultar campo custom
             if (customDiv) {
                 customDiv.style.display = temOutro ? 'block' : 'none';
             }
             
-            opcoesSelecionadas.forEach(option => {
-                if (option.value === 'outro') {
-                    const custom = document.getElementById('nichoCustom').value.trim();
-                    if (custom) {
-                        selecionados.push(custom);
-                    }
-                } else {
-                    const nicho = this.nichos[option.value];
-                    if (nicho) {
-                        selecionados.push(`${nicho.icon} ${nicho.nome}`);
-                    }
-                }
-            });
+            let texto;
+            if (temOutro) {
+                const custom = document.getElementById('nichoCustom').value.trim();
+                texto = custom || 'Outro nicho';
+            } else {
+                const nicho = this.nichos[selecionado.value];
+                texto = nicho ? `${nicho.icon} ${nicho.nome}` : selecionado.nextElementSibling.textContent;
+            }
+            
+            document.getElementById('nichoSelecionado').textContent = texto;
+            this.updateResumo();
+            this.calcularPrecificacao();
+        } else {
+            document.getElementById('nichoSelecionado').textContent = 'Selecione um nicho acima';
+            if (customDiv) {
+                customDiv.style.display = 'none';
+            }
+        }
+    updateDoresResumo() {
+        const selecionadas = document.querySelectorAll('input[name="dores"]:checked');
+        const customDiv = document.querySelector('.dor-custom');
+        
+        const temOutra = Array.from(selecionadas).some(cb => cb.value === 'outra');
+        
+        // Mostrar/ocultar campo custom
+        if (customDiv) {
+            customDiv.style.display = temOutra ? 'block' : 'none';
         }
         
-        this.updateLista('listaNichos', selecionados, 'nicho-selecionado');
+        const textos = [];
+        selecionadas.forEach(checkbox => {
+            if (checkbox.value === 'outra') {
+                const custom = document.getElementById('dorCustom').value.trim();
+                if (custom) {
+                    textos.push(custom);
+                }
+            } else {
+                const dor = this.dores[checkbox.value];
+                textos.push(dor ? `${dor.icon} ${dor.nome}` : checkbox.nextElementSibling.textContent);
+            }
+        });
+        
+        const container = document.getElementById('doresSelecionadas');
+        if (textos.length > 0) {
+            container.innerHTML = textos.map(texto => `<span class="tag">${texto}</span>`).join(' ');
+        } else {
+            container.textContent = 'Selecione as dores acima';
+        }
+        
         this.updateResumo();
         this.calcularPrecificacao();
     }
@@ -807,19 +805,20 @@ class CanvasAutomatizado {
     }
     
     updateServicos() {
-        const selecionados = [];
         const checkboxes = document.querySelectorAll('input[name="servicos"]:checked');
+        const selecionados = [];
         
         checkboxes.forEach(checkbox => {
-            const servico = this.servicos[checkbox.value];
+            const label = checkbox.parentElement.querySelector('.servico-nome').textContent;
             const detalhe = checkbox.parentElement.querySelector('.servico-input').value.trim();
-            let texto = `${servico.icon} ${servico.nome}`;
+            let texto = label;
             if (detalhe) {
                 texto += ` (${detalhe})`;
             }
             selecionados.push(texto);
         });
         
+        this.servicosSelecionados = selecionados;
         this.updateLista('listaServicos', selecionados, 'servico-selecionado');
         this.updateResumo();
         this.calcularPrecificacao();
@@ -910,6 +909,12 @@ class CanvasAutomatizado {
         
         document.getElementById('capacidadeEstimada').innerHTML = `
             <span class="capacidade-texto">${faixa}</span>
+            <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
+        `;
+        
+        // Atualizar resumo da capacidade
+        document.getElementById('capacidadeSelecionada').innerHTML = `
+            <span class="badge">${faixa}</span>
             <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
         `;
         
@@ -1022,54 +1027,42 @@ class CanvasAutomatizado {
     }
     
     updateResumo() {
-        // Nichos
-        const nichosSelecionados = Array.from(document.querySelectorAll('input[name="nichos"]:checked')).map(cb => {
-            if (cb.value === 'outro') {
-                return document.getElementById('nichoCustom').value.trim() || 'Outro nicho';
-            }
-            return this.nichos[cb.value].nome;
-        });
+        // Nicho
+        const nicho = document.querySelector('input[name="nicho"]:checked');
+        const nichoTexto = nicho ? 
+            (nicho.value === 'outro' ? 
+                (document.getElementById('nichoCustom').value.trim() || 'Outro nicho') : 
+                (this.nichos[nicho.value] ? `${this.nichos[nicho.value].icon} ${this.nichos[nicho.value].nome}` : nicho.nextElementSibling.textContent)
+            ) : 'Nenhum nicho selecionado';
+        document.getElementById('resumoNichos').textContent = nichoTexto;
         
-        document.getElementById('resumoNichos').innerHTML = nichosSelecionados.length > 0 
-            ? nichosSelecionados.map(n => `<p>• ${n}</p>`).join('')
-            : '<p>Selecione os nichos acima</p>';
+        // Dores
+        const dores = Array.from(document.querySelectorAll('input[name="dores"]:checked'));
+        const doresTexto = dores.length > 0 ? 
+            dores.map(d => {
+                if (d.value === 'outra') {
+                    const custom = document.getElementById('dorCustom').value.trim();
+                    return custom || 'Outra dor';
+                }
+                return this.dores[d.value] ? `${this.dores[d.value].icon} ${this.dores[d.value].nome}` : d.nextElementSibling.textContent;
+            }).join(', ') : 'Nenhuma dor selecionada';
+        document.getElementById('resumoDores').textContent = doresTexto;
         
-        // Capacidade Financeira
-        if (this.capacidadeFinanceira) {
-            const faixas = {
-                'micro': 'Micro: até R$ 10k/mês',
-                'pequeno': 'Pequeno: R$ 10k - R$ 50k/mês',
-                'medio': 'Médio: R$ 50k - R$ 200k/mês',
-                'grande': 'Grande: acima de R$ 200k/mês'
-            };
-            document.getElementById('resumoCapacidade').innerHTML = `<p>• ${faixas[this.capacidadeFinanceira]}</p>`;
-        } else {
-            document.getElementById('resumoCapacidade').innerHTML = '<p>Defina a capacidade financeira acima</p>';
-        }
+        // Capacidade
+        const capacidade = this.capacidadeFinanceira || 'Não definida';
+        document.getElementById('resumoCapacidade').textContent = capacidade;
         
         // Serviços
-        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(cb => {
-            const servico = this.servicos[cb.value];
-            return `${servico.icon} ${servico.nome}`;
-        });
-        
-        const outrosSelecionados = Array.from(document.querySelectorAll('input[name="outrosServicos"]:checked')).map(cb => {
-            const servico = this.outrosServicos[cb.value];
-            return `${servico.icon} ${servico.nome}`;
-        });
-        
-        const todosServicos = [...servicosSelecionados, ...outrosSelecionados];
-        document.getElementById('resumoServicos').innerHTML = todosServicos.length > 0 
-            ? todosServicos.map(s => `<p>• ${s}</p>`).join('')
-            : '<p>Selecione os serviços acima</p>';
+        const servicos = this.servicosSelecionados || [];
+        const servicosTexto = servicos.length > 0 ? servicos.join(', ') : 'Nenhum serviço selecionado';
+        document.getElementById('resumoServicos').textContent = servicosTexto;
     }
     
     updateAllSelections() {
-        this.updateNichos();
-        this.updateDores();
+        this.updateNichoResumo();
+        this.updateDoresResumo();
         this.updateCanais();
         this.updateServicos();
-        this.updateOutrosServicos();
         this.updateResumo();
     }
 }

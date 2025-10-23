@@ -135,76 +135,220 @@
 
                 <!-- 1. NICHO - Largura Total -->
                 <div class="canvas-section full-width">
-                        <h2>1. NICHO</h2>
-                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione o(s) nicho(s) que você vai focar:</p>
+                    <h2>1. NICHO</h2>
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione o nicho que você vai focar:</p>
                     
-                    <select id="nichoSelect" multiple size="8">
-                        <option value="advogados">⚖️ Advogados/Escritórios Jurídicos</option>
-                        <option value="dentistas">🦷 Dentistas/Clínicas Odontológicas</option>
-                        <option value="medicos">👨‍⚕️ Médicos/Clínicas Médicas</option>
-                        <option value="academias">💪 Academias/Personal Trainers</option>
-                        <option value="restaurantes">🍽️ Restaurantes/Bares</option>
-                        <option value="beleza">💇‍♀️ Salões de Beleza/Barbearias</option>
-                        <option value="imoveis">🏠 Corretores de Imóveis</option>
-                        <option value="arquitetos">🏗️ Arquitetos/Design de Interiores</option>
-                        <option value="contadores">📊 Contadores/Escritórios Contábeis</option>
-                        <option value="escolas">🎓 Escolas/Cursos Livres</option>
-                        <option value="ecommerce">🛒 E-commerce/Lojas Online</option>
-                        <option value="infoprodutores">📚 Infoprodutores/Coaches</option>
-                        <option value="construtoras">🏢 Construtoras/Engenharia</option>
-                        <option value="mecanicas">🔧 Oficinas Mecânicas</option>
-                        <option value="psicologos">🧠 Psicólogos/Terapeutas</option>
-                        <option value="outro">➕ Outro nicho</option>
-                    </select>
+                    <div class="nichos-grid">
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho1" name="nicho" value="advogados">
+                            <label for="nicho1">
+                                <span class="card-icon">⚖️</span>
+                                <span class="card-title">Advogados</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho2" name="nicho" value="dentistas">
+                            <label for="nicho2">
+                                <span class="card-icon">🦷</span>
+                                <span class="card-title">Dentistas</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho3" name="nicho" value="medicos">
+                            <label for="nicho3">
+                                <span class="card-icon">👨‍⚕️</span>
+                                <span class="card-title">Médicos</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho4" name="nicho" value="academias">
+                            <label for="nicho4">
+                                <span class="card-icon">💪</span>
+                                <span class="card-title">Academias</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho5" name="nicho" value="restaurantes">
+                            <label for="nicho5">
+                                <span class="card-icon">🍽️</span>
+                                <span class="card-title">Restaurantes</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho6" name="nicho" value="beleza">
+                            <label for="nicho6">
+                                <span class="card-icon">💇‍♀️</span>
+                                <span class="card-title">Beleza</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho7" name="nicho" value="imoveis">
+                            <label for="nicho7">
+                                <span class="card-icon">🏠</span>
+                                <span class="card-title">Imóveis</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho8" name="nicho" value="arquitetos">
+                            <label for="nicho8">
+                                <span class="card-icon">🏗️</span>
+                                <span class="card-title">Arquitetos</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho9" name="nicho" value="contadores">
+                            <label for="nicho9">
+                                <span class="card-icon">📊</span>
+                                <span class="card-title">Contadores</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho10" name="nicho" value="escolas">
+                            <label for="nicho10">
+                                <span class="card-icon">🎓</span>
+                                <span class="card-title">Escolas</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho11" name="nicho" value="ecommerce">
+                            <label for="nicho11">
+                                <span class="card-icon">🛒</span>
+                                <span class="card-title">E-commerce</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho12" name="nicho" value="infoprodutores">
+                            <label for="nicho12">
+                                <span class="card-icon">📚</span>
+                                <span class="card-title">Infoprodutores</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho13" name="nicho" value="construtoras">
+                            <label for="nicho13">
+                                <span class="card-icon">🏢</span>
+                                <span class="card-title">Construtoras</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho14" name="nicho" value="mecanicas">
+                            <label for="nicho14">
+                                <span class="card-icon">🔧</span>
+                                <span class="card-title">Mecânicas</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nicho15" name="nicho" value="psicologos">
+                            <label for="nicho15">
+                                <span class="card-icon">🧠</span>
+                                <span class="card-title">Psicólogos</span>
+                            </label>
+                        </div>
+                        <div class="nicho-card">
+                            <input type="radio" id="nichoOutro" name="nicho" value="outro">
+                            <label for="nichoOutro">
+                                <span class="card-icon">➕</span>
+                                <span class="card-title">Outro</span>
+                            </label>
+                        </div>
+                    </div>
                     
                     <div class="nicho-custom" style="display: none;">
                         <input type="text" id="nichoCustom" placeholder="Especifique outro nicho">
                     </div>
-
-                    <div class="nichos-selecionados" id="nichosSelecionados">
-                        <h4>✅ Nichos Selecionados:</h4>
-                        <div id="listaNichos"></div>
+                    
+                    <div class="nicho-resumo" id="nichoResumo">
+                        <h5>✅ Nicho Selecionado:</h5>
+                        <div id="nichoSelecionado">Selecione um nicho acima</div>
                     </div>
                 </div>
 
                 <!-- 2. DORES - Largura Total -->
                 <div class="canvas-section full-width">
-                        <h2>2. DORES PRINCIPAIS</h2>
+                    <h2>2. DORES PRINCIPAIS</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione as principais dores que o marketing digital resolve:</p>
                     
-                    <select id="doresSelect" multiple size="6">
-                        <option value="presenca-digital">🌐 Falta de presença digital/online</option>
-                        <option value="leads-qualificados">🎯 Baixa geração de leads qualificados</option>
-                        <option value="conversao-seguidores">📱 Dificuldade em converter seguidores em clientes</option>
-                        <option value="redes-sociais">📲 Não sabe usar redes sociais para vender</option>
-                        <option value="orcamento-desperdicado">💰 Orçamento desperdiçado em anúncios</option>
-                        <option value="relacionamento-publico">🤝 Falta de relacionamento com público</option>
-                        <option value="site-desatualizado">💻 Site desatualizado ou inexistente</option>
-                        <option value="processos-desorganizados">📋 Processos comerciais desorganizados</option>
-                        <option value="outra">➕ Outra dor específica</option>
-                    </select>
+                    <div class="dores-grid">
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor1" name="dores" value="presenca-digital">
+                            <label for="dor1">
+                                <span class="card-icon">🌐</span>
+                                <span class="card-title">Falta de presença digital</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor2" name="dores" value="leads-qualificados">
+                            <label for="dor2">
+                                <span class="card-icon">🎯</span>
+                                <span class="card-title">Baixa geração de leads</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor3" name="dores" value="conversao-seguidores">
+                            <label for="dor3">
+                                <span class="card-icon">📱</span>
+                                <span class="card-title">Dificuldade em converter</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor4" name="dores" value="redes-sociais">
+                            <label for="dor4">
+                                <span class="card-icon">📲</span>
+                                <span class="card-title">Não sabe usar redes sociais</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor5" name="dores" value="orcamento-desperdicado">
+                            <label for="dor5">
+                                <span class="card-icon">💰</span>
+                                <span class="card-title">Orçamento desperdiçado</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor6" name="dores" value="relacionamento-publico">
+                            <label for="dor6">
+                                <span class="card-icon">🤝</span>
+                                <span class="card-title">Falta de relacionamento</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor7" name="dores" value="site-desatualizado">
+                            <label for="dor7">
+                                <span class="card-icon">💻</span>
+                                <span class="card-title">Site desatualizado</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor8" name="dores" value="processos-desorganizados">
+                            <label for="dor8">
+                                <span class="card-icon">📋</span>
+                                <span class="card-title">Processos desorganizados</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dorOutro" name="dores" value="outra">
+                            <label for="dorOutro">
+                                <span class="card-icon">➕</span>
+                                <span class="card-title">Outra dor</span>
+                            </label>
+                        </div>
+                    </div>
                     
                     <div class="dor-custom" style="display: none;">
                         <input type="text" id="dorCustom" placeholder="Especifique outra dor">
                     </div>
-
-                    <div class="dores-selecionadas" id="doresSelecionadas">
-                        <h4>✅ Dores Selecionadas:</h4>
-                        <div id="listaDores"></div>
+                    
+                    <div class="dores-resumo" id="doresResumo">
+                        <h5>✅ Dores Selecionadas:</h5>
+                        <div id="doresSelecionadas">Selecione as dores acima</div>
                     </div>
                 </div>
 
                 <!-- 3. CAPACIDADE FINANCEIRA - Largura Total -->
                 <div class="canvas-section full-width">
-                        <h2>3. CAPACIDADE FINANCEIRA</h2>
-                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Como você quer definir a capacidade financeira do seu ICP?</p>
+                    <h2>3. CAPACIDADE FINANCEIRA</h2>
+                    <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Responda sobre a estrutura do seu ICP para calcular a capacidade financeira:</p>
                     
-                    <div class="capacidade-toggle">
-                        <button type="button" class="toggle-btn active" id="toggleEstrutura">📊 Calcular por Estrutura</button>
-                        <button type="button" class="toggle-btn" id="toggleDireto">💰 Informar Diretamente</button>
-                    </div>
-                    
-                    <!-- Opção A: Validação por Estrutura -->
                     <div class="capacidade-estrutura" id="capacidadeEstrutura">
                         <h4>📋 Responda sobre a estrutura do seu ICP:</h4>
                         
@@ -269,17 +413,13 @@
                         </div>
                     </div>
                     
-                    <!-- Opção B: Informar Diretamente -->
-                    <div class="capacidade-direto" id="capacidadeDireto" style="display: none;">
-                        <h4>💰 Selecione a faixa de faturamento mensal:</h4>
-                        <div class="radio-group">
-                            <label><input type="radio" name="capacidadeDireta" value="micro"> 🏠 Micro: até R$ 5k/mês</label>
-                            <label><input type="radio" name="capacidadeDireta" value="pequeno"> 🏢 Pequeno: R$ 5k - R$ 25k/mês</label>
-                            <label><input type="radio" name="capacidadeDireta" value="medio"> 🏪 Médio: R$ 25k - R$ 125k/mês</label>
-                            <label><input type="radio" name="capacidadeDireta" value="grande"> 🏬 Grande: acima de R$ 125k/mês</label>
+                    <div class="capacidade-resumo" id="capacidadeResumo">
+                        <h5>✅ Capacidade Detectada:</h5>
+                        <div id="capacidadeSelecionada">
+                            <span class="badge">Aguardando seleção...</span>
                         </div>
                     </div>
-                    </div>
+                </div>
 
                 <!-- 4. ACESSO AO DECISOR - Largura Total -->
                 <div class="canvas-section full-width">
@@ -332,6 +472,11 @@
                     <div class="canais-selecionados" id="canaisSelecionados">
                         <h4>✅ Canais Selecionados:</h4>
                         <div id="listaCanais"></div>
+                    </div>
+                    
+                    <div class="canais-resumo" id="canaisResumo">
+                        <h5>✅ Canais Selecionados:</h5>
+                        <div id="canaisSelecionados">Selecione os canais acima</div>
                     </div>
                 </div>
 
@@ -711,9 +856,7 @@
 
             <!-- BOTÕES -->
             <div class="button-group">
-                <button type="button" class="btn-secondary" onclick="salvarDados()">💾 Salvar Localmente (Auto-save)</button>
                 <button type="button" class="btn-primary" onclick="exportarPDF()">📄 Exportar como PDF</button>
-                <button type="button" class="btn-danger" onclick="limparDados()">🔄 Limpar Tudo</button>
             </div>
         </form>
 

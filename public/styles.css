@@ -1587,40 +1587,114 @@ body {
     }
 }
 
-/* Estilos para Selects Múltiplos */
-select[multiple] {
-    width: 100%;
-    max-width: 600px;
-    padding: 10px;
+/* Nicho Cards - Radio */
+.nichos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 15px;
+    margin-bottom: 20px;
+}
+
+.nicho-card input[type="radio"] {
+    display: none;
+}
+
+.nicho-card label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
     border: 2px solid #e9ecef;
     border-radius: 8px;
-    font-size: 0.95em;
-    background: #fff;
-    min-height: 120px;
-}
-
-select[multiple] option {
-    padding: 8px;
-    margin: 2px 0;
-    border-radius: 4px;
     cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
 }
 
-select[multiple] option:checked {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+.nicho-card input[type="radio"]:checked + label {
+    border-color: #f39c12;
+    background: linear-gradient(135deg, #fff3e0 0%, #ffe0b2 100%);
+    box-shadow: 0 4px 12px rgba(243, 156, 18, 0.3);
+}
+
+.nicho-card .card-icon {
+    font-size: 2em;
+    margin-bottom: 8px;
+}
+
+.nicho-card .card-title {
+    font-weight: 500;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/* Dor Cards - Checkbox */
+.dores-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 15px;
+}
+
+.dor-card input[type="checkbox"] {
+    display: none;
+}
+
+.dor-card label {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    padding: 20px;
+    border: 2px solid #e9ecef;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    background: white;
+}
+
+.dor-card input[type="checkbox"]:checked + label {
+    border-color: #3498db;
+    background: linear-gradient(135deg, #e3f2fd 0%, #bbdefb 100%);
+    box-shadow: 0 4px 12px rgba(52, 152, 219, 0.3);
+}
+
+.dor-card .card-icon {
+    font-size: 2em;
+    margin-bottom: 8px;
+}
+
+.dor-card .card-title {
+    font-weight: 500;
+    text-align: center;
+    font-size: 0.9em;
+}
+
+/* Resumos */
+.nicho-resumo, .dores-resumo, .capacidade-resumo, .canais-resumo {
+    margin-top: 20px;
+    padding: 15px;
+    background: #f8f9fa;
+    border-radius: 8px;
+    border-left: 4px solid #f39c12;
+}
+
+.tag {
+    display: inline-block;
+    padding: 5px 12px;
+    margin: 4px;
+    background: #667eea;
     color: white;
+    border-radius: 4px;
+    font-size: 0.9em;
+}
+
+.badge {
+    padding: 8px 16px;
+    background: #e9ecef;
+    border-radius: 6px;
     font-weight: 500;
 }
 
-select[multiple] option:hover {
-    background: #f8f9fa;
-}
-
-select[multiple] option:checked:hover {
-    background: linear-gradient(135deg, #5a6fd8 0%, #6a4190 100%);
-}
-
-/* Campos customizados para selects */
+/* Campos customizados para cards */
 .nicho-custom, .dor-custom {
     margin-top: 10px;
     padding: 10px;
@@ -1661,9 +1735,27 @@ select[multiple] option:checked:hover {
         grid-template-columns: 1fr;
     }
     
-    select[multiple] {
-        max-width: 100%;
-        min-height: 100px;
+    /* Cards de Nicho e Dores */
+    .nichos-grid {
+        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        gap: 10px;
+    }
+    
+    .dores-grid {
+        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
+        gap: 10px;
+    }
+    
+    .nicho-card label, .dor-card label {
+        padding: 15px 10px;
+    }
+    
+    .nicho-card .card-icon, .dor-card .card-icon {
+        font-size: 1.5em;
+    }
+    
+    .nicho-card .card-title, .dor-card .card-title {
+        font-size: 0.8em;
     }
     
     .triada-info {

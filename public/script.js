@@ -1145,20 +1145,35 @@ class CanvasAutomatizado {
         const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(cb => cb.value);
         console.log('🔧 calcularPrecificacao: Serviços selecionados:', servicosSelecionados);
         
-        let total = 0;
-        const servicosIncluidos = [];
+        let totalMensal = 0;
+        let totalUnico = 0;
+        const servicosMensais = [];
+        const servicosUnicos = [];
         
-        // Calcular serviços de marketing
+        // Separar serviços mensais dos únicos
         servicosSelecionados.forEach(servico => {
             const preco = this.precos[servico] ? this.precos[servico][this.capacidadeFinanceira] : 0;
-            total += preco;
             const servicoInfo = this.servicos[servico];
-            servicosIncluidos.push({
-                nome: servicoInfo ? servicoInfo.nome : servico,
-                preco: preco,
-                icon: servicoInfo ? servicoInfo.icon : '📦'
-            });
-            console.log(`🔧 calcularPrecificacao: ${servico} = R$ ${preco}`);
+            
+            if (servico === 'desenvolvimento-sites') {
+                // Sites e landing pages são cobrados uma única vez
+                totalUnico += preco;
+                servicosUnicos.push({
+                    nome: servicoInfo ? servicoInfo.nome : servico,
+                    preco: preco,
+                    icon: servicoInfo ? servicoInfo.icon : '💻'
+                });
+                console.log(`🔧 calcularPrecificacao: ${servico} (único) = R$ ${preco}`);
+            } else {
+                // Outros serviços são mensais
+                totalMensal += preco;
+                servicosMensais.push({
+                    nome: servicoInfo ? servicoInfo.nome : servico,
+                    preco: preco,
+                    icon: servicoInfo ? servicoInfo.icon : '📦'
+                });
+                console.log(`🔧 calcularPrecificacao: ${servico} (mensal) = R$ ${preco}`);
+            }
         });
         
         // Aplicar multiplicador do nicho
@@ -1170,52 +1185,80 @@ class CanvasAutomatizado {
             console.log(`🔧 calcularPrecificacao: Multiplicador do nicho ${nichoSelecionado.value}: ${multiplicadorNicho}`);
         }
         
-        total *= multiplicadorNicho;
-        console.log(`🔧 calcularPrecificacao: Total calculado: R$ ${total}`);
+        totalMensal *= multiplicadorNicho;
+        totalUnico *= multiplicadorNicho;
         
-        // Calcular jornadas
-        const enxuta = Math.round(total * 0.6);
-        const padrao = Math.round(total * 0.8);
-        const completa = Math.round(total);
+        console.log(`🔧 calcularPrecificacao: Total mensal: R$ ${totalMensal}, Total único: R$ ${totalUnico}`);
+        
+        // Calcular jornadas (apenas serviços mensais)
+        const enxuta = Math.round(totalMensal * 0.6);
+        const padrao = Math.round(totalMensal * 0.8);
+        const completa = Math.round(totalMensal);
         
         console.log(`🔧 calcularPrecificacao: Jornadas - Enxuta: R$ ${enxuta}, Padrão: R$ ${padrao}, Completa: R$ ${completa}`);
         
         // Atualizar interface
-        this.atualizarResultadoPrecificacao(servicosIncluidos, total);
+        this.atualizarResultadoPrecificacao(servicosMensais, servicosUnicos, totalMensal, totalUnico);
         this.atualizarJornadas(enxuta, padrao, completa);
         this.atualizarResumoJornadas(enxuta, padrao, completa);
         
         console.log('✅ calcularPrecificacao: Concluído');
     }
     
-    atualizarResultadoPrecificacao(servicosIncluidos, total) {
-        console.log('🔧 atualizarResultadoPrecificacao: Atualizando...', servicosIncluidos);
+    atualizarResultadoPrecificacao(servicosMensais, servicosUnicos, totalMensal, totalUnico) {
+        console.log('🔧 atualizarResultadoPrecificacao: Atualizando...', {servicosMensais, servicosUnicos, totalMensal, totalUnico});
         const container = document.getElementById('resultadoPrecificacao');
         if (!container) {
             console.error('❌ Elemento resultadoPrecificacao não encontrado');
             return;
         }
         
-        if (servicosIncluidos.length === 0) {
+        if (servicosMensais.length === 0 && servicosUnicos.length === 0) {
             container.innerHTML = '<p>Selecione os serviços para ver a precificação sugerida</p>';
             return;
         }
         
         let html = '<div class="precificacao-detalhada">';
-        servicosIncluidos.forEach(servico => {
+        
+        // Serviços mensais (recorrentes)
+        if (servicosMensais.length > 0) {
+            html += '<h5 style="margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">📅 Serviços Mensais (Recorrentes):</h5>';
+            servicosMensais.forEach(servico => {
+                html += `
+                    <div class="item-precificacao">
+                        <span>${servico.icon} ${servico.nome}</span>
+                        <span>R$ ${servico.preco.toLocaleString('pt-BR')}/mês</span>
+                    </div>
+                `;
+            });
+            
             html += `
-                <div class="item-precificacao">
-                    <span>${servico.icon} ${servico.nome}</span>
-                    <span>R$ ${servico.preco.toLocaleString('pt-BR')}</span>
+                <div class="total-precificacao">
+                    <strong>Total Mensal: R$ ${totalMensal.toLocaleString('pt-BR')}/mês</strong>
                 </div>
             `;
-        });
+        }
         
-        html += `
-            <div class="total-precificacao">
-                <strong>Total: R$ ${total.toLocaleString('pt-BR')}</strong>
-            </div>
-        </div>`;
+        // Serviços únicos (implementação)
+        if (servicosUnicos.length > 0) {
+            html += '<h5 style="margin-top: 20px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">💻 Implementação (Parcela Única):</h5>';
+            servicosUnicos.forEach(servico => {
+                html += `
+                    <div class="item-precificacao">
+                        <span>${servico.icon} ${servico.nome}</span>
+                        <span>R$ ${servico.preco.toLocaleString('pt-BR')}</span>
+                    </div>
+                `;
+            });
+            
+            html += `
+                <div class="total-precificacao">
+                    <strong>Total Implementação: R$ ${totalUnico.toLocaleString('pt-BR')}</strong>
+                </div>
+            `;
+        }
+        
+        html += '</div>';
         
         container.innerHTML = html;
         console.log('✅ atualizarResultadoPrecificacao: Precificação atualizada');

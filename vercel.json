@@ -1,39 +1,11 @@
 {
   "version": 2,
   "name": "canvas-nicho-icp-podium",
-  "buildCommand": "echo 'Static site - no build needed'",
-  "outputDirectory": ".",
-  "installCommand": "echo 'No dependencies to install'",
   "framework": null,
-  "functions": {},
   "rewrites": [
     {
       "source": "/(.*)",
       "destination": "/index.html"
     }
-  ],
-  "headers": [
-    {
-      "source": "/static/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=31536000, immutable"
-        }
-      ]
-    },
-    {
-      "source": "/(.*)",
-      "headers": [
-        {
-          "key": "Cache-Control",
-          "value": "public, max-age=0, must-revalidate"
-        }
-      ]
-    }
-  ],
-  "github": {
-    "enabled": true,
-    "autoAlias": true
-  }
+  ]
 }

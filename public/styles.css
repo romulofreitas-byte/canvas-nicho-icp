@@ -607,11 +607,17 @@ body {
     margin-bottom: 15px;
 }
 
+/* Seções de Largura Total */
+.canvas-section.full-width {
+    margin-top: 25px;
+    width: 100%;
+}
+
 /* Grid de Serviços */
 .servicos-grid {
     display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-    gap: 15px;
+    grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+    gap: 20px;
     margin-bottom: 20px;
 }
 

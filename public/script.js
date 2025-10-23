@@ -574,3 +574,503 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// ========================================
+// CLASSE: Canvas Automatizado Completo
+// ========================================
+class CanvasAutomatizado {
+    constructor() {
+        this.nichos = {
+            'advogados': { nome: 'Advogados/Escritórios Jurídicos', multiplicador: 1.2 },
+            'dentistas': { nome: 'Dentistas/Clínicas Odontológicas', multiplicador: 1.1 },
+            'medicos': { nome: 'Médicos/Clínicas Médicas', multiplicador: 1.2 },
+            'academias': { nome: 'Academias/Personal Trainers', multiplicador: 1.0 },
+            'restaurantes': { nome: 'Restaurantes/Bares', multiplicador: 1.0 },
+            'beleza': { nome: 'Salões de Beleza/Barbearias', multiplicador: 1.0 },
+            'imoveis': { nome: 'Corretores de Imóveis', multiplicador: 1.1 },
+            'arquitetos': { nome: 'Arquitetos/Design de Interiores', multiplicador: 1.2 },
+            'contadores': { nome: 'Contadores/Escritórios Contábeis', multiplicador: 1.1 },
+            'escolas': { nome: 'Escolas/Cursos Livres', multiplicador: 1.0 },
+            'ecommerce': { nome: 'E-commerce/Lojas Online', multiplicador: 1.0 },
+            'infoprodutores': { nome: 'Infoprodutores/Coaches', multiplicador: 1.1 },
+            'construtoras': { nome: 'Construtoras/Engenharia', multiplicador: 1.2 },
+            'mecanicas': { nome: 'Oficinas Mecânicas', multiplicador: 1.0 },
+            'psicologos': { nome: 'Psicólogos/Terapeutas', multiplicador: 1.1 }
+        };
+        
+        this.dores = {
+            'presenca-digital': 'Falta de presença digital/online',
+            'leads-qualificados': 'Baixa geração de leads qualificados',
+            'conversao-seguidores': 'Dificuldade em converter seguidores em clientes',
+            'redes-sociais': 'Não sabe usar redes sociais para vender',
+            'orcamento-desperdicado': 'Orçamento desperdiçado em anúncios',
+            'relacionamento-publico': 'Falta de relacionamento com público',
+            'site-desatualizado': 'Site desatualizado ou inexistente',
+            'processos-desorganizados': 'Processos comerciais desorganizados'
+        };
+        
+        this.canais = {
+            'google-maps': 'Google Maps / Google Meu Negócio',
+            'linkedin': 'LinkedIn (B2B)',
+            'instagram-facebook': 'Instagram / Facebook (B2C)',
+            'portais-classe': 'Portais de Classe (OAB, CREA, CRM, CRO)',
+            'indicacao': 'Indicação / Networking',
+            'eventos': 'Eventos / Feiras do Setor',
+            'cold-call': 'Cold Call / Prospecção Ativa',
+            'anuncios-pagos': 'Anúncios Pagos'
+        };
+        
+        this.servicos = {
+            'trafego-pago': { nome: 'Tráfego Pago', icon: '📈' },
+            'midias-sociais': { nome: 'Mídias Sociais', icon: '📱' },
+            'desenvolvimento-sites': { nome: 'Desenvolvimento de Sites e Landing Pages', icon: '💻' },
+            'automacao-whatsapp': { nome: 'Automação de WhatsApp', icon: '🤖' },
+            'mapeamento-processo': { nome: 'Mapeamento do Processo Comercial', icon: '🗺️' },
+            'estruturacao-atendimento': { nome: 'Estruturação de Atendimento', icon: '🎧' },
+            'estrategia-marketing': { nome: 'Estratégia e Planejamento de Marketing', icon: '🎯' }
+        };
+        
+        this.outrosServicos = {
+            'consultoria': { nome: 'Consultoria Estratégica', icon: '💡' }
+        };
+        
+        this.precos = {
+            'trafego-pago': { micro: 1500, pequeno: 3000, medio: 6000, grande: 12000 },
+            'midias-sociais': { micro: 800, pequeno: 1500, medio: 3000, grande: 6000 },
+            'desenvolvimento-sites': { micro: 2000, pequeno: 4000, medio: 8000, grande: 15000 },
+            'automacao-whatsapp': { micro: 1200, pequeno: 2500, medio: 5000, grande: 10000 },
+            'mapeamento-processo': { micro: 1000, pequeno: 2000, medio: 4000, grande: 8000 },
+            'estruturacao-atendimento': { micro: 1500, pequeno: 3000, medio: 6000, grande: 12000 },
+            'estrategia-marketing': { micro: 2500, pequeno: 5000, medio: 10000, grande: 20000 },
+            'consultoria': { micro: 500, pequeno: 1000, medio: 2500, grande: 5000 }
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.setupToggleCapacidade();
+        this.updateAllSelections();
+    }
+    
+    setupEventListeners() {
+        // Nichos
+        document.querySelectorAll('input[name="nichos"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => this.updateNichos());
+        });
+        
+        // Dores
+        document.querySelectorAll('input[name="dores"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => this.updateDores());
+        });
+        
+        // Canais
+        document.querySelectorAll('input[name="canais"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => this.updateCanais());
+        });
+        
+        // Serviços
+        document.querySelectorAll('input[name="servicos"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => this.updateServicos());
+        });
+        
+        // Outros Serviços
+        document.querySelectorAll('input[name="outrosServicos"]').forEach(checkbox => {
+            checkbox.addEventListener('change', () => this.updateOutrosServicos());
+        });
+        
+        // Capacidade Financeira - Radio buttons
+        document.querySelectorAll('input[name="estruturaFisica"], input[name="tamanhoEquipe"], input[name="volumeClientes"], input[name="ticketMedio"], input[name="investeMarketing"]').forEach(radio => {
+            radio.addEventListener('change', () => this.calcularCapacidadeEstrutura());
+        });
+        
+        document.querySelectorAll('input[name="capacidadeDireta"]').forEach(radio => {
+            radio.addEventListener('change', () => this.updateCapacidadeDireta());
+        });
+        
+        // Campos customizados
+        document.getElementById('nichoCustom')?.addEventListener('input', () => this.updateNichos());
+        document.getElementById('dorCustom')?.addEventListener('input', () => this.updateDores());
+        document.getElementById('canalCustom')?.addEventListener('input', () => this.updateCanais());
+    }
+    
+    setupToggleCapacidade() {
+        const toggleEstrutura = document.getElementById('toggleEstrutura');
+        const toggleDireto = document.getElementById('toggleDireto');
+        const capacidadeEstrutura = document.getElementById('capacidadeEstrutura');
+        const capacidadeDireto = document.getElementById('capacidadeDireto');
+        
+        toggleEstrutura?.addEventListener('click', () => {
+            toggleEstrutura.classList.add('active');
+            toggleDireto.classList.remove('active');
+            capacidadeEstrutura.style.display = 'block';
+            capacidadeDireto.style.display = 'none';
+        });
+        
+        toggleDireto?.addEventListener('click', () => {
+            toggleDireto.classList.add('active');
+            toggleEstrutura.classList.remove('active');
+            capacidadeDireto.style.display = 'block';
+            capacidadeEstrutura.style.display = 'none';
+        });
+    }
+    
+    updateNichos() {
+        const selecionados = [];
+        const checkboxes = document.querySelectorAll('input[name="nichos"]:checked');
+        
+        checkboxes.forEach(checkbox => {
+            if (checkbox.value === 'outro') {
+                const custom = document.getElementById('nichoCustom').value.trim();
+                if (custom) {
+                    selecionados.push(custom);
+                }
+            } else {
+                selecionados.push(this.nichos[checkbox.value].nome);
+            }
+        });
+        
+        this.updateLista('listaNichos', selecionados, 'nicho-selecionado');
+        this.updateResumo();
+        this.calcularPrecificacao();
+    }
+    
+    updateDores() {
+        const selecionadas = [];
+        const checkboxes = document.querySelectorAll('input[name="dores"]:checked');
+        
+        checkboxes.forEach(checkbox => {
+            if (checkbox.value === 'outra') {
+                const custom = document.getElementById('dorCustom').value.trim();
+                if (custom) {
+                    selecionadas.push(custom);
+                }
+            } else {
+                selecionadas.push(this.dores[checkbox.value]);
+            }
+        });
+        
+        this.updateLista('listaDores', selecionadas, 'dor-selecionada');
+        this.updateResumo();
+        this.calcularPrecificacao();
+    }
+    
+    updateCanais() {
+        const selecionados = [];
+        const checkboxes = document.querySelectorAll('input[name="canais"]:checked');
+        
+        checkboxes.forEach(checkbox => {
+            if (checkbox.value === 'outro') {
+                const custom = document.getElementById('canalCustom').value.trim();
+                if (custom) {
+                    selecionados.push(custom);
+                }
+            } else {
+                selecionados.push(this.canais[checkbox.value]);
+            }
+        });
+        
+        this.updateLista('listaCanais', selecionados, 'canal-selecionado');
+        this.updateResumo();
+    }
+    
+    updateServicos() {
+        const selecionados = [];
+        const checkboxes = document.querySelectorAll('input[name="servicos"]:checked');
+        
+        checkboxes.forEach(checkbox => {
+            const servico = this.servicos[checkbox.value];
+            const detalhe = checkbox.parentElement.querySelector('.servico-input').value.trim();
+            let texto = `${servico.icon} ${servico.nome}`;
+            if (detalhe) {
+                texto += ` (${detalhe})`;
+            }
+            selecionados.push(texto);
+        });
+        
+        this.updateLista('listaServicos', selecionados, 'servico-selecionado');
+        this.updateResumo();
+        this.calcularPrecificacao();
+    }
+    
+    updateOutrosServicos() {
+        const selecionados = [];
+        const checkboxes = document.querySelectorAll('input[name="outrosServicos"]:checked');
+        
+        checkboxes.forEach(checkbox => {
+            const servico = this.outrosServicos[checkbox.value];
+            const detalhe = checkbox.parentElement.querySelector('.servico-input').value.trim();
+            let texto = `${servico.icon} ${servico.nome}`;
+            if (detalhe) {
+                texto += ` (${detalhe})`;
+            }
+            selecionados.push(texto);
+        });
+        
+        this.updateLista('listaOutrosServicos', selecionados, 'outro-servico-selecionado');
+        this.updateResumo();
+        this.calcularPrecificacao();
+    }
+    
+    updateLista(containerId, itens, className) {
+        const container = document.getElementById(containerId);
+        if (!container) return;
+        
+        container.innerHTML = '';
+        itens.forEach(item => {
+            const span = document.createElement('span');
+            span.className = className;
+            span.textContent = item;
+            container.appendChild(span);
+        });
+    }
+    
+    calcularCapacidadeEstrutura() {
+        const estruturaFisica = document.querySelector('input[name="estruturaFisica"]:checked')?.value;
+        const tamanhoEquipe = document.querySelector('input[name="tamanhoEquipe"]:checked')?.value;
+        const volumeClientes = document.querySelector('input[name="volumeClientes"]:checked')?.value;
+        const ticketMedio = document.querySelector('input[name="ticketMedio"]:checked')?.value;
+        const investeMarketing = document.querySelector('input[name="investeMarketing"]:checked')?.value;
+        
+        if (!estruturaFisica || !tamanhoEquipe || !volumeClientes || !ticketMedio || !investeMarketing) {
+            document.getElementById('capacidadeEstimada').innerHTML = '<span class="capacidade-texto">Responda todas as perguntas</span>';
+            return;
+        }
+        
+        // Cálculo baseado nas respostas
+        let score = 0;
+        
+        // Estrutura física
+        const estruturaScores = { 'casa': 1, 'alugada': 2, 'propria': 3, 'multiplas': 4 };
+        score += estruturaScores[estruturaFisica] || 1;
+        
+        // Tamanho da equipe
+        const equipeScores = { '0': 1, '1-2': 2, '3-10': 3, '11-50': 4, '50+': 5 };
+        score += equipeScores[tamanhoEquipe] || 1;
+        
+        // Volume de clientes
+        const volumeScores = { '1-10': 1, '11-50': 2, '51-200': 3, '200+': 4 };
+        score += volumeScores[volumeClientes] || 1;
+        
+        // Ticket médio
+        const ticketScores = { '100': 1, '100-500': 2, '500-2000': 3, '2000-10000': 4, '10000+': 5 };
+        score += ticketScores[ticketMedio] || 1;
+        
+        // Investimento em marketing
+        const investScores = { '0': 1, '500': 2, '500-2000': 3, '2000-5000': 4, '5000+': 5 };
+        score += investScores[investeMarketing] || 1;
+        
+        // Determinar faixa baseada no score
+        let faixa, estimativa;
+        if (score <= 8) {
+            faixa = 'Micro';
+            estimativa = 'R$ 2k - R$ 8k/mês';
+        } else if (score <= 12) {
+            faixa = 'Pequeno';
+            estimativa = 'R$ 8k - R$ 30k/mês';
+        } else if (score <= 16) {
+            faixa = 'Médio';
+            estimativa = 'R$ 30k - R$ 100k/mês';
+        } else {
+            faixa = 'Grande';
+            estimativa = 'R$ 100k+/mês';
+        }
+        
+        document.getElementById('capacidadeEstimada').innerHTML = `
+            <span class="capacidade-texto">${faixa}</span>
+            <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
+        `;
+        
+        this.capacidadeFinanceira = faixa.toLowerCase();
+        this.updateResumo();
+        this.calcularPrecificacao();
+    }
+    
+    updateCapacidadeDireta() {
+        const selecionada = document.querySelector('input[name="capacidadeDireta"]:checked')?.value;
+        if (selecionada) {
+            this.capacidadeFinanceira = selecionada;
+            this.updateResumo();
+            this.calcularPrecificacao();
+        }
+    }
+    
+    calcularPrecificacao() {
+        if (!this.capacidadeFinanceira) return;
+        
+        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(cb => cb.value);
+        const outrosSelecionados = Array.from(document.querySelectorAll('input[name="outrosServicos"]:checked')).map(cb => cb.value);
+        
+        let total = 0;
+        const servicosIncluidos = [];
+        
+        // Calcular serviços de marketing
+        servicosSelecionados.forEach(servico => {
+            const preco = this.precos[servico][this.capacidadeFinanceira];
+            total += preco;
+            servicosIncluidos.push({
+                nome: this.servicos[servico].nome,
+                preco: preco,
+                icon: this.servicos[servico].icon
+            });
+        });
+        
+        // Calcular outros serviços
+        outrosSelecionados.forEach(servico => {
+            const preco = this.precos[servico][this.capacidadeFinanceira];
+            total += preco;
+            servicosIncluidos.push({
+                nome: this.outrosServicos[servico].nome,
+                preco: preco,
+                icon: this.outrosServicos[servico].icon
+            });
+        });
+        
+        // Aplicar multiplicador do nicho
+        const nichosSelecionados = Array.from(document.querySelectorAll('input[name="nichos"]:checked')).map(cb => cb.value);
+        let multiplicadorNicho = 1;
+        
+        nichosSelecionados.forEach(nicho => {
+            if (nicho !== 'outro' && this.nichos[nicho]) {
+                multiplicadorNicho = Math.max(multiplicadorNicho, this.nichos[nicho].multiplicador);
+            }
+        });
+        
+        total *= multiplicadorNicho;
+        
+        // Calcular jornadas
+        const enxuta = Math.round(total * 0.6);
+        const padrao = Math.round(total * 0.8);
+        const completa = Math.round(total);
+        
+        // Atualizar interface
+        this.atualizarResultadoPrecificacao(servicosIncluidos, total);
+        this.atualizarJornadas(enxuta, padrao, completa);
+        this.atualizarResumoJornadas(enxuta, padrao, completa);
+    }
+    
+    atualizarResultadoPrecificacao(servicosIncluidos, total) {
+        const container = document.getElementById('resultadoPrecificacao');
+        if (!container) return;
+        
+        if (servicosIncluidos.length === 0) {
+            container.innerHTML = '<p>Selecione os serviços para ver a precificação sugerida</p>';
+            return;
+        }
+        
+        let html = '<div class="precificacao-detalhada">';
+        servicosIncluidos.forEach(servico => {
+            html += `
+                <div class="item-precificacao">
+                    <span>${servico.icon} ${servico.nome}</span>
+                    <span>R$ ${servico.preco.toLocaleString('pt-BR')}</span>
+                </div>
+            `;
+        });
+        
+        html += `
+            <div class="total-precificacao">
+                <strong>Total: R$ ${total.toLocaleString('pt-BR')}</strong>
+            </div>
+        </div>`;
+        
+        container.innerHTML = html;
+    }
+    
+    atualizarJornadas(enxuta, padrao, completa) {
+        document.getElementById('pacoteBasico').querySelector('.pacote-preco').textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+        document.getElementById('pacoteIntermediario').querySelector('.pacote-preco').textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+        document.getElementById('pacotePremium').querySelector('.pacote-preco').textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+    }
+    
+    atualizarResumoJornadas(enxuta, padrao, completa) {
+        document.getElementById('resumoEnxuta').textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+        document.getElementById('resumoPadrao').textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+        document.getElementById('resumoCompleta').textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+    }
+    
+    updateResumo() {
+        // Nichos
+        const nichosSelecionados = Array.from(document.querySelectorAll('input[name="nichos"]:checked')).map(cb => {
+            if (cb.value === 'outro') {
+                return document.getElementById('nichoCustom').value.trim() || 'Outro nicho';
+            }
+            return this.nichos[cb.value].nome;
+        });
+        
+        document.getElementById('resumoNichos').innerHTML = nichosSelecionados.length > 0 
+            ? nichosSelecionados.map(n => `<p>• ${n}</p>`).join('')
+            : '<p>Selecione os nichos acima</p>';
+        
+        // Capacidade Financeira
+        if (this.capacidadeFinanceira) {
+            const faixas = {
+                'micro': 'Micro: até R$ 10k/mês',
+                'pequeno': 'Pequeno: R$ 10k - R$ 50k/mês',
+                'medio': 'Médio: R$ 50k - R$ 200k/mês',
+                'grande': 'Grande: acima de R$ 200k/mês'
+            };
+            document.getElementById('resumoCapacidade').innerHTML = `<p>• ${faixas[this.capacidadeFinanceira]}</p>`;
+        } else {
+            document.getElementById('resumoCapacidade').innerHTML = '<p>Defina a capacidade financeira acima</p>';
+        }
+        
+        // Serviços
+        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(cb => {
+            const servico = this.servicos[cb.value];
+            return `${servico.icon} ${servico.nome}`;
+        });
+        
+        const outrosSelecionados = Array.from(document.querySelectorAll('input[name="outrosServicos"]:checked')).map(cb => {
+            const servico = this.outrosServicos[cb.value];
+            return `${servico.icon} ${servico.nome}`;
+        });
+        
+        const todosServicos = [...servicosSelecionados, ...outrosSelecionados];
+        document.getElementById('resumoServicos').innerHTML = todosServicos.length > 0 
+            ? todosServicos.map(s => `<p>• ${s}</p>`).join('')
+            : '<p>Selecione os serviços acima</p>';
+    }
+    
+    updateAllSelections() {
+        this.updateNichos();
+        this.updateDores();
+        this.updateCanais();
+        this.updateServicos();
+        this.updateOutrosServicos();
+        this.updateResumo();
+    }
+}
+
+// ========================================
+// FUNÇÃO: Exportar PDF
+// ========================================
+function exportarPDF() {
+    const element = document.getElementById('canvasForm');
+    const opt = {
+        margin: 1,
+        filename: `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.pdf`,
+        image: { type: 'jpeg', quality: 0.98 },
+        html2canvas: { scale: 2 },
+        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+    };
+    
+    html2pdf().set(opt).from(element).save();
+}
+
+// Atualizar inicialização para incluir CanvasAutomatizado
+document.addEventListener('DOMContentLoaded', function() {
+    new PasswordAuth();
+    new CanvasNichoICP();
+    
+    // Inicializar canvas automatizado
+    new CanvasAutomatizado();
+    
+    // Inicializar Vercel Analytics
+    if (typeof window.va === 'function') {
+        window.va('track', 'Page View', {
+            page: 'Canvas Nicho ICP'
+        });
+    }
+});

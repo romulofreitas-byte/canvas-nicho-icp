@@ -133,30 +133,278 @@
                     <!-- 1. NICHO -->
                     <div class="canvas-section">
                         <h2>1. NICHO</h2>
-                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Qual é o segmento de mercado específico que você vai focar?</p>
-                        <textarea id="nicho" name="nicho" placeholder="Ex: Barbearias, Advogados autônomos, Engenheiros, etc."></textarea>
-                        <p style="font-size: 0.85em; color: #999; margin-top: 10px;">💡 Dica: Quanto mais específico, melhor!</p>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione o(s) nicho(s) que você vai focar:</p>
+                        
+                        <div class="nichos-grid">
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho1" name="nichos" value="advogados">
+                                <label for="nicho1">⚖️ Advogados/Escritórios Jurídicos</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho2" name="nichos" value="dentistas">
+                                <label for="nicho2">🦷 Dentistas/Clínicas Odontológicas</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho3" name="nichos" value="medicos">
+                                <label for="nicho3">👨‍⚕️ Médicos/Clínicas Médicas</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho4" name="nichos" value="academias">
+                                <label for="nicho4">💪 Academias/Personal Trainers</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho5" name="nichos" value="restaurantes">
+                                <label for="nicho5">🍽️ Restaurantes/Bares</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho6" name="nichos" value="beleza">
+                                <label for="nicho6">💇‍♀️ Salões de Beleza/Barbearias</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho7" name="nichos" value="imoveis">
+                                <label for="nicho7">🏠 Corretores de Imóveis</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho8" name="nichos" value="arquitetos">
+                                <label for="nicho8">🏗️ Arquitetos/Design de Interiores</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho9" name="nichos" value="contadores">
+                                <label for="nicho9">📊 Contadores/Escritórios Contábeis</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho10" name="nichos" value="escolas">
+                                <label for="nicho10">🎓 Escolas/Cursos Livres</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho11" name="nichos" value="ecommerce">
+                                <label for="nicho11">🛒 E-commerce/Lojas Online</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho12" name="nichos" value="infoprodutores">
+                                <label for="nicho12">📚 Infoprodutores/Coaches</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho13" name="nichos" value="construtoras">
+                                <label for="nicho13">🏢 Construtoras/Engenharia</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho14" name="nichos" value="mecanicas">
+                                <label for="nicho14">🔧 Oficinas Mecânicas</label>
+                            </div>
+                            <div class="nicho-item">
+                                <input type="checkbox" id="nicho15" name="nichos" value="psicologos">
+                                <label for="nicho15">🧠 Psicólogos/Terapeutas</label>
+                            </div>
+                        </div>
+                        
+                        <div class="nicho-outro">
+                            <input type="checkbox" id="nichoOutro" name="nichos" value="outro">
+                            <label for="nichoOutro">➕ Outro nicho</label>
+                            <div class="nicho-custom" style="display: none;">
+                                <input type="text" id="nichoCustom" placeholder="Descreva seu nicho específico">
+                            </div>
+                        </div>
+                        
+                        <div class="nichos-selecionados" id="nichosSelecionados">
+                            <h4>✅ Nichos Selecionados:</h4>
+                            <div id="listaNichos"></div>
+                        </div>
                     </div>
 
                     <!-- 2. DORES DO MERCADO -->
                     <div class="canvas-section">
                         <h2>2. DORES PRINCIPAIS</h2>
-                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Quais são as 3 principais dores desse mercado?</p>
-                        <textarea id="dores" name="dores" placeholder="1. Dor 1&#10;2. Dor 2&#10;3. Dor 3"></textarea>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione as principais dores que o marketing digital resolve:</p>
+                        
+                        <div class="dores-grid">
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor1" name="dores" value="presenca-digital">
+                                <label for="dor1">🌐 Falta de presença digital/online</label>
+                            </div>
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor2" name="dores" value="leads-qualificados">
+                                <label for="dor2">🎯 Baixa geração de leads qualificados</label>
+                            </div>
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor3" name="dores" value="conversao-seguidores">
+                                <label for="dor3">📱 Dificuldade em converter seguidores em clientes</label>
+                            </div>
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor4" name="dores" value="redes-sociais">
+                                <label for="dor4">📲 Não sabe usar redes sociais para vender</label>
+                            </div>
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor5" name="dores" value="orcamento-desperdicado">
+                                <label for="dor5">💰 Orçamento desperdiçado em anúncios</label>
+                            </div>
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor6" name="dores" value="relacionamento-publico">
+                                <label for="dor6">🤝 Falta de relacionamento com público</label>
+                            </div>
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor7" name="dores" value="site-desatualizado">
+                                <label for="dor7">💻 Site desatualizado ou inexistente</label>
+                            </div>
+                            <div class="dor-item">
+                                <input type="checkbox" id="dor8" name="dores" value="processos-desorganizados">
+                                <label for="dor8">📋 Processos comerciais desorganizados</label>
+                            </div>
+                        </div>
+                        
+                        <div class="dor-outro">
+                            <input type="checkbox" id="dorOutro" name="dores" value="outra">
+                            <label for="dorOutro">➕ Outra dor específica</label>
+                            <div class="dor-custom" style="display: none;">
+                                <input type="text" id="dorCustom" placeholder="Descreva a dor específica do seu nicho">
+                            </div>
+                        </div>
+                        
+                        <div class="dores-selecionadas" id="doresSelecionadas">
+                            <h4>✅ Dores Identificadas:</h4>
+                            <div id="listaDores"></div>
+                        </div>
                     </div>
 
                     <!-- 3. CAPACIDADE FINANCEIRA -->
                     <div class="canvas-section">
                         <h2>3. CAPACIDADE FINANCEIRA</h2>
-                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Qual é o orçamento típico desse mercado?</p>
-                        <textarea id="financeiro" name="financeiro" placeholder="Faturamento mensal, orçamento disponível, ticket médio esperado, etc."></textarea>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Como você quer definir a capacidade financeira do seu ICP?</p>
+                        
+                        <div class="capacidade-toggle">
+                            <button type="button" class="toggle-btn active" id="toggleEstrutura">📊 Calcular por Estrutura</button>
+                            <button type="button" class="toggle-btn" id="toggleDireto">💰 Informar Diretamente</button>
+                        </div>
+                        
+                        <!-- Opção A: Validação por Estrutura -->
+                        <div class="capacidade-estrutura" id="capacidadeEstrutura">
+                            <h4>📋 Responda sobre a estrutura do seu ICP:</h4>
+                            
+                            <div class="estrutura-pergunta">
+                                <h5>1. Estrutura Física:</h5>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="estruturaFisica" value="casa"> 🏠 Trabalha em casa</label>
+                                    <label><input type="radio" name="estruturaFisica" value="alugada"> 🏢 Sala comercial alugada</label>
+                                    <label><input type="radio" name="estruturaFisica" value="propria"> 🏪 Escritório/Loja próprio(a)</label>
+                                    <label><input type="radio" name="estruturaFisica" value="multiplas"> 🏬 Múltiplas unidades</label>
+                                </div>
+                            </div>
+                            
+                            <div class="estrutura-pergunta">
+                                <h5>2. Tamanho da Equipe:</h5>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="tamanhoEquipe" value="0"> 👤 Solo/Autônomo (0)</label>
+                                    <label><input type="radio" name="tamanhoEquipe" value="1-2"> 👥 Micro (1-2 pessoas)</label>
+                                    <label><input type="radio" name="tamanhoEquipe" value="3-10"> 👨‍👩‍👧‍👦 Pequena (3-10 pessoas)</label>
+                                    <label><input type="radio" name="tamanhoEquipe" value="11-50"> 🏢 Média (11-50 pessoas)</label>
+                                    <label><input type="radio" name="tamanhoEquipe" value="50+"> 🏭 Grande (50+ pessoas)</label>
+                                </div>
+                            </div>
+                            
+                            <div class="estrutura-pergunta">
+                                <h5>3. Volume de Clientes/Mês:</h5>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="volumeClientes" value="1-10"> 📊 1-10 clientes</label>
+                                    <label><input type="radio" name="volumeClientes" value="11-50"> 📈 11-50 clientes</label>
+                                    <label><input type="radio" name="volumeClientes" value="51-200"> 📊 51-200 clientes</label>
+                                    <label><input type="radio" name="volumeClientes" value="200+"> 🚀 200+ clientes</label>
+                                </div>
+                            </div>
+                            
+                            <div class="estrutura-pergunta">
+                                <h5>4. Ticket Médio por Cliente:</h5>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="ticketMedio" value="100"> 💵 Até R$ 100</label>
+                                    <label><input type="radio" name="ticketMedio" value="100-500"> 💰 R$ 100 - R$ 500</label>
+                                    <label><input type="radio" name="ticketMedio" value="500-2000"> 💎 R$ 500 - R$ 2.000</label>
+                                    <label><input type="radio" name="ticketMedio" value="2000-10000"> 💸 R$ 2.000 - R$ 10.000</label>
+                                    <label><input type="radio" name="ticketMedio" value="10000+"> 🏆 Acima de R$ 10.000</label>
+                                </div>
+                            </div>
+                            
+                            <div class="estrutura-pergunta">
+                                <h5>5. Já investe em marketing?</h5>
+                                <div class="radio-group">
+                                    <label><input type="radio" name="investeMarketing" value="0"> ❌ Não investe</label>
+                                    <label><input type="radio" name="investeMarketing" value="500"> 💰 Até R$ 500/mês</label>
+                                    <label><input type="radio" name="investeMarketing" value="500-2000"> 💎 R$ 500 - R$ 2.000/mês</label>
+                                    <label><input type="radio" name="investeMarketing" value="2000-5000"> 💸 R$ 2.000 - R$ 5.000/mês</label>
+                                    <label><input type="radio" name="investeMarketing" value="5000+"> 🏆 Acima de R$ 5.000/mês</label>
+                                </div>
+                            </div>
+                            
+                            <div class="capacidade-resultado" id="capacidadeResultado">
+                                <h4>📊 Capacidade Financeira Estimada:</h4>
+                                <div id="capacidadeEstimada" class="capacidade-badge">
+                                    <span class="capacidade-texto">Responda as perguntas acima</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <!-- Opção B: Informar Diretamente -->
+                        <div class="capacidade-direto" id="capacidadeDireto" style="display: none;">
+                            <h4>💰 Selecione a faixa de faturamento mensal:</h4>
+                            <div class="radio-group">
+                                <label><input type="radio" name="capacidadeDireta" value="micro"> 🏠 Micro: até R$ 10k/mês</label>
+                                <label><input type="radio" name="capacidadeDireta" value="pequeno"> 🏢 Pequeno: R$ 10k - R$ 50k/mês</label>
+                                <label><input type="radio" name="capacidadeDireta" value="medio"> 🏪 Médio: R$ 50k - R$ 200k/mês</label>
+                                <label><input type="radio" name="capacidadeDireta" value="grande"> 🏬 Grande: acima de R$ 200k/mês</label>
+                            </div>
+                        </div>
                     </div>
 
                     <!-- 4. ACESSO AO DECISOR -->
                     <div class="canvas-section">
                         <h2>4. ACESSO AO DECISOR</h2>
-                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Como você vai encontrar e contatar o tomador de decisão?</p>
-                        <textarea id="acesso" name="acesso" placeholder="Google Maps, LinkedIn, OAB, CREA, Portais específicos, etc."></textarea>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione os canais para encontrar e contatar o tomador de decisão:</p>
+                        
+                        <div class="canais-grid">
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal1" name="canais" value="google-maps">
+                                <label for="canal1">🗺️ Google Maps / Google Meu Negócio</label>
+                            </div>
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal2" name="canais" value="linkedin">
+                                <label for="canal2">💼 LinkedIn (B2B)</label>
+                            </div>
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal3" name="canais" value="instagram-facebook">
+                                <label for="canal3">📱 Instagram / Facebook (B2C)</label>
+                            </div>
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal4" name="canais" value="portais-classe">
+                                <label for="canal4">🏛️ Portais de Classe (OAB, CREA, CRM, CRO)</label>
+                            </div>
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal5" name="canais" value="indicacao">
+                                <label for="canal5">🤝 Indicação / Networking</label>
+                            </div>
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal6" name="canais" value="eventos">
+                                <label for="canal6">🎪 Eventos / Feiras do Setor</label>
+                            </div>
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal7" name="canais" value="cold-call">
+                                <label for="canal7">📞 Cold Call / Prospecção Ativa</label>
+                            </div>
+                            <div class="canal-item">
+                                <input type="checkbox" id="canal8" name="canais" value="anuncios-pagos">
+                                <label for="canal8">💰 Anúncios Pagos</label>
+                            </div>
+                        </div>
+                        
+                        <div class="canal-outro">
+                            <input type="checkbox" id="canalOutro" name="canais" value="outro">
+                            <label for="canalOutro">➕ Outro canal específico</label>
+                            <div class="canal-custom" style="display: none;">
+                                <input type="text" id="canalCustom" placeholder="Descreva o canal específico do seu nicho">
+                            </div>
+                        </div>
+                        
+                        <div class="canais-selecionados" id="canaisSelecionados">
+                            <h4>✅ Canais Selecionados:</h4>
+                            <div id="listaCanais"></div>
+                        </div>
                     </div>
 
                 </div>
@@ -249,12 +497,57 @@
                         <h4>✅ Serviços Selecionados:</h4>
                         <div id="listaServicos"></div>
                     </div>
+
+                    <!-- OUTROS SERVIÇOS -->
+                    <div class="outros-servicos">
+                        <h3>💼 OUTROS SERVIÇOS</h3>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Para profissionais de outras áreas que precisam de orientação estratégica:</p>
+                        
+                        <div class="outros-servicos-grid">
+                            <div class="outro-servico-item">
+                                <input type="checkbox" id="outroServico1" name="outrosServicos" value="consultoria">
+                                <label for="outroServico1">
+                                    <span class="servico-icon">💡</span>
+                                    <span class="servico-nome">Consultoria Estratégica</span>
+                                    <span class="servico-desc">Para profissionais de outras áreas que precisam de orientação estratégica</span>
+                                </label>
+                                <div class="servico-detalhes">
+                                    <input type="text" placeholder="Detalhe sua consultoria (opcional)" class="servico-input">
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="outros-servicos-selecionados" id="outrosServicosSelecionados">
+                            <h4>✅ Outros Serviços Selecionados:</h4>
+                            <div id="listaOutrosServicos"></div>
+                        </div>
+                    </div>
                 </div>
 
                 <!-- 6. CALCULADORA DE PRECIFICAÇÃO - Largura Total -->
                 <div class="canvas-section full-width">
                     <h2>6. CALCULADORA DE PRECIFICAÇÃO</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Precificação inteligente baseada na capacidade financeira do seu nicho</p>
+                    
+                    <!-- ALERTA SOBRE PRECIFICAÇÃO -->
+                    <div class="alerta-precificacao">
+                        <div class="alerta-header">
+                            <span class="alerta-icon">⚠️</span>
+                            <h4>ATENÇÃO: Precificação Estimativa</h4>
+                        </div>
+                        <div class="alerta-content">
+                            <p>Os valores apresentados são <strong>OTIMISTAS</strong> e servem como <strong>REFERÊNCIA inicial</strong>.</p>
+                            <p>Diversos fatores influenciarão o preço final, principalmente:</p>
+                            <ul>
+                                <li>• Complexidade do nicho escolhido</li>
+                                <li>• Maturidade digital do ICP</li>
+                                <li>• Urgência e expectativas do cliente</li>
+                                <li>• Seu nível de experiência e portfólio</li>
+                                <li>• Concorrência local</li>
+                            </ul>
+                            <p class="alerta-dica">💡 <strong>Use como base, mas ajuste conforme a realidade de cada negociação!</strong></p>
+                        </div>
+                    </div>
                     
                     <div class="precificacao-container">
                         <div class="capacidade-info">
@@ -339,25 +632,90 @@
                             </div>
                             
                             <div class="pacotes-sugeridos">
-                                <h5>📦 Pacotes Sugeridos:</h5>
+                                <h5>📦 Jornadas Sugeridas:</h5>
+                                
+                                <!-- ALERTA SOBRE USO ESTRATÉGICO -->
+                                <div class="alerta-jornadas">
+                                    <div class="alerta-jornadas-header">
+                                        <span class="alerta-icon">⚠️</span>
+                                        <h6>INFORMAÇÃO INTERNA - USO ESTRATÉGICO</h6>
+                                    </div>
+                                    <div class="alerta-jornadas-content">
+                                        <p>As jornadas abaixo são para <strong>VOCÊ organizar sua proposta</strong>,</p>
+                                        <p><strong>NÃO devem ser oferecidas como "pacotes" ao cliente.</strong></p>
+                                        <p>Use como base para criar uma proposta <strong>PERSONALIZADA</strong> e</p>
+                                        <p><strong>ESPECÍFICA</strong> para as necessidades do cliente.</p>
+                                    </div>
+                                </div>
+                                
                                 <div class="pacotes-grid">
                                     <div class="pacote-item" id="pacoteBasico">
-                                        <h6>🥉 Básico</h6>
+                                        <h6>🥉 Proposta Enxuta</h6>
                                         <div class="pacote-preco">R$ 0</div>
                                         <div class="pacote-servicos"></div>
                                     </div>
                                     <div class="pacote-item" id="pacoteIntermediario">
-                                        <h6>🥈 Intermediário</h6>
+                                        <h6>🥈 Proposta Padrão</h6>
                                         <div class="pacote-preco">R$ 0</div>
                                         <div class="pacote-servicos"></div>
                                     </div>
                                     <div class="pacote-item" id="pacotePremium">
-                                        <h6>🥇 Premium</h6>
+                                        <h6>🥇 Proposta Completa</h6>
                                         <div class="pacote-preco">R$ 0</div>
                                         <div class="pacote-servicos"></div>
                                     </div>
                                 </div>
                             </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO DE RESUMO -->
+                <div class="resumo-section">
+                    <h3>📊 RESUMO DO SEU CANVAS</h3>
+                    
+                    <div class="resumo-container">
+                        <div class="resumo-item">
+                            <h4>🎯 NICHO SELECIONADO:</h4>
+                            <div id="resumoNichos" class="resumo-content">
+                                <p>Selecione os nichos acima</p>
+                            </div>
+                        </div>
+                        
+                        <div class="resumo-item">
+                            <h4>💰 CAPACIDADE FINANCEIRA:</h4>
+                            <div id="resumoCapacidade" class="resumo-content">
+                                <p>Defina a capacidade financeira acima</p>
+                            </div>
+                        </div>
+                        
+                        <div class="resumo-item">
+                            <h4>📦 SERVIÇOS OFERECIDOS:</h4>
+                            <div id="resumoServicos" class="resumo-content">
+                                <p>Selecione os serviços acima</p>
+                            </div>
+                        </div>
+                        
+                        <div class="resumo-item">
+                            <h4>💡 JORNADAS SUGERIDAS:</h4>
+                            <div id="resumoJornadas" class="resumo-content">
+                                <div class="resumo-jornada">
+                                    <span class="jornada-nome">🥉 Proposta Enxuta:</span>
+                                    <span id="resumoEnxuta" class="jornada-preco">R$ 0</span>
+                                </div>
+                                <div class="resumo-jornada">
+                                    <span class="jornada-nome">🥈 Proposta Padrão:</span>
+                                    <span id="resumoPadrao" class="jornada-preco">R$ 0</span>
+                                </div>
+                                <div class="resumo-jornada">
+                                    <span class="jornada-nome">🥇 Proposta Completa:</span>
+                                    <span id="resumoCompleta" class="jornada-preco">R$ 0</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="resumo-alerta">
+                            <p>⚠️ <strong>Lembre-se:</strong> Ajuste conforme o contexto de cada negociação!</p>
                         </div>
                     </div>
                 </div>
@@ -406,9 +764,9 @@
 
             <!-- BOTÕES -->
             <div class="button-group">
-                <button type="button" class="btn-primary" onclick="salvarDados()">💾 SALVAR DADOS</button>
-                <button type="button" class="btn-secondary" onclick="limparDados()">🔄 LIMPAR TUDO</button>
-                <button type="button" class="btn-print" onclick="window.print()">🖨️ IMPRIMIR</button>
+                <button type="button" class="btn-secondary" onclick="salvarDados()">💾 Salvar Localmente (Auto-save)</button>
+                <button type="button" class="btn-primary" onclick="exportarPDF()">📄 Exportar como PDF</button>
+                <button type="button" class="btn-danger" onclick="limparDados()">🔄 Limpar Tudo</button>
             </div>
         </form>
 
@@ -459,6 +817,7 @@
     </div>
     
     <script src="config.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
     <script src="script.js"></script>
     
     <!-- Vercel Analytics -->

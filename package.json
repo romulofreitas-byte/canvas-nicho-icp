@@ -1,0 +1,31 @@
+{
+  "name": "canvas-nicho-icp-podium",
+  "version": "1.0.0",
+  "description": "Canvas de Nicho e ICP - Método Pódium",
+  "main": "index.html",
+  "scripts": {
+    "start": "npx serve .",
+    "dev": "npx serve . -l 3000",
+    "build": "echo 'Static site - no build needed'",
+    "deploy": "vercel --prod",
+    "vercel-build": "echo 'Static site ready for deployment'"
+  },
+  "keywords": [
+    "canvas",
+    "nicho",
+    "icp",
+    "podium",
+    "metodologia"
+  ],
+  "author": "Rômulo Freitas",
+  "license": "MIT",
+  "dependencies": {
+    "@vercel/analytics": "^1.2.1"
+  },
+  "devDependencies": {
+    "serve": "^14.2.1"
+  },
+  "engines": {
+    "node": ">=14.0.0"
+  }
+}

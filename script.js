@@ -210,6 +210,22 @@ class CanvasNichoICP {
                 return false;
             }
             
+            // Rate limiting: verificar se já salvou recentemente
+            const lastSaveKey = `lastSupabaseSave_${this.userFingerprint}`;
+            const lastSave = localStorage.getItem(lastSaveKey);
+            const now = Date.now();
+            
+            if (lastSave) {
+                const timeDiff = now - parseInt(lastSave);
+                const oneHour = 60 * 60 * 1000; // 1 hora em milissegundos
+                
+                if (timeDiff < oneHour) {
+                    const remainingTime = Math.ceil((oneHour - timeDiff) / (60 * 1000));
+                    alert(`⚠️ Aguarde ${remainingTime} minutos antes de salvar novamente no Supabase.\n\nIsso evita spam e garante melhor performance.`);
+                    return false;
+                }
+            }
+            
             const payload = {
                 user_fingerprint: this.userFingerprint,
                 triada1: dados.triada1,
@@ -241,6 +257,8 @@ class CanvasNichoICP {
             
             if (response.ok) {
                 console.log('✅ Canvas salvo no Supabase!');
+                // Salvar timestamp do último save
+                localStorage.setItem(lastSaveKey, now.toString());
                 return true;
             } else {
                 console.error('❌ Erro ao salvar no Supabase:', await response.json());

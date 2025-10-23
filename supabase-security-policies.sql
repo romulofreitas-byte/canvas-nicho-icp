@@ -40,18 +40,12 @@ CREATE INDEX idx_canvas_data_created_at ON canvas_data(created_at DESC);
 -- Ativar Row Level Security (RLS)
 ALTER TABLE canvas_data ENABLE ROW LEVEL SECURITY;
 
--- Política: Permitir INSERT com rate limit
--- Máximo 10 envios por hora por fingerprint
+-- Política: Permitir INSERT para todos
+-- Rate limiting é implementado no código JavaScript (1 save por hora por usuário)
+-- Como estamos usando anon key, vamos permitir INSERT para todos
 CREATE POLICY "Allow insert canvas data" ON canvas_data
     FOR INSERT
-    WITH CHECK (
-        (
-            SELECT COUNT(*) 
-            FROM canvas_data 
-            WHERE user_fingerprint = NEW.user_fingerprint 
-            AND created_at > NOW() - INTERVAL '1 hour'
-        ) < 10
-    );
+    WITH CHECK (true);
 
 -- Política: Permitir SELECT apenas do próprio usuário
 -- Nota: Esta política requer autenticação JWT, mas como estamos usando anon key,
@@ -107,7 +101,7 @@ CREATE TRIGGER update_canvas_data_updated_at
 
 -- Ver canvas completos (tríade validada)
 -- SELECT * FROM canvas_data 
--- WHERE triada1 = true AND triada2 = true AND oda3 = true
+-- WHERE triada1 = true AND triada2 = true AND triada3 = true
 -- ORDER BY created_at DESC;
 
 -- Ver estatísticas gerais

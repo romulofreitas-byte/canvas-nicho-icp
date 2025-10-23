@@ -4,7 +4,319 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Canvas de Nicho e ICP - Método Pódium</title>
-    <link rel="stylesheet" href="styles.css">
+    <style>
+        /* Reset e Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header */
+        .header {
+            background: linear-gradient(135deg, #F2b705 0%, #d99a04 100%);
+            color: white;
+            padding: 30px;
+            border-radius: 12px;
+            margin-bottom: 30px;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(242, 183, 5, 0.3);
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .header p {
+            font-size: 1.1rem;
+            margin-bottom: 25px;
+            opacity: 0.9;
+        }
+
+        .triada-info {
+            display: flex;
+            justify-content: center;
+            gap: 30px;
+            flex-wrap: wrap;
+        }
+
+        .triada-item {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 12px 20px;
+            border-radius: 8px;
+            backdrop-filter: blur(10px);
+        }
+
+        .triada-icon {
+            background: #000000;
+            color: #F2b705;
+            width: 24px;
+            height: 24px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+        /* Canvas Wrapper */
+        .canvas-wrapper {
+            background: white;
+            border-radius: 12px;
+            padding: 30px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            margin-bottom: 30px;
+        }
+
+        /* Seções do Canvas */
+        .canvas-section {
+            margin-bottom: 30px;
+            padding: 25px;
+            border: 2px solid #e9ecef;
+            border-radius: 8px;
+            background: #fff;
+            transition: all 0.3s ease;
+        }
+
+        .canvas-section:hover {
+            border-color: #F2b705;
+            box-shadow: 0 2px 10px rgba(242, 183, 5, 0.1);
+        }
+
+        .canvas-section h2 {
+            color: #000000;
+            font-size: 1.5rem;
+            margin-bottom: 15px;
+            font-weight: bold;
+        }
+
+        /* Tríade do Nicho */
+        .triada {
+            background: linear-gradient(135deg, #fffef0 0%, #ffffff 100%);
+            border: 3px solid #F2b705;
+        }
+
+        .triada-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 20px;
+            margin-bottom: 20px;
+        }
+
+        .triada-box {
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            border: 2px solid #e9ecef;
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .triada-box:hover {
+            border-color: #F2b705;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(242, 183, 5, 0.2);
+        }
+
+        .triada-box h3 {
+            color: #000000;
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+            font-weight: bold;
+        }
+
+        .triada-box p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 0.9rem;
+        }
+
+        .triada-checkbox {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+        }
+
+        .triada-checkbox input[type="checkbox"] {
+            width: 20px;
+            height: 20px;
+            accent-color: #F2b705;
+            cursor: pointer;
+        }
+
+        .triada-checkbox label {
+            font-weight: bold;
+            color: #000000;
+            cursor: pointer;
+            user-select: none;
+        }
+
+        /* Resultado da Tríade */
+        .resultado {
+            background: linear-gradient(135deg, #F2b705 0%, #d99a04 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: none;
+            text-align: center;
+            animation: slideIn 0.5s ease-out;
+        }
+
+        .resultado.ativo {
+            display: block;
+        }
+
+        .resultado h4 {
+            font-size: 1.3rem;
+            margin-bottom: 8px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        /* Grid do Canvas */
+        .canvas-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 25px;
+        }
+
+        /* Botões */
+        .button-group {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+            margin: 30px 0;
+            flex-wrap: wrap;
+        }
+
+        .btn-primary {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 14px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-decoration: none;
+            display: inline-block;
+            background: #F2b705;
+            color: #000000;
+        }
+
+        .btn-primary:hover {
+            background: #e0a500;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(242, 183, 5, 0.3);
+        }
+
+        /* Community Section */
+        .community-section {
+            background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+            border: 2px solid #25D366;
+            border-radius: 12px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+            box-shadow: 0 4px 15px rgba(37, 211, 102, 0.1);
+            transition: all 0.3s ease;
+        }
+
+        .community-section:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 6px 20px rgba(37, 211, 102, 0.15);
+        }
+
+        .btn-whatsapp {
+            display: inline-block;
+            background-color: #25D366;
+            color: white;
+            padding: 15px 30px;
+            border-radius: 8px;
+            text-decoration: none;
+            font-size: 16px;
+            font-weight: bold;
+            transition: all 0.3s ease;
+        }
+
+        .btn-whatsapp:hover {
+            background-color: #20B358;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            padding: 20px;
+            color: #666;
+            border-top: 1px solid #e9ecef;
+            margin-top: 30px;
+        }
+
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+            
+            .header h1 {
+                font-size: 2rem;
+            }
+            
+            .triada-info {
+                flex-direction: column;
+                gap: 15px;
+            }
+            
+            .triada-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .canvas-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .button-group {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .btn-primary {
+                width: 100%;
+                max-width: 300px;
+            }
+        }
+    </style>
 </head>
 <body>
     <div class="container">
@@ -480,9 +792,6 @@
                     </div>
                 </div>
 
-                <!-- CANVAS GRID - Apenas seções 5 e 6 -->
-                <div class="canvas-grid">
-
                 <!-- 5. ENTREGÁVEIS (SERVIÇOS) - Largura Total -->
                 <div class="canvas-section full-width">
                     <h2>5. ENTREGÁVEIS (SERVIÇOS)</h2>
@@ -879,39 +1188,588 @@
         <div class="footer">
             <p>Canvas de Nicho e ICP - Método Pódium</p>
             <p>Desenvolvido para a Primeira Fase do Método Pódium: Definição de Nicho e ICP</p>
-            <p style="margin-top: 10px; color: #999;">Seus dados são salvos localmente e no Supabase</p>
+            <p style="margin-top: 10px; color: #999;">Versão Standalone - Seus dados são salvos localmente</p>
         </div>
     </div>
 
     
-    <script src="config.js"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
-    <script src="script.js"></script>
-    
-    <!-- Vercel Analytics -->
     <script>
-        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
-    </script>
-    <script defer src="/_vercel/insights/script.js"></script>
-    
-    <!-- Fallback Analytics Script -->
-    <script>
-        setTimeout(() => {
-            if (typeof window.va !== 'function') {
-                console.warn('⚠️ Vercel Analytics não carregou automaticamente');
-                // Tentar carregar o script do Vercel Analytics
-                const script = document.createElement('script');
-                script.src = '/_vercel/insights/script.js';
-                script.defer = true;
-                script.onerror = function() {
-                    console.log('ℹ️ Vercel Analytics não disponível (ambiente local ou erro de rede)');
+        /**
+         * Canvas de Nicho e ICP - Método Pódium
+         * Versão Standalone Completa com todas as correções
+         */
+        
+        // ========================================
+        // CLASSE: Canvas Automatizado Completo
+        // ========================================
+        class CanvasAutomatizado {
+            constructor() {
+                this.nichos = {
+                    'advogados': { nome: 'Advogados/Escritórios Jurídicos', multiplicador: 1.2 },
+                    'dentistas': { nome: 'Dentistas/Clínicas Odontológicas', multiplicador: 1.1 },
+                    'medicos': { nome: 'Médicos/Clínicas Médicas', multiplicador: 1.2 },
+                    'academias': { nome: 'Academias/Personal Trainers', multiplicador: 1.0 },
+                    'restaurantes': { nome: 'Restaurantes/Bares', multiplicador: 1.0 },
+                    'beleza': { nome: 'Salões de Beleza/Barbearias', multiplicador: 1.0 },
+                    'imoveis': { nome: 'Corretores de Imóveis', multiplicador: 1.1 },
+                    'arquitetos': { nome: 'Arquitetos/Design de Interiores', multiplicador: 1.2 },
+                    'contadores': { nome: 'Contadores/Escritórios Contábeis', multiplicador: 1.1 },
+                    'escolas': { nome: 'Escolas/Cursos Livres', multiplicador: 1.0 },
+                    'ecommerce': { nome: 'E-commerce/Lojas Online', multiplicador: 1.0 },
+                    'infoprodutores': { nome: 'Infoprodutores/Coaches', multiplicador: 1.1 },
+                    'construtoras': { nome: 'Construtoras/Engenharia', multiplicador: 1.2 },
+                    'mecanicas': { nome: 'Oficinas Mecânicas', multiplicador: 1.0 },
+                    'psicologos': { nome: 'Psicólogos/Terapeutas', multiplicador: 1.1 }
                 };
-                document.head.appendChild(script);
-            } else {
-                console.log('✅ Vercel Analytics carregado com sucesso');
+                
+                this.dores = {
+                    'presenca-digital': 'Falta de presença digital/online',
+                    'leads-qualificados': 'Baixa geração de leads qualificados',
+                    'conversao-seguidores': 'Dificuldade em converter seguidores em clientes',
+                    'redes-sociais': 'Não sabe usar redes sociais para vender',
+                    'orcamento-desperdicado': 'Orçamento desperdiçado em anúncios',
+                    'relacionamento-publico': 'Falta de relacionamento com público',
+                    'site-desatualizado': 'Site desatualizado ou inexistente',
+                    'processos-desorganizados': 'Processos comerciais desorganizados'
+                };
+                
+                this.servicos = {
+                    'trafego-pago': { nome: 'Tráfego Pago', icon: '📈' },
+                    'midias-sociais': { nome: 'Mídias Sociais', icon: '📱' },
+                    'desenvolvimento-sites': { nome: 'Desenvolvimento de Sites e Landing Pages', icon: '💻' },
+                    'automacao-whatsapp': { nome: 'Automação de WhatsApp', icon: '🤖' },
+                    'mapeamento-processo': { nome: 'Mapeamento do Processo Comercial', icon: '🗺️' },
+                    'estruturacao-atendimento': { nome: 'Estruturação de Atendimento', icon: '🎧' },
+                    'estrategia-marketing': { nome: 'Estratégia e Planejamento de Marketing', icon: '🎯' },
+                    'consultoria': { nome: 'Consultoria Estratégica', icon: '💡' },
+                    'google-meu-negocio': { nome: 'Google Meu Negócio', icon: '🗺️' }
+                };
+                
+                this.precos = {
+                    'trafego-pago': { micro: 400, pequeno: 800, medio: 2000, grande: 4000 },
+                    'midias-sociais': { micro: 300, pequeno: 600, medio: 1500, grande: 3000 },
+                    'desenvolvimento-sites': { micro: 800, pequeno: 1500, medio: 3500, grande: 7000 },
+                    'automacao-whatsapp': { micro: 250, pequeno: 500, medio: 1200, grande: 2500 },
+                    'mapeamento-processo': { micro: 200, pequeno: 400, medio: 1000, grande: 2000 },
+                    'estruturacao-atendimento': { micro: 300, pequeno: 600, medio: 1500, grande: 3000 },
+                    'estrategia-marketing': { micro: 500, pequeno: 1000, medio: 2500, grande: 5000 },
+                    'consultoria': { micro: 300, pequeno: 600, medio: 1500, grande: 3000 },
+                    'google-meu-negocio': { micro: 200, pequeno: 400, medio: 1000, grande: 2000 }
+                };
+                
+                this.init();
             }
-        }, 3000);
+            
+            init() {
+                this.setupEventListeners();
+                this.updateAllSelections();
+            }
+            
+            setupEventListeners() {
+                // Nichos - Radio buttons
+                document.querySelectorAll('input[name="nicho"]').forEach(radio => {
+                    radio.addEventListener('change', () => this.updateNichoResumo());
+                });
+                
+                // Dores - Checkboxes
+                document.querySelectorAll('input[name="dores"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', () => this.updateDoresResumo());
+                });
+                
+                // Serviços
+                document.querySelectorAll('input[name="servicos"]').forEach(checkbox => {
+                    checkbox.addEventListener('change', () => this.updateServicos());
+                });
+                
+                // Capacidade Financeira - Radio buttons
+                document.querySelectorAll('input[name="estruturaFisica"], input[name="tamanhoEquipe"], input[name="volumeClientes"], input[name="ticketMedio"], input[name="investeMarketing"]').forEach(radio => {
+                    radio.addEventListener('change', () => this.calcularCapacidadeEstrutura());
+                });
+                
+                // Campos customizados
+                document.getElementById('nichoCustom')?.addEventListener('input', () => this.updateNichoResumo());
+                document.getElementById('dorCustom')?.addEventListener('input', () => this.updateDoresResumo());
+            }
+            
+            updateNichoResumo() {
+                const selecionado = document.querySelector('input[name="nicho"]:checked');
+                const customDiv = document.querySelector('.nicho-custom');
+                
+                if (selecionado) {
+                    const temOutro = selecionado.value === 'outro';
+                    
+                    // Mostrar/ocultar campo custom
+                    if (customDiv) {
+                        customDiv.style.display = temOutro ? 'block' : 'none';
+                    }
+                    
+                    let texto;
+                    if (temOutro) {
+                        const custom = document.getElementById('nichoCustom').value.trim();
+                        texto = custom || 'Outro nicho';
+                    } else {
+                        const nicho = this.nichos[selecionado.value];
+                        texto = nicho ? nicho.nome : selecionado.nextElementSibling.textContent;
+                    }
+                    
+                    const elemento = document.getElementById('nichoSelecionado');
+                    if (elemento) elemento.textContent = texto;
+                    this.updateResumo();
+                    this.calcularPrecificacao();
+                } else {
+                    const elemento = document.getElementById('nichoSelecionado');
+                    if (elemento) elemento.textContent = 'Selecione um nicho acima';
+                    if (customDiv) {
+                        customDiv.style.display = 'none';
+                    }
+                }
+            }
+            
+            updateServicos() {
+                const checkboxes = document.querySelectorAll('input[name="servicos"]:checked');
+                const selecionados = [];
+                
+                checkboxes.forEach(checkbox => {
+                    const labelElement = checkbox.parentElement.querySelector('.servico-nome');
+                    const detalheElement = checkbox.parentElement.querySelector('.servico-input');
+                    
+                    const label = labelElement ? labelElement.textContent : checkbox.value;
+                    const detalhe = detalheElement ? detalheElement.value.trim() : '';
+                    
+                    let texto = label;
+                    if (detalhe) {
+                        texto += ` (${detalhe})`;
+                    }
+                    selecionados.push(texto);
+                });
+                
+                this.servicosSelecionados = selecionados;
+                this.updateLista('listaServicos', selecionados, 'servico-selecionado');
+                this.updateResumo();
+                this.calcularPrecificacao();
+            }
+            
+            updateLista(containerId, itens, className) {
+                const container = document.getElementById(containerId);
+                if (!container) return;
+                
+                container.innerHTML = '';
+                itens.forEach(item => {
+                    const span = document.createElement('span');
+                    span.className = className;
+                    span.textContent = item;
+                    container.appendChild(span);
+                });
+            }
+            
+            calcularCapacidadeEstrutura() {
+                const estruturaFisica = document.querySelector('input[name="estruturaFisica"]:checked')?.value;
+                const tamanhoEquipe = document.querySelector('input[name="tamanhoEquipe"]:checked')?.value;
+                const volumeClientes = document.querySelector('input[name="volumeClientes"]:checked')?.value;
+                const ticketMedio = document.querySelector('input[name="ticketMedio"]:checked')?.value;
+                const investeMarketing = document.querySelector('input[name="investeMarketing"]:checked')?.value;
+                
+                if (!estruturaFisica || !tamanhoEquipe || !volumeClientes || !ticketMedio || !investeMarketing) {
+                    const elemento = document.getElementById('capacidadeEstimada');
+                    if (elemento) elemento.innerHTML = '<span class="capacidade-texto">Responda todas as perguntas</span>';
+                    return;
+                }
+                
+                // Cálculo baseado nas respostas
+                let score = 0;
+                
+                // Estrutura física
+                const estruturaScores = { 'casa': 1, 'alugada': 2, 'propria': 3, 'multiplas': 4 };
+                score += estruturaScores[estruturaFisica] || 1;
+                
+                // Tamanho da equipe
+                const equipeScores = { '0': 1, '1-2': 2, '3-10': 3, '11-50': 4, '50+': 5 };
+                score += equipeScores[tamanhoEquipe] || 1;
+                
+                // Volume de clientes
+                const volumeScores = { '1-10': 1, '11-50': 2, '51-200': 3, '200+': 4 };
+                score += volumeScores[volumeClientes] || 1;
+                
+                // Ticket médio
+                const ticketScores = { '100': 1, '100-500': 2, '500-2000': 3, '2000-10000': 4, '10000+': 5 };
+                score += ticketScores[ticketMedio] || 1;
+                
+                // Investimento em marketing
+                const investScores = { '0': 1, '500': 2, '500-2000': 3, '2000-5000': 4, '5000+': 5 };
+                score += investScores[investeMarketing] || 1;
+                
+                // Determinar faixa baseada no score
+                let faixa, estimativa;
+                if (score <= 8) {
+                    faixa = 'Micro';
+                    estimativa = 'R$ 5k/mês (3-5% = R$ 150-250 em marketing)';
+                } else if (score <= 12) {
+                    faixa = 'Pequeno';
+                    estimativa = 'R$ 25k/mês (3-5% = R$ 750-1.250)';
+                } else if (score <= 16) {
+                    faixa = 'Médio';
+                    estimativa = 'R$ 125k/mês (3-5% = R$ 3.750-6.250)';
+                } else {
+                    faixa = 'Grande';
+                    estimativa = 'R$ 300k+/mês (3-5% = R$ 9k-15k)';
+                }
+                
+                const elemento = document.getElementById('capacidadeEstimada');
+                if (elemento) {
+                    elemento.innerHTML = `
+                        <span class="capacidade-texto">${faixa}</span>
+                        <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
+                    `;
+                }
+                
+                // Atualizar resumo da capacidade
+                const elementoResumo = document.getElementById('capacidadeSelecionada');
+                if (elementoResumo) {
+                    elementoResumo.innerHTML = `
+                        <span class="badge">${faixa}</span>
+                        <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
+                    `;
+                }
+                
+                this.capacidadeFinanceira = faixa.toLowerCase();
+                this.updateResumo();
+                this.calcularPrecificacao();
+            }
+            
+            calcularPrecificacao() {
+                if (!this.capacidadeFinanceira) return;
+                
+                const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(cb => cb.value);
+                
+                let total = 0;
+                const servicosIncluidos = [];
+                
+                // Calcular serviços de marketing
+                servicosSelecionados.forEach(servico => {
+                    const preco = this.precos[servico] ? this.precos[servico][this.capacidadeFinanceira] : 0;
+                    total += preco;
+                    const servicoInfo = this.servicos[servico];
+                    servicosIncluidos.push({
+                        nome: servicoInfo ? servicoInfo.nome : servico,
+                        preco: preco,
+                        icon: servicoInfo ? servicoInfo.icon : '📦'
+                    });
+                });
+                
+                // Calcular jornadas
+                const enxuta = Math.round(total * 0.6);
+                const padrao = Math.round(total * 0.8);
+                const completa = Math.round(total);
+                
+                // Atualizar interface
+                this.atualizarResultadoPrecificacao(servicosIncluidos, total);
+                this.atualizarJornadas(enxuta, padrao, completa);
+                this.atualizarResumoJornadas(enxuta, padrao, completa);
+            }
+            
+            atualizarResultadoPrecificacao(servicosIncluidos, total) {
+                const container = document.getElementById('resultadoPrecificacao');
+                if (!container) return;
+                
+                if (servicosIncluidos.length === 0) {
+                    container.innerHTML = '<p>Selecione os serviços para ver a precificação sugerida</p>';
+                    return;
+                }
+                
+                let html = '<div class="precificacao-detalhada">';
+                servicosIncluidos.forEach(servico => {
+                    html += `
+                        <div class="item-precificacao">
+                            <span>${servico.icon} ${servico.nome}</span>
+                            <span>R$ ${servico.preco.toLocaleString('pt-BR')}</span>
+                        </div>
+                    `;
+                });
+                
+                html += `
+                    <div class="total-precificacao">
+                        <strong>Total: R$ ${total.toLocaleString('pt-BR')}</strong>
+                    </div>
+                </div>`;
+                
+                container.innerHTML = html;
+            }
+            
+            atualizarJornadas(enxuta, padrao, completa) {
+                const pacoteBasico = document.getElementById('pacoteBasico');
+                const pacoteIntermediario = document.getElementById('pacoteIntermediario');
+                const pacotePremium = document.getElementById('pacotePremium');
+                
+                if (pacoteBasico) {
+                    const precoElement = pacoteBasico.querySelector('.pacote-preco');
+                    if (precoElement) precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+                }
+                
+                if (pacoteIntermediario) {
+                    const precoElement = pacoteIntermediario.querySelector('.pacote-preco');
+                    if (precoElement) precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+                }
+                
+                if (pacotePremium) {
+                    const precoElement = pacotePremium.querySelector('.pacote-preco');
+                    if (precoElement) precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+                }
+            }
+            
+            atualizarResumoJornadas(enxuta, padrao, completa) {
+                const resumoEnxuta = document.getElementById('resumoEnxuta');
+                const resumoPadrao = document.getElementById('resumoPadrao');
+                const resumoCompleta = document.getElementById('resumoCompleta');
+                
+                if (resumoEnxuta) resumoEnxuta.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+                if (resumoPadrao) resumoPadrao.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+                if (resumoCompleta) resumoCompleta.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+            }
+            
+            updateResumo() {
+                // Nicho
+                const nicho = document.querySelector('input[name="nicho"]:checked');
+                const nichoTexto = nicho ? 
+                    (nicho.value === 'outro' ? 
+                        (document.getElementById('nichoCustom').value.trim() || 'Outro nicho') : 
+                        (this.nichos[nicho.value] ? this.nichos[nicho.value].nome : nicho.nextElementSibling.textContent)
+                    ) : 'Nenhum nicho selecionado';
+                const elementoNicho = document.getElementById('resumoNichos');
+                if (elementoNicho) elementoNicho.textContent = nichoTexto;
+                
+                // Capacidade
+                const capacidade = this.capacidadeFinanceira || 'Não definida';
+                const elementoCapacidade = document.getElementById('resumoCapacidade');
+                if (elementoCapacidade) elementoCapacidade.textContent = capacidade;
+                
+                // Serviços
+                const servicos = this.servicosSelecionados || [];
+                const servicosTexto = servicos.length > 0 ? servicos.join(', ') : 'Nenhum serviço selecionado';
+                const elementoServicos = document.getElementById('resumoServicos');
+                if (elementoServicos) elementoServicos.textContent = servicosTexto;
+            }
+            
+            updateDoresResumo() {
+                const selecionadas = document.querySelectorAll('input[name="dores"]:checked');
+                const customDiv = document.querySelector('.dor-custom');
+                
+                const temOutra = Array.from(selecionadas).some(cb => cb.value === 'outra');
+                
+                // Mostrar/ocultar campo custom
+                if (customDiv) {
+                    customDiv.style.display = temOutra ? 'block' : 'none';
+                }
+                
+                const textos = [];
+                selecionadas.forEach(checkbox => {
+                    if (checkbox.value === 'outra') {
+                        const custom = document.getElementById('dorCustom').value.trim();
+                        if (custom) {
+                            textos.push(custom);
+                        }
+                    } else {
+                        const dor = this.dores[checkbox.value];
+                        textos.push(dor || checkbox.nextElementSibling.textContent);
+                    }
+                });
+                
+                const container = document.getElementById('doresSelecionadas');
+                if (container) {
+                    if (textos.length > 0) {
+                        container.innerHTML = textos.map(texto => `<span class="tag">${texto}</span>`).join(' ');
+                    } else {
+                        container.textContent = 'Selecione as dores acima';
+                    }
+                }
+                
+                this.updateResumo();
+                this.calcularPrecificacao();
+            }
+            
+            updateAllSelections() {
+                this.updateNichoResumo();
+                this.updateDoresResumo();
+                this.updateServicos();
+                this.updateResumo();
+            }
+        }
+
+        // ========================================
+        // CLASSE: Canvas Nicho ICP
+        // ========================================
+        class CanvasNichoICP {
+            constructor() {
+                this.form = document.getElementById('canvasForm');
+                this.userFingerprint = this.generateFingerprint();
+                this.canvasAutomatizado = new CanvasAutomatizado();
+                this.init();
+            }
+            
+            init() {
+                this.carregarDados();
+                this.setupTriada();
+                setInterval(() => this.autoSave(), 30000);
+            }
+            
+            setupTriada() {
+                const triada1 = document.getElementById('triada1');
+                const triada2 = document.getElementById('triada2');
+                const triada3 = document.getElementById('triada3');
+                
+                [triada1, triada2, triada3].forEach(checkbox => {
+                    checkbox.addEventListener('change', () => this.validarTriada());
+                });
+                
+                this.validarTriada();
+            }
+            
+            validarTriada() {
+                const triada1 = document.getElementById('triada1').checked;
+                const triada2 = document.getElementById('triada2').checked;
+                const triada3 = document.getElementById('triada3').checked;
+                
+                const resultado = document.getElementById('resultadoTriada');
+                
+                if (triada1 && triada2 && triada3) {
+                    resultado.classList.add('ativo');
+                } else {
+                    resultado.classList.remove('ativo');
+                }
+            }
+            
+            generateFingerprint() {
+                const canvas = document.createElement('canvas');
+                const ctx = canvas.getContext('2d');
+                ctx.textBaseline = 'top';
+                ctx.font = '14px Arial';
+                ctx.fillText('browser-fingerprint', 2, 2);
+                
+                const fingerprint = canvas.toDataURL();
+                const hash = this.hashCode(fingerprint + navigator.userAgent + navigator.language);
+                
+                return 'user_' + hash;
+            }
+            
+            hashCode(str) {
+                let hash = 0;
+                for (let i = 0; i < str.length; i++) {
+                    const char = str.charCodeAt(i);
+                    hash = ((hash << 5) - hash) + char;
+                    hash = hash & hash;
+                }
+                return Math.abs(hash).toString(36);
+            }
+            
+            salvarDados() {
+                const dados = this.coletarDados();
+                this.salvarLocal(dados);
+                alert('✅ Dados salvos com sucesso!\n\nSeus dados foram salvos localmente no navegador.');
+            }
+            
+            coletarDados() {
+                return {
+                    triada1: document.getElementById('triada1').checked,
+                    triada2: document.getElementById('triada2').checked,
+                    triada3: document.getElementById('triada3').checked,
+                    nicho: document.getElementById('nicho').value,
+                    dores: document.getElementById('dores').value,
+                    financeiro: document.getElementById('financeiro').value,
+                    acesso: document.getElementById('acesso').value,
+                    entregaveis: document.getElementById('entregaveis').value,
+                    precificacao: document.getElementById('precificacao').value
+                };
+            }
+            
+            salvarLocal(dados) {
+                localStorage.setItem('canvasNichoICP', JSON.stringify(dados));
+            }
+            
+            carregarDados() {
+                const dados = localStorage.getItem('canvasNichoICP');
+                
+                if (dados) {
+                    const obj = JSON.parse(dados);
+                    
+                    document.getElementById('triada1').checked = obj.triada1 || false;
+                    document.getElementById('triada2').checked = obj.triada2 || false;
+                    document.getElementById('triada3').checked = obj.triada3 || false;
+                    document.getElementById('nicho').value = obj.nicho || '';
+                    document.getElementById('dores').value = obj.dores || '';
+                    document.getElementById('financeiro').value = obj.financeiro || '';
+                    document.getElementById('acesso').value = obj.acesso || '';
+                    document.getElementById('entregaveis').value = obj.entregaveis || '';
+                    document.getElementById('precificacao').value = obj.precificacao || '';
+                    
+                    this.validarTriada();
+                }
+            }
+            
+            limparDados() {
+                if (confirm('⚠️ Tem certeza que deseja limpar todos os dados?\n\nEssa ação não pode ser desfeita.')) {
+                    localStorage.removeItem('canvasNichoICP');
+                    this.form.reset();
+                    this.validarTriada();
+                    alert('✅ Todos os dados foram limpos.');
+                }
+            }
+            
+            autoSave() {
+                const dados = this.coletarDados();
+                this.salvarLocal(dados);
+                console.log('💾 Auto-save realizado');
+            }
+        }
+
+        // ========================================
+        // FUNÇÕES GLOBAIS
+        // ========================================
+        function salvarDados() {
+            if (window.canvas) {
+                window.canvas.salvarDados();
+            }
+        }
+
+        function limparDados() {
+            if (window.canvas) {
+                window.canvas.limparDados();
+            }
+        }
+
+        function exportarPDF() {
+            const element = document.getElementById('canvasForm');
+            const opt = {
+                margin: 1,
+                filename: `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.pdf`,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { scale: 2 },
+                jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+            };
+            
+            // Verificar se html2pdf está disponível
+            if (typeof html2pdf !== 'undefined') {
+                html2pdf().set(opt).from(element).save();
+            } else {
+                alert('⚠️ Função de exportar PDF não disponível nesta versão standalone.\n\nUse Ctrl+P para imprimir ou salvar como PDF.');
+            }
+        }
+
+        // ========================================
+        // INICIALIZAÇÃO
+        // ========================================
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
+            
+            try {
+                // Inicializar canvas
+                console.log('🔧 Criando CanvasNichoICP...');
+                window.canvas = new CanvasNichoICP();
+                console.log('✅ CanvasNichoICP criado:', !!window.canvas);
+                
+                console.log('🎉 Inicialização completa!');
+            } catch (error) {
+                console.error('❌ Erro durante inicialização:', error);
+            }
+        });
     </script>
 </body>
 </html>

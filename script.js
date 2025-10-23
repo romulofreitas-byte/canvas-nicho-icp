@@ -4,230 +4,9 @@
  */
 
 // ========================================
-// CLASSE: Lead Capture
+// FORMULÁRIO DE CAPTURA DE LEADS REMOVIDO
 // ========================================
-class LeadCapture {
-    constructor() {
-        console.log('🏗️ Construtor LeadCapture iniciado...');
-        
-        this.modal = document.getElementById('leadModal');
-        this.form = document.getElementById('leadForm');
-        this.nameInput = document.getElementById('leadName');
-        this.emailInput = document.getElementById('leadEmail');
-        this.phoneInput = document.getElementById('leadPhone');
-        this.termsInput = document.getElementById('leadTerms');
-        
-        console.log('🔍 Elementos encontrados:', {
-            modal: !!this.modal,
-            form: !!this.form,
-            nameInput: !!this.nameInput,
-            emailInput: !!this.emailInput,
-            phoneInput: !!this.phoneInput,
-            termsInput: !!this.termsInput
-        });
-        
-        // Configurar Supabase
-        this.supabase = null;
-        this.initSupabase();
-        this.init();
-        
-        console.log('✅ Construtor LeadCapture finalizado');
-    }
-    
-    initSupabase() {
-        try {
-            // Usar as configurações do config.js
-            if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-                this.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-                console.log('✅ Supabase inicializado com sucesso');
-            } else {
-                console.warn('⚠️ Configurações do Supabase não encontradas - funcionará apenas com localStorage');
-            }
-        } catch (error) {
-            console.error('❌ Erro ao inicializar Supabase:', error);
-            console.warn('⚠️ Funcionará apenas com localStorage');
-        }
-    }
-    
-    init() {
-        console.log('🔧 Inicializando LeadCapture...');
-        
-        // TEMPORÁRIO: Sempre esconder o modal para permitir acesso direto ao canvas
-        console.log('🔓 Modo temporário: Modal sempre escondido');
-        this.hideModal();
-        
-        /* CÓDIGO ORIGINAL COMENTADO - DESCOMENTAR QUANDO QUISER REATIVAR O FORMULÁRIO
-        // Verificar se já está autenticado
-        if (!this.isAuthenticated()) {
-            console.log('🔓 Usuário não autenticado - exibindo modal');
-            this.showModal();
-        } else {
-            console.log('✅ Usuário já autenticado - escondendo modal');
-            this.hideModal();
-        }
-        */
-        
-        // Listener para o form (mantido caso queira reativar depois)
-        if (this.form) {
-            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-        }
-        
-        // Máscara para telefone (mantido caso queira reativar depois)
-        if (this.phoneInput) {
-            this.phoneInput.addEventListener('input', (e) => this.formatPhone(e));
-        }
-        
-        console.log('✅ LeadCapture inicializado com sucesso (modo temporário)');
-    }
-    
-    formatPhone(event) {
-        let value = event.target.value.replace(/\D/g, '');
-        if (value.length >= 11) {
-            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-        } else if (value.length >= 7) {
-            value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-        } else if (value.length >= 3) {
-            value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-        }
-        event.target.value = value;
-    }
-    
-    isAuthenticated() {
-        // TEMPORÁRIO: Sempre retornar true para permitir acesso direto ao canvas
-        console.log('🔓 Modo temporário: Acesso direto ao canvas habilitado');
-        return true;
-        
-        /* CÓDIGO ORIGINAL COMENTADO - DESCOMENTAR QUANDO QUISER REATIVAR O FORMULÁRIO
-        const authData = localStorage.getItem('canvas-lead-auth');
-        console.log('🔍 Verificando autenticação...', authData ? 'Dados encontrados' : 'Nenhum dado');
-        
-        if (!authData) return false;
-        
-        try {
-            const parsed = JSON.parse(authData);
-            const expiryDate = new Date(parsed.expiry);
-            const now = new Date();
-            
-            console.log('📅 Data de expiração:', expiryDate.toISOString());
-            console.log('📅 Data atual:', now.toISOString());
-            console.log('⏰ Expirou?', now > expiryDate);
-            
-            // Verificar se ainda está dentro do prazo (30 dias)
-            if (now > expiryDate) {
-                localStorage.removeItem('canvas-lead-auth');
-                console.log('🗑️ Autenticação expirada - removida');
-                return false;
-            }
-            
-            console.log('✅ Usuário autenticado e válido');
-            return true;
-        } catch (error) {
-            console.error('❌ Erro ao verificar autenticação:', error);
-            localStorage.removeItem('canvas-lead-auth');
-            return false;
-        }
-        */
-    }
-    
-    async handleSubmit(event) {
-        event.preventDefault();
-        console.log('📝 Processando submissão do formulário...');
-        
-        const formData = {
-            name: this.nameInput.value.trim(),
-            email: this.emailInput.value.trim(),
-            phone: this.phoneInput.value.trim(),
-            terms: this.termsInput.checked,
-            created_at: new Date().toISOString(),
-            source: 'canvas-nicho-icp'
-        };
-        
-        console.log('📋 Dados do formulário:', formData);
-        
-        // Validações
-        if (!formData.name || !formData.email || !formData.phone) {
-            alert('❌ Por favor, preencha todos os campos obrigatórios.');
-            return;
-        }
-        
-        if (!formData.terms) {
-            alert('❌ Você deve aceitar receber conteúdos do Método Pódium.');
-            return;
-        }
-        
-        // Validar email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            alert('❌ Por favor, insira um e-mail válido.');
-            return;
-        }
-        
-        console.log('✅ Validações passaram - processando dados...');
-        
-        try {
-            // Salvar no Supabase
-            if (this.supabase) {
-                console.log('💾 Salvando no Supabase...');
-                const { data, error } = await this.supabase
-                    .from('leads')
-                    .insert([formData]);
-                
-                if (error) {
-                    console.error('Erro ao salvar no Supabase:', error);
-                    // Continuar mesmo com erro no Supabase
-                } else {
-                    console.log('✅ Lead salvo no Supabase:', data);
-                }
-            }
-            
-            // Salvar autenticação local (30 dias)
-            const expiryDate = new Date();
-            expiryDate.setDate(expiryDate.getDate() + 30);
-            
-            localStorage.setItem('canvas-lead-auth', JSON.stringify({
-                authenticated: true,
-                lead: formData,
-                expiry: expiryDate.toISOString(),
-                date: new Date().toISOString()
-            }));
-            
-            console.log('💾 Autenticação salva localmente');
-            
-            this.hideModal();
-            alert('✅ Acesso liberado! Bem-vindo ao Canvas de Nicho e ICP, ' + formData.name + '!');
-            
-            // Track analytics
-            if (typeof window.va === 'function') {
-                window.va('track', 'Lead Captured', {
-                    lead_name: formData.name,
-                    lead_email: formData.email
-                });
-            }
-            
-        } catch (error) {
-            console.error('Erro ao processar lead:', error);
-            alert('❌ Ocorreu um erro. Tente novamente.');
-        }
-    }
-    
-    showModal() {
-        if (this.modal) {
-            this.modal.classList.remove('hidden');
-            console.log('✅ Modal exibido com sucesso');
-        } else {
-            console.error('❌ Modal não encontrado');
-        }
-    }
-    
-    hideModal() {
-        if (this.modal) {
-            this.modal.classList.add('hidden');
-            console.log('✅ Modal escondido com sucesso');
-        } else {
-            console.error('❌ Modal não encontrado');
-        }
-    }
-}
+// O formulário foi completamente removido para permitir acesso direto ao canvas
 
 // ========================================
 // CLASSE: Serviços e Precificação
@@ -706,9 +485,8 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
     
     try {
-        // TEMPORÁRIO: Não inicializar LeadCapture para evitar problemas
-        console.log('🔧 Pulando inicialização do LeadCapture (modo temporário)');
-        // window.leadCapture = new LeadCapture();
+        // LeadCapture removido - acesso direto ao canvas
+        console.log('🔧 Pulando inicialização do LeadCapture (removido)');
         
         // Inicializar canvas
         console.log('🔧 Criando CanvasNichoICP...');
@@ -862,7 +640,7 @@ class CanvasAutomatizado {
                 texto = custom || 'Outro nicho';
             } else {
                 const nicho = this.nichos[selecionado.value];
-                texto = nicho ? `${nicho.icon} ${nicho.nome}` : selecionado.nextElementSibling.textContent;
+                texto = nicho ? nicho.nome : selecionado.nextElementSibling.textContent;
             }
             
             document.getElementById('nichoSelecionado').textContent = texto;
@@ -900,8 +678,12 @@ class CanvasAutomatizado {
         const selecionados = [];
         
         checkboxes.forEach(checkbox => {
-            const label = checkbox.parentElement.querySelector('.servico-nome').textContent;
-            const detalhe = checkbox.parentElement.querySelector('.servico-input').value.trim();
+            const labelElement = checkbox.parentElement.querySelector('.servico-nome');
+            const detalheElement = checkbox.parentElement.querySelector('.servico-input');
+            
+            const label = labelElement ? labelElement.textContent : checkbox.value;
+            const detalhe = detalheElement ? detalheElement.value.trim() : '';
+            
             let texto = label;
             if (detalhe) {
                 texto += ` (${detalhe})`;
@@ -921,8 +703,10 @@ class CanvasAutomatizado {
         
         checkboxes.forEach(checkbox => {
             const servico = this.outrosServicos[checkbox.value];
-            const detalhe = checkbox.parentElement.querySelector('.servico-input').value.trim();
-            let texto = `${servico.icon} ${servico.nome}`;
+            const detalheElement = checkbox.parentElement.querySelector('.servico-input');
+            const detalhe = detalheElement ? detalheElement.value.trim() : '';
+            
+            let texto = servico ? servico.nome : checkbox.value;
             if (detalhe) {
                 texto += ` (${detalhe})`;
             }
@@ -1034,23 +818,25 @@ class CanvasAutomatizado {
         
         // Calcular serviços de marketing
         servicosSelecionados.forEach(servico => {
-            const preco = this.precos[servico][this.capacidadeFinanceira];
+            const preco = this.precos[servico] ? this.precos[servico][this.capacidadeFinanceira] : 0;
             total += preco;
+            const servicoInfo = this.servicos[servico];
             servicosIncluidos.push({
-                nome: this.servicos[servico].nome,
+                nome: servicoInfo ? servicoInfo.nome : servico,
                 preco: preco,
-                icon: this.servicos[servico].icon
+                icon: servicoInfo ? servicoInfo.icon : '📦'
             });
         });
         
         // Calcular outros serviços
         outrosSelecionados.forEach(servico => {
-            const preco = this.precos[servico][this.capacidadeFinanceira];
+            const preco = this.precos[servico] ? this.precos[servico][this.capacidadeFinanceira] : 0;
             total += preco;
+            const servicoInfo = this.outrosServicos[servico];
             servicosIncluidos.push({
-                nome: this.outrosServicos[servico].nome,
+                nome: servicoInfo ? servicoInfo.nome : servico,
                 preco: preco,
-                icon: this.outrosServicos[servico].icon
+                icon: servicoInfo ? servicoInfo.icon : '📦'
             });
         });
         
@@ -1106,15 +892,34 @@ class CanvasAutomatizado {
     }
     
     atualizarJornadas(enxuta, padrao, completa) {
-        document.getElementById('pacoteBasico').querySelector('.pacote-preco').textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
-        document.getElementById('pacoteIntermediario').querySelector('.pacote-preco').textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
-        document.getElementById('pacotePremium').querySelector('.pacote-preco').textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+        const pacoteBasico = document.getElementById('pacoteBasico');
+        const pacoteIntermediario = document.getElementById('pacoteIntermediario');
+        const pacotePremium = document.getElementById('pacotePremium');
+        
+        if (pacoteBasico) {
+            const precoElement = pacoteBasico.querySelector('.pacote-preco');
+            if (precoElement) precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+        }
+        
+        if (pacoteIntermediario) {
+            const precoElement = pacoteIntermediario.querySelector('.pacote-preco');
+            if (precoElement) precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+        }
+        
+        if (pacotePremium) {
+            const precoElement = pacotePremium.querySelector('.pacote-preco');
+            if (precoElement) precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+        }
     }
     
     atualizarResumoJornadas(enxuta, padrao, completa) {
-        document.getElementById('resumoEnxuta').textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
-        document.getElementById('resumoPadrao').textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
-        document.getElementById('resumoCompleta').textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+        const resumoEnxuta = document.getElementById('resumoEnxuta');
+        const resumoPadrao = document.getElementById('resumoPadrao');
+        const resumoCompleta = document.getElementById('resumoCompleta');
+        
+        if (resumoEnxuta) resumoEnxuta.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+        if (resumoPadrao) resumoPadrao.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+        if (resumoCompleta) resumoCompleta.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
     }
     
     updateResumo() {
@@ -1123,7 +928,7 @@ class CanvasAutomatizado {
         const nichoTexto = nicho ? 
             (nicho.value === 'outro' ? 
                 (document.getElementById('nichoCustom').value.trim() || 'Outro nicho') : 
-                (this.nichos[nicho.value] ? `${this.nichos[nicho.value].icon} ${this.nichos[nicho.value].nome}` : nicho.nextElementSibling.textContent)
+                (this.nichos[nicho.value] ? this.nichos[nicho.value].nome : nicho.nextElementSibling.textContent)
             ) : 'Nenhum nicho selecionado';
         document.getElementById('resumoNichos').textContent = nichoTexto;
         
@@ -1135,9 +940,9 @@ class CanvasAutomatizado {
                     const custom = document.getElementById('dorCustom').value.trim();
                     return custom || 'Outra dor';
                 }
-                return this.dores[d.value] ? `${this.dores[d.value].icon} ${this.dores[d.value].nome}` : d.nextElementSibling.textContent;
+                return this.dores[d.value] || d.nextElementSibling.textContent;
             }).join(', ') : 'Nenhuma dor selecionada';
-        document.getElementById('resumoDores').textContent = doresTexto;
+        // Não atualizar resumoDores pois não existe no HTML
         
         // Capacidade
         const capacidade = this.capacidadeFinanceira || 'Não definida';
@@ -1169,7 +974,7 @@ class CanvasAutomatizado {
                 }
             } else {
                 const dor = this.dores[checkbox.value];
-                textos.push(dor ? `${dor.icon} ${dor.nome}` : checkbox.nextElementSibling.textContent);
+                textos.push(dor || checkbox.nextElementSibling.textContent);
             }
         });
         
@@ -1207,7 +1012,7 @@ class CanvasAutomatizado {
                 } else {
                     const dor = this.dores[option.value];
                     if (dor) {
-                        selecionadas.push(`${dor.icon} ${dor.nome}`);
+                        selecionadas.push(dor);
                     }
                 }
             });

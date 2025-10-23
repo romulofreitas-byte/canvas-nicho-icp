@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste - Canvas Sem Formulário</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            padding: 20px;
+            background: #f5f5f5;
+        }
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 10px;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.1);
+        }
+        .status {
+            background: #e8f5e8;
+            border: 1px solid #4caf50;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+        .btn {
+            background: #007bff;
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin: 10px;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+        }
+        .btn:hover {
+            background: #0056b3;
+        }
+        .btn-success {
+            background: #28a745;
+        }
+        .btn-success:hover {
+            background: #218838;
+        }
+        .debug {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 5px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+        .instructions {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 5px;
+            padding: 15px;
+            margin: 20px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste - Canvas Sem Formulário</h1>
+        
+        <div class="status">
+            ✅ <strong>Status:</strong> Formulário de captura de leads completamente desabilitado
+        </div>
+        
+        <div class="instructions">
+            <h3>📋 Instruções:</h3>
+            <p>1. Clique no botão abaixo para acessar o canvas diretamente</p>
+            <p>2. O modal de captura de leads NÃO deve aparecer</p>
+            <p>3. Você deve ter acesso imediato ao canvas</p>
+            <p>4. As seções 5, 6 e resumo devem ter largura total (não espremidas)</p>
+        </div>
+        
+        <div style="text-align: center;">
+            <a href="index.html" class="btn btn-success">🎯 Acessar Canvas Principal</a>
+            <button class="btn" onclick="verificarStatus()">🔍 Verificar Status</button>
+            <button class="btn" onclick="limparCache()">🗑️ Limpar Cache</button>
+        </div>
+        
+        <div class="debug" id="debugInfo">
+            Clique em "Verificar Status" para ver as informações...
+        </div>
+        
+        <div class="instructions">
+            <h3>🔧 Se ainda houver problemas:</h3>
+            <p>1. <strong>Limpe o cache do navegador:</strong> Ctrl+F5 ou Ctrl+Shift+R</p>
+            <p>2. <strong>Abra o console (F12)</strong> para ver os logs</p>
+            <p>3. <strong>Verifique se não há erros</strong> no console</p>
+            <p>4. <strong>Teste em modo incógnito</strong> para evitar cache</p>
+        </div>
+    </div>
+
+    <script>
+        function verificarStatus() {
+            const debugInfo = document.getElementById('debugInfo');
+            
+            const info = {
+                'LeadCapture inicializado': 'NÃO (desabilitado temporariamente)',
+                'Modal deve aparecer': 'NÃO',
+                'Acesso ao canvas': 'DIRETO',
+                'Seções 5, 6, resumo': 'Largura total (não espremidas)',
+                'Modo atual': 'Temporário - Sem formulário',
+                'Cache do navegador': 'Pode estar causando problemas'
+            };
+            
+            debugInfo.textContent = JSON.stringify(info, null, 2);
+            console.log('🔍 Status atual:', info);
+        }
+
+        function limparCache() {
+            // Tentar limpar dados locais
+            localStorage.clear();
+            sessionStorage.clear();
+            
+            alert('✅ Cache limpo! Recarregue a página (Ctrl+F5) para aplicar as mudanças.');
+        }
+
+        // Verificar status automaticamente ao carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Página de teste carregada');
+            verificarStatus();
+        });
+    </script>
+</body>
+</html>

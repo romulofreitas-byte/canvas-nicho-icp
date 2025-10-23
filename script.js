@@ -706,10 +706,9 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
     
     try {
-        // Inicializar autenticação
-        console.log('🔧 Criando LeadCapture...');
-        window.leadCapture = new LeadCapture();
-        console.log('✅ LeadCapture criado:', !!window.leadCapture);
+        // TEMPORÁRIO: Não inicializar LeadCapture para evitar problemas
+        console.log('🔧 Pulando inicialização do LeadCapture (modo temporário)');
+        // window.leadCapture = new LeadCapture();
         
         // Inicializar canvas
         console.log('🔧 Criando CanvasNichoICP...');
@@ -728,7 +727,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        console.log('🎉 Inicialização completa!');
+        console.log('🎉 Inicialização completa! (sem LeadCapture)');
     } catch (error) {
         console.error('❌ Erro durante inicialização:', error);
     }

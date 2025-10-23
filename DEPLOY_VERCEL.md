@@ -60,12 +60,12 @@ vercel link --project-id prj_hTAxPkyoXqwnmXZxfRXloUv8pJAZ
 
 **VITE_SUPABASE_URL**
 - **Name:** `VITE_SUPABASE_URL`
-- **Value:** `https://zqscitdvsqfkhzddzaeh.supabase.co`
+- **Value:** `https://wmsxiuxscmogbechxlty.supabase.co`
 - **Environment:** Production, Preview, Development
 
 **VITE_SUPABASE_ANON_KEY**
 - **Name:** `VITE_SUPABASE_ANON_KEY`
-- **Value:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpxc2NpdGR2c3Fma2h6ZGR6YWVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNzA0MzAsImV4cCI6MjA3NjY0NjQzMH0.JZmkmdxJTTf42UYY3M4ruunnS5HupXHiTMwK_YDJmAY`
+- **Value:** `eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indtc3hpdXhzY21vZ2JlY2h4bHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyMjQ3NzYsImV4cCI6MjA3NjgwMDc3Nn0.QzgHcJJLU2YMybrJC-a9BeaQXDVsxuJOszqkj431c0c`
 - **Environment:** Production, Preview, Development
 
 **CANVAS_PASSWORD**

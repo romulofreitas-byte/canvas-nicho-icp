@@ -9,13 +9,13 @@ function getEnvVar(name, defaultValue = null) {
 }
 
 const SUPABASE_CONFIG = {
-    // URL do seu projeto Supabase (MESMA URL da calculadora)
-    URL: getEnvVar('VITE_SUPABASE_URL', "https://zqscitdvsqfkhzddzaeh.supabase.co"),
+    // URL do seu projeto Supabase
+    URL: getEnvVar('VITE_SUPABASE_URL', "https://wmsxiuxscmogbechxlty.supabase.co"),
     
-    // Chave pública do Supabase (MESMA ANON KEY da calculadora)
-    ANON_KEY: getEnvVar('VITE_SUPABASE_ANON_KEY', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Inpxc2NpdGR2c3Fma2h6ZGR6YWVoIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEwNzA0MzAsImV4cCI6MjA3NjY0NjQzMH0.JZmkmdxJTTf42UYY3M4ruunnS5HupXHiTMwK_YDJmAY"),
+    // Chave pública do Supabase
+    ANON_KEY: getEnvVar('VITE_SUPABASE_ANON_KEY', "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indtc3hpdXhzY21vZ2JlY2h4bHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyMjQ3NzYsImV4cCI6MjA3NjgwMDc3Nn0.QzgHcJJLU2YMybrJC-a9BeaQXDVsxuJOszqkj431c0c"),
     
-    // Nome da tabela (DIFERENTE da calculadora)
+    // Nome da tabela
     TABLE_NAME: 'canvas_data'
 };
 

@@ -51,10 +51,10 @@ Este guia te ajudará a configurar o Supabase para salvar os dados do Canvas de 
 
 ### 3.3 Configurar no Projeto
 1. Abra o arquivo `config.js`
-2. Substitua os valores:
+2. As credenciais já estão configuradas:
    ```javascript
-   URL: "SUA_PROJECT_URL_AQUI",
-   ANON_KEY: "SUA_ANON_KEY_AQUI"
+   URL: "https://wmsxiuxscmogbechxlty.supabase.co",
+   ANON_KEY: "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Indtc3hpdXhzY21vZ2JlY2h4bHR5Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3NjEyMjQ3NzYsImV4cCI6MjA3NjgwMDc3Nn0.QzgHcJJLU2YMybrJC-a9BeaQXDVsxuJOszqkj431c0c"
    ```
 
 ## 🔒 PASSO 4: Configurar Segurança (RLS)

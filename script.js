@@ -790,40 +790,6 @@ class CanvasAutomatizado {
             }
         }
     
-    updateDores() {
-        const selecionadas = [];
-        const select = document.getElementById('doresSelect');
-        const customDiv = document.querySelector('.dor-custom');
-        
-        if (select) {
-            const opcoesSelecionadas = Array.from(select.selectedOptions);
-            const temOutra = opcoesSelecionadas.some(option => option.value === 'outra');
-            
-            // Mostrar/ocultar campo custom
-            if (customDiv) {
-                customDiv.style.display = temOutra ? 'block' : 'none';
-            }
-            
-            opcoesSelecionadas.forEach(option => {
-                if (option.value === 'outra') {
-                    const custom = document.getElementById('dorCustom').value.trim();
-                    if (custom) {
-                        selecionadas.push(custom);
-                    }
-                } else {
-                    const dor = this.dores[option.value];
-                    if (dor) {
-                        selecionadas.push(`${dor.icon} ${dor.nome}`);
-                    }
-                }
-            });
-        }
-        
-        this.updateLista('listaDores', selecionadas, 'dor-selecionada');
-        this.updateResumo();
-        this.calcularPrecificacao();
-    }
-    
     updateCanais() {
         const selecionados = [];
         const checkboxes = document.querySelectorAll('input[name="canais"]:checked');
@@ -1128,6 +1094,40 @@ class CanvasAutomatizado {
             container.textContent = 'Selecione as dores acima';
         }
         
+        this.updateResumo();
+        this.calcularPrecificacao();
+    }
+    
+    updateDores() {
+        const selecionadas = [];
+        const select = document.getElementById('doresSelect');
+        const customDiv = document.querySelector('.dor-custom');
+        
+        if (select) {
+            const opcoesSelecionadas = Array.from(select.selectedOptions);
+            const temOutra = opcoesSelecionadas.some(option => option.value === 'outra');
+            
+            // Mostrar/ocultar campo custom
+            if (customDiv) {
+                customDiv.style.display = temOutra ? 'block' : 'none';
+            }
+            
+            opcoesSelecionadas.forEach(option => {
+                if (option.value === 'outra') {
+                    const custom = document.getElementById('dorCustom').value.trim();
+                    if (custom) {
+                        selecionadas.push(custom);
+                    }
+                } else {
+                    const dor = this.dores[option.value];
+                    if (dor) {
+                        selecionadas.push(`${dor.icon} ${dor.nome}`);
+                    }
+                }
+            });
+        }
+        
+        this.updateLista('listaDores', selecionadas, 'dor-selecionada');
         this.updateResumo();
         this.calcularPrecificacao();
     }

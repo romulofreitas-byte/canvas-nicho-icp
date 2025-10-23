@@ -228,9 +228,13 @@
         setTimeout(() => {
             if (typeof window.va !== 'function') {
                 console.warn('⚠️ Vercel Analytics não carregou automaticamente');
+                // Tentar carregar o script do Vercel Analytics
                 const script = document.createElement('script');
                 script.src = '/_vercel/insights/script.js';
                 script.defer = true;
+                script.onerror = function() {
+                    console.log('ℹ️ Vercel Analytics não disponível (ambiente local ou erro de rede)');
+                };
                 document.head.appendChild(script);
             } else {
                 console.log('✅ Vercel Analytics carregado com sucesso');

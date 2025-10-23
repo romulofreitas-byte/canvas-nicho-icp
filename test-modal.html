@@ -1,0 +1,356 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Teste Modal - Canvas de Nicho e ICP</title>
+    <style>
+        /* Reset e Base */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, Cantarell, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background-color: #f8f9fa;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 30px;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            color: #F2b705;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+
+        .test-info {
+            background: #e9ecef;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 20px;
+        }
+
+        .test-info h2 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .test-info p {
+            color: #6c757d;
+            margin-bottom: 5px;
+        }
+
+        .btn-test {
+            background: #F2b705;
+            color: #000000;
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            margin: 10px;
+        }
+
+        .btn-test:hover {
+            background: #e0a500;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(242, 183, 5, 0.3);
+        }
+
+        /* Modal de Captura de Leads */
+        .modal {
+            display: flex;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.7);
+            align-items: center;
+            justify-content: center;
+        }
+
+        .modal.hidden {
+            display: none;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.3);
+            max-width: 450px;
+            width: 90%;
+            animation: slideIn 0.3s ease-out;
+        }
+
+        .modal-header {
+            text-align: center;
+            margin-bottom: 30px;
+            border-bottom: 3px solid #F2b705;
+            padding-bottom: 20px;
+        }
+
+        .modal-header h2 {
+            color: #000000;
+            font-size: 24px;
+            margin-bottom: 8px;
+        }
+
+        .modal-header p {
+            color: #F2b705;
+            font-size: 14px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 20px;
+            display: flex;
+            flex-direction: column;
+        }
+
+        .form-group label {
+            font-weight: bold;
+            color: #000000;
+            margin-bottom: 8px;
+            font-size: 14px;
+        }
+
+        .form-group input {
+            padding: 12px;
+            border: 2px solid #F2b705;
+            border-radius: 6px;
+            font-size: 14px;
+            background-color: #fffef0;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #000000;
+            box-shadow: 0 0 8px rgba(242, 183, 5, 0.4);
+        }
+
+        .btn-unlock {
+            width: 100%;
+            padding: 14px;
+            background-color: #F2b705;
+            color: #000000;
+            border: none;
+            border-radius: 6px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .btn-unlock:hover {
+            background-color: #e0a500;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(242, 183, 5, 0.3);
+        }
+
+        .modal-footer {
+            text-align: center;
+            padding-top: 15px;
+            border-top: 1px solid #eee;
+        }
+
+        .modal-footer p {
+            color: #666;
+            font-size: 12px;
+        }
+
+        @keyframes slideIn {
+            from {
+                transform: translateY(-20px);
+                opacity: 0;
+            }
+            to {
+                transform: translateY(0);
+                opacity: 1;
+            }
+        }
+
+        .debug-info {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 8px;
+            padding: 15px;
+            margin-top: 20px;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .debug-info h3 {
+            color: #495057;
+            margin-bottom: 10px;
+        }
+
+        .debug-info pre {
+            background: #e9ecef;
+            padding: 10px;
+            border-radius: 4px;
+            overflow-x: auto;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🧪 Teste do Modal de Captura de Leads</h1>
+        
+        <div class="test-info">
+            <h2>📋 Instruções de Teste</h2>
+            <p>1. Clique no botão "Testar Modal" para abrir o modal</p>
+            <p>2. Preencha os dados do formulário</p>
+            <p>3. Clique em "Acessar Canvas Gratuitamente"</p>
+            <p>4. Verifique se o modal fecha e aparece a mensagem de sucesso</p>
+            <p>5. Abra o console do navegador (F12) para ver os logs de debug</p>
+        </div>
+
+        <div style="text-align: center;">
+            <button class="btn-test" onclick="testarModal()">🧪 Testar Modal</button>
+            <button class="btn-test" onclick="limparDados()">🗑️ Limpar Dados</button>
+            <button class="btn-test" onclick="verificarEstado()">🔍 Verificar Estado</button>
+            <button class="btn-test" onclick="forcarInicializacao()">🔄 Forçar Inicialização</button>
+        </div>
+
+        <div class="debug-info">
+            <h3>🔍 Informações de Debug</h3>
+            <pre id="debugOutput">Clique em "Verificar Estado" para ver as informações de debug...</pre>
+        </div>
+    </div>
+
+    <!-- Modal de Captura de Leads -->
+    <div id="leadModal" class="modal hidden">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🚀 Canvas de Nicho e ICP - Método Pódium</h2>
+                <p>Preencha seus dados para acessar gratuitamente</p>
+            </div>
+            
+            <form id="leadForm" class="lead-form">
+                <div class="form-group">
+                    <label for="leadName">Nome Completo *</label>
+                    <input type="text" id="leadName" name="name" placeholder="Seu nome completo" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="leadEmail">E-mail *</label>
+                    <input type="email" id="leadEmail" name="email" placeholder="seu@email.com" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="leadPhone">WhatsApp *</label>
+                    <input type="tel" id="leadPhone" name="phone" placeholder="(11) 99999-9999" required>
+                </div>
+                
+                <div class="form-group">
+                    <label>
+                        <input type="checkbox" id="leadTerms" name="terms" required>
+                        Aceito receber conteúdos e atualizações do Método Pódium
+                    </label>
+                </div>
+                
+                <button type="submit" class="btn-unlock">🎯 Acessar Canvas Gratuitamente</button>
+            </form>
+            
+            <div class="modal-footer">
+                <p>✨ <strong>100% Gratuito</strong> • Seus dados estão seguros conosco</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        // Funções de teste
+        function testarModal() {
+            console.log('🧪 Testando modal...');
+            if (window.leadCapture) {
+                window.leadCapture.showModal();
+            } else {
+                console.error('❌ LeadCapture não encontrado');
+                alert('❌ LeadCapture não encontrado. Verifique o console para mais detalhes.');
+            }
+        }
+
+        function limparDados() {
+            console.log('🗑️ Limpando dados...');
+            localStorage.removeItem('canvas-lead-auth');
+            alert('✅ Dados limpos! Recarregue a página para testar novamente.');
+        }
+
+        function forcarInicializacao() {
+            console.log('🔄 Forçando inicialização...');
+            try {
+                if (!window.leadCapture) {
+                    console.log('🔧 Criando LeadCapture...');
+                    window.leadCapture = new LeadCapture();
+                    console.log('✅ LeadCapture criado:', !!window.leadCapture);
+                } else {
+                    console.log('ℹ️ LeadCapture já existe');
+                }
+                
+                verificarEstado();
+                alert('✅ Inicialização forçada concluída!');
+            } catch (error) {
+                console.error('❌ Erro ao forçar inicialização:', error);
+                alert('❌ Erro ao forçar inicialização. Verifique o console para mais detalhes.');
+            }
+        }
+
+        function verificarEstado() {
+            const debugOutput = document.getElementById('debugOutput');
+            const info = {
+                'LeadCapture disponível': !!window.leadCapture,
+                'Canvas disponível': !!window.canvas,
+                'CanvasAutomatizado disponível': !!window.canvasAutomatizado,
+                'Modal encontrado': !!document.getElementById('leadModal'),
+                'Formulário encontrado': !!document.getElementById('leadForm'),
+                'Supabase configurado': !!(window.SUPABASE_URL && window.SUPABASE_ANON_KEY),
+                'Supabase client': !!window.supabase,
+                'Dados de autenticação': localStorage.getItem('canvas-lead-auth'),
+                'Console logs': 'Abra o console (F12) para ver os logs detalhados'
+            };
+            
+            debugOutput.textContent = JSON.stringify(info, null, 2);
+            console.log('🔍 Estado atual:', info);
+            
+            // Verificar elementos específicos
+            const elementos = {
+                'leadModal': document.getElementById('leadModal'),
+                'leadForm': document.getElementById('leadForm'),
+                'leadName': document.getElementById('leadName'),
+                'leadEmail': document.getElementById('leadEmail'),
+                'leadPhone': document.getElementById('leadPhone'),
+                'leadTerms': document.getElementById('leadTerms')
+            };
+            
+            console.log('🔍 Elementos encontrados:', elementos);
+        }
+
+        // Inicializar quando a página carregar
+        document.addEventListener('DOMContentLoaded', () => {
+            console.log('🚀 Página de teste carregada');
+            verificarEstado();
+        });
+    </script>
+</body>
+</html>

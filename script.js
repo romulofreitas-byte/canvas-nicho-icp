@@ -8,6 +8,8 @@
 // ========================================
 class LeadCapture {
     constructor() {
+        console.log('🏗️ Construtor LeadCapture iniciado...');
+        
         this.modal = document.getElementById('leadModal');
         this.form = document.getElementById('leadForm');
         this.nameInput = document.getElementById('leadName');
@@ -15,10 +17,21 @@ class LeadCapture {
         this.phoneInput = document.getElementById('leadPhone');
         this.termsInput = document.getElementById('leadTerms');
         
+        console.log('🔍 Elementos encontrados:', {
+            modal: !!this.modal,
+            form: !!this.form,
+            nameInput: !!this.nameInput,
+            emailInput: !!this.emailInput,
+            phoneInput: !!this.phoneInput,
+            termsInput: !!this.termsInput
+        });
+        
         // Configurar Supabase
         this.supabase = null;
         this.initSupabase();
         this.init();
+        
+        console.log('✅ Construtor LeadCapture finalizado');
     }
     
     initSupabase() {
@@ -28,18 +41,23 @@ class LeadCapture {
                 this.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
                 console.log('✅ Supabase inicializado com sucesso');
             } else {
-                console.warn('⚠️ Configurações do Supabase não encontradas');
+                console.warn('⚠️ Configurações do Supabase não encontradas - funcionará apenas com localStorage');
             }
         } catch (error) {
             console.error('❌ Erro ao inicializar Supabase:', error);
+            console.warn('⚠️ Funcionará apenas com localStorage');
         }
     }
     
     init() {
+        console.log('🔧 Inicializando LeadCapture...');
+        
         // Verificar se já está autenticado
         if (!this.isAuthenticated()) {
+            console.log('🔓 Usuário não autenticado - exibindo modal');
             this.showModal();
         } else {
+            console.log('✅ Usuário já autenticado - escondendo modal');
             this.hideModal();
         }
         
@@ -48,6 +66,8 @@ class LeadCapture {
         
         // Máscara para telefone
         this.phoneInput.addEventListener('input', (e) => this.formatPhone(e));
+        
+        console.log('✅ LeadCapture inicializado com sucesso');
     }
     
     formatPhone(event) {
@@ -64,22 +84,38 @@ class LeadCapture {
     
     isAuthenticated() {
         const authData = localStorage.getItem('canvas-lead-auth');
+        console.log('🔍 Verificando autenticação...', authData ? 'Dados encontrados' : 'Nenhum dado');
+        
         if (!authData) return false;
         
-        const parsed = JSON.parse(authData);
-        const expiryDate = new Date(parsed.expiry);
-        
-        // Verificar se ainda está dentro do prazo (30 dias)
-        if (new Date() > expiryDate) {
+        try {
+            const parsed = JSON.parse(authData);
+            const expiryDate = new Date(parsed.expiry);
+            const now = new Date();
+            
+            console.log('📅 Data de expiração:', expiryDate.toISOString());
+            console.log('📅 Data atual:', now.toISOString());
+            console.log('⏰ Expirou?', now > expiryDate);
+            
+            // Verificar se ainda está dentro do prazo (30 dias)
+            if (now > expiryDate) {
+                localStorage.removeItem('canvas-lead-auth');
+                console.log('🗑️ Autenticação expirada - removida');
+                return false;
+            }
+            
+            console.log('✅ Usuário autenticado e válido');
+            return true;
+        } catch (error) {
+            console.error('❌ Erro ao verificar autenticação:', error);
             localStorage.removeItem('canvas-lead-auth');
             return false;
         }
-        
-        return true;
     }
     
     async handleSubmit(event) {
         event.preventDefault();
+        console.log('📝 Processando submissão do formulário...');
         
         const formData = {
             name: this.nameInput.value.trim(),
@@ -89,6 +125,8 @@ class LeadCapture {
             created_at: new Date().toISOString(),
             source: 'canvas-nicho-icp'
         };
+        
+        console.log('📋 Dados do formulário:', formData);
         
         // Validações
         if (!formData.name || !formData.email || !formData.phone) {
@@ -108,9 +146,12 @@ class LeadCapture {
             return;
         }
         
+        console.log('✅ Validações passaram - processando dados...');
+        
         try {
             // Salvar no Supabase
             if (this.supabase) {
+                console.log('💾 Salvando no Supabase...');
                 const { data, error } = await this.supabase
                     .from('leads')
                     .insert([formData]);
@@ -134,6 +175,8 @@ class LeadCapture {
                 date: new Date().toISOString()
             }));
             
+            console.log('💾 Autenticação salva localmente');
+            
             this.hideModal();
             alert('✅ Acesso liberado! Bem-vindo ao Canvas de Nicho e ICP, ' + formData.name + '!');
             
@@ -152,11 +195,21 @@ class LeadCapture {
     }
     
     showModal() {
-        this.modal.classList.remove('hidden');
+        if (this.modal) {
+            this.modal.classList.remove('hidden');
+            console.log('✅ Modal exibido com sucesso');
+        } else {
+            console.error('❌ Modal não encontrado');
+        }
     }
     
     hideModal() {
-        this.modal.classList.add('hidden');
+        if (this.modal) {
+            this.modal.classList.add('hidden');
+            console.log('✅ Modal escondido com sucesso');
+        } else {
+            console.error('❌ Modal não encontrado');
+        }
     }
 }
 
@@ -634,17 +687,34 @@ function limparDados() {
 // INICIALIZAÇÃO
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar autenticação
-    window.leadCapture = new LeadCapture();
+    console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
     
-    // Inicializar canvas
-    window.canvas = new CanvasNichoICP();
-    
-    // Inicializar Vercel Analytics
-    if (typeof window.va === 'function') {
-        window.va('track', 'Page View', {
-            page: 'Canvas Nicho ICP'
-        });
+    try {
+        // Inicializar autenticação
+        console.log('🔧 Criando LeadCapture...');
+        window.leadCapture = new LeadCapture();
+        console.log('✅ LeadCapture criado:', !!window.leadCapture);
+        
+        // Inicializar canvas
+        console.log('🔧 Criando CanvasNichoICP...');
+        window.canvas = new CanvasNichoICP();
+        console.log('✅ CanvasNichoICP criado:', !!window.canvas);
+        
+        // Inicializar canvas automatizado
+        console.log('🔧 Criando CanvasAutomatizado...');
+        window.canvasAutomatizado = new CanvasAutomatizado();
+        console.log('✅ CanvasAutomatizado criado:', !!window.canvasAutomatizado);
+        
+        // Inicializar Vercel Analytics
+        if (typeof window.va === 'function') {
+            window.va('track', 'Page View', {
+                page: 'Canvas Nicho ICP'
+            });
+        }
+        
+        console.log('🎉 Inicialização completa!');
+    } catch (error) {
+        console.error('❌ Erro durante inicialização:', error);
     }
 });
 
@@ -789,6 +859,7 @@ class CanvasAutomatizado {
                 customDiv.style.display = 'none';
             }
         }
+    }
     
     updateCanais() {
         const selecionados = [];
@@ -1157,18 +1228,4 @@ function exportarPDF() {
     html2pdf().set(opt).from(element).save();
 }
 
-// Atualizar inicialização para incluir CanvasAutomatizado
-document.addEventListener('DOMContentLoaded', function() {
-    new LeadCapture();
-    new CanvasNichoICP();
-    
-    // Inicializar canvas automatizado
-    new CanvasAutomatizado();
-    
-    // Inicializar Vercel Analytics
-    if (typeof window.va === 'function') {
-        window.va('track', 'Page View', {
-            page: 'Canvas Nicho ICP'
-        });
-    }
-});
+// Inicialização já feita acima - removendo duplicação

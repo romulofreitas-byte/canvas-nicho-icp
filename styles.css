@@ -1229,6 +1229,14 @@ body {
     margin-right: 0;
 }
 
+.resumo-section.full-width {
+    margin-top: 25px;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
+}
+
 /* Grid de Serviços */
 .servicos-grid {
     display: grid;

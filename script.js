@@ -640,29 +640,10 @@ class CanvasAutomatizado {
                 customDiv.style.display = temOutro ? 'block' : 'none';
             }
             
-            let texto;
-            if (temOutro) {
-                const custom = document.getElementById('nichoCustom').value.trim();
-                texto = custom || 'Outro nicho';
-            } else {
-                const nicho = this.nichos[selecionado.value];
-                texto = nicho ? nicho.nome : selecionado.nextElementSibling.textContent;
-            }
-            
-            const elemento = document.getElementById('nichoSelecionado');
-            if (elemento) {
-                elemento.textContent = texto;
-                console.log('✅ updateNichoResumo: Nicho atualizado:', texto);
-            } else {
-                console.error('❌ updateNichoResumo: Elemento nichoSelecionado não encontrado');
-            }
-            
             this.updateResumo();
             this.calcularPrecificacao();
         } else {
             console.log('🔧 updateNichoResumo: Nenhum nicho selecionado');
-            const elemento = document.getElementById('nichoSelecionado');
-            if (elemento) elemento.textContent = 'Selecione um nicho acima';
             if (customDiv) {
                 customDiv.style.display = 'none';
             }
@@ -707,7 +688,6 @@ class CanvasAutomatizado {
         });
         
         this.servicosSelecionados = selecionados;
-        this.updateLista('listaServicos', selecionados, 'servico-selecionado');
         this.updateResumo();
         this.calcularPrecificacao();
     }
@@ -802,11 +782,7 @@ class CanvasAutomatizado {
             <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
         `;
         
-        // Atualizar resumo da capacidade
-        document.getElementById('capacidadeSelecionada').innerHTML = `
-            <span class="badge">${faixa}</span>
-            <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
-        `;
+        // Não atualizar elemento inexistente
         
         this.capacidadeFinanceira = faixa.toLowerCase();
         this.updateResumo();
@@ -1004,26 +980,6 @@ class CanvasAutomatizado {
         // Mostrar/ocultar campo custom
         if (customDiv) {
             customDiv.style.display = temOutra ? 'block' : 'none';
-        }
-        
-        const textos = [];
-        selecionadas.forEach(checkbox => {
-            if (checkbox.value === 'outra') {
-                const custom = document.getElementById('dorCustom').value.trim();
-                if (custom) {
-                    textos.push(custom);
-                }
-            } else {
-                const dor = this.dores[checkbox.value];
-                textos.push(dor || checkbox.nextElementSibling.textContent);
-            }
-        });
-        
-        const container = document.getElementById('doresSelecionadas');
-        if (textos.length > 0) {
-            container.innerHTML = textos.map(texto => `<span class="tag">${texto}</span>`).join(' ');
-        } else {
-            container.textContent = 'Selecione as dores acima';
         }
         
         this.updateResumo();

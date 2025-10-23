@@ -88,12 +88,197 @@ class PasswordAuth {
 }
 
 // ========================================
+// CLASSE: Serviços e Precificação
+// ========================================
+class ServicosPrecificacao {
+    constructor() {
+        this.servicos = {
+            'trafego-pago': { nome: 'Tráfego Pago', icon: '📈' },
+            'midias-sociais': { nome: 'Mídias Sociais', icon: '📱' },
+            'desenvolvimento-sites': { nome: 'Desenvolvimento de Sites e Landing Pages', icon: '💻' },
+            'automacao-whatsapp': { nome: 'Automação de WhatsApp', icon: '🤖' },
+            'mapeamento-processo': { nome: 'Mapeamento do Processo Comercial', icon: '🗺️' },
+            'estruturacao-atendimento': { nome: 'Estruturação de Atendimento', icon: '🎧' },
+            'estrategia-marketing': { nome: 'Estratégia e Planejamento de Marketing', icon: '🎯' }
+        };
+        
+        this.precos = {
+            'micro': { 'trafego-pago': 1500, 'midias-sociais': 800, 'desenvolvimento-sites': 2000, 'automacao-whatsapp': 1200, 'mapeamento-processo': 1000, 'estruturacao-atendimento': 1500, 'estrategia-marketing': 2500 },
+            'pequeno': { 'trafego-pago': 3000, 'midias-sociais': 1500, 'desenvolvimento-sites': 4000, 'automacao-whatsapp': 2500, 'mapeamento-processo': 2000, 'estruturacao-atendimento': 3000, 'estrategia-marketing': 5000 },
+            'medio': { 'trafego-pago': 6000, 'midias-sociais': 3000, 'desenvolvimento-sites': 8000, 'automacao-whatsapp': 5000, 'mapeamento-processo': 4000, 'estruturacao-atendimento': 6000, 'estrategia-marketing': 10000 },
+            'grande': { 'trafego-pago': 12000, 'midias-sociais': 6000, 'desenvolvimento-sites': 15000, 'automacao-whatsapp': 10000, 'mapeamento-processo': 8000, 'estruturacao-atendimento': 12000, 'estrategia-marketing': 20000 }
+        };
+        
+        this.init();
+    }
+    
+    init() {
+        this.setupEventListeners();
+        this.updateServicosSelecionados();
+        this.detectarCapacidadeFinanceira();
+    }
+    
+    setupEventListeners() {
+        // Listeners para checkboxes de serviços
+        const servicosCheckboxes = document.querySelectorAll('input[name="servicos"]');
+        servicosCheckboxes.forEach(checkbox => {
+            checkbox.addEventListener('change', () => {
+                this.updateServicosSelecionados();
+                this.calcularPrecificacao();
+            });
+        });
+        
+        // Listener para campo de capacidade financeira
+        const campoFinanceiro = document.getElementById('financeiro');
+        if (campoFinanceiro) {
+            campoFinanceiro.addEventListener('input', () => {
+                this.detectarCapacidadeFinanceira();
+                this.calcularPrecificacao();
+            });
+        }
+    }
+    
+    updateServicosSelecionados() {
+        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked'));
+        const listaServicos = document.getElementById('listaServicos');
+        
+        if (servicosSelecionados.length === 0) {
+            listaServicos.innerHTML = '<p style="color: #999; font-style: italic;">Nenhum serviço selecionado</p>';
+            return;
+        }
+        
+        const html = servicosSelecionados.map(checkbox => {
+            const servico = this.servicos[checkbox.value];
+            const detalhes = checkbox.parentElement.querySelector('.servico-input').value;
+            return `
+                <div class="servico-selecionado">
+                    <span class="servico-icon">${servico.icon}</span>
+                    <span class="servico-nome">${servico.nome}</span>
+                    ${detalhes ? `<span class="servico-detalhe">- ${detalhes}</span>` : ''}
+                </div>
+            `;
+        }).join('');
+        
+        listaServicos.innerHTML = html;
+    }
+    
+    detectarCapacidadeFinanceira() {
+        const campoFinanceiro = document.getElementById('financeiro');
+        const capacidadeDetectada = document.getElementById('capacidadeDetectada');
+        
+        if (!campoFinanceiro || !capacidadeDetectada) return;
+        
+        const texto = campoFinanceiro.value.toLowerCase();
+        let capacidade = 'indefinida';
+        let cor = '#666';
+        
+        // Detectar faixa baseada no texto
+        if (texto.includes('micro') || texto.includes('até') || texto.includes('10k') || texto.includes('10.000')) {
+            capacidade = 'Micro (até R$ 10k/mês)';
+            cor = '#e74c3c';
+        } else if (texto.includes('pequeno') || texto.includes('10k') || texto.includes('50k') || texto.includes('10.000') || texto.includes('50.000')) {
+            capacidade = 'Pequeno (R$ 10k-50k/mês)';
+            cor = '#f39c12';
+        } else if (texto.includes('médio') || texto.includes('medio') || texto.includes('50k') || texto.includes('200k') || texto.includes('50.000') || texto.includes('200.000')) {
+            capacidade = 'Médio (R$ 50k-200k/mês)';
+            cor = '#3498db';
+        } else if (texto.includes('grande') || texto.includes('acima') || texto.includes('200k') || texto.includes('200.000')) {
+            capacidade = 'Grande (acima R$ 200k/mês)';
+            cor = '#27ae60';
+        }
+        
+        capacidadeDetectada.innerHTML = `<span class="capacidade-texto" style="color: ${cor};">${capacidade}</span>`;
+        this.capacidadeAtual = capacidade.toLowerCase().includes('micro') ? 'micro' : 
+                              capacidade.toLowerCase().includes('pequeno') ? 'pequeno' :
+                              capacidade.toLowerCase().includes('médio') || capacidade.toLowerCase().includes('medio') ? 'medio' :
+                              capacidade.toLowerCase().includes('grande') ? 'grande' : 'micro';
+    }
+    
+    calcularPrecificacao() {
+        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked'));
+        const resultadoPrecificacao = document.getElementById('resultadoPrecificacao');
+        
+        if (servicosSelecionados.length === 0) {
+            resultadoPrecificacao.innerHTML = '<p>Selecione os serviços para ver a precificação sugerida</p>';
+            this.atualizarPacotes([]);
+            return;
+        }
+        
+        const capacidade = this.capacidadeAtual || 'micro';
+        const precosServicos = [];
+        let total = 0;
+        
+        servicosSelecionados.forEach(checkbox => {
+            const servico = checkbox.value;
+            const preco = this.precos[capacidade][servico];
+            const detalhes = checkbox.parentElement.querySelector('.servico-input').value;
+            
+            precosServicos.push({
+                servico: this.servicos[servico].nome,
+                icon: this.servicos[servico].icon,
+                preco: preco,
+                detalhes: detalhes
+            });
+            
+            total += preco;
+        });
+        
+        // Atualizar resultado
+        const html = `
+            <div class="precificacao-detalhada">
+                ${precosServicos.map(item => `
+                    <div class="item-precificacao">
+                        <span class="item-icon">${item.icon}</span>
+                        <span class="item-nome">${item.nome}</span>
+                        <span class="item-preco">R$ ${item.preco.toLocaleString('pt-BR')}</span>
+                        ${item.detalhes ? `<div class="item-detalhes">${item.detalhes}</div>` : ''}
+                    </div>
+                `).join('')}
+                <div class="total-precificacao">
+                    <strong>Total: R$ ${total.toLocaleString('pt-BR')}</strong>
+                </div>
+            </div>
+        `;
+        
+        resultadoPrecificacao.innerHTML = html;
+        
+        // Atualizar pacotes
+        this.atualizarPacotes(precosServicos, total);
+    }
+    
+    atualizarPacotes(servicos, total = 0) {
+        const pacotes = [
+            { id: 'pacoteBasico', nome: '🥉 Básico', porcentagem: 0.6 },
+            { id: 'pacoteIntermediario', nome: '🥈 Intermediário', porcentagem: 0.8 },
+            { id: 'pacotePremium', nome: '🥇 Premium', porcentagem: 1.0 }
+        ];
+        
+        pacotes.forEach(pacote => {
+            const elemento = document.getElementById(pacote.id);
+            if (!elemento) return;
+            
+            const precoPacote = Math.round(total * pacote.porcentagem);
+            const servicosPacote = servicos.slice(0, Math.ceil(servicos.length * pacote.porcentagem));
+            
+            elemento.querySelector('.pacote-preco').textContent = `R$ ${precoPacote.toLocaleString('pt-BR')}`;
+            
+            const servicosHtml = servicosPacote.map(item => 
+                `<div class="pacote-servico">${item.icon} ${item.nome}</div>`
+            ).join('');
+            
+            elemento.querySelector('.pacote-servicos').innerHTML = servicosHtml || '<div class="pacote-servico">Nenhum serviço</div>';
+        });
+    }
+}
+
+// ========================================
 // CLASSE: Canvas Nicho ICP
 // ========================================
 class CanvasNichoICP {
     constructor() {
         this.form = document.getElementById('canvasForm');
         this.userFingerprint = this.generateFingerprint();
+        this.servicosPrecificacao = new ServicosPrecificacao();
         this.init();
     }
     
@@ -176,6 +361,12 @@ class CanvasNichoICP {
     }
     
     coletarDados() {
+        // Coletar serviços selecionados
+        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(checkbox => ({
+            servico: checkbox.value,
+            detalhes: checkbox.parentElement.querySelector('.servico-input').value
+        }));
+        
         return {
             triada1: document.getElementById('triada1').checked,
             triada2: document.getElementById('triada2').checked,
@@ -184,8 +375,8 @@ class CanvasNichoICP {
             dores: document.getElementById('dores').value,
             financeiro: document.getElementById('financeiro').value,
             acesso: document.getElementById('acesso').value,
-            entregaveis: document.getElementById('entregaveis').value,
-            precificacao: document.getElementById('precificacao').value,
+            servicos: servicosSelecionados,
+            capacidadeFinanceira: this.servicosPrecificacao.capacidadeAtual || 'micro',
             checks: {
                 check1: document.getElementById('check1').checked,
                 check2: document.getElementById('check2').checked,
@@ -235,9 +426,9 @@ class CanvasNichoICP {
                 dores: dados.dores,
                 financeiro: dados.financeiro,
                 acesso: dados.acesso,
-                entregaveis: dados.entregaveis,
-                precificacao: dados.precificacao,
-                checks: dados.checks,
+                servicos: JSON.stringify(dados.servicos),
+                capacidade_financeira: dados.capacidadeFinanceira,
+                checks: JSON.stringify(dados.checks),
                 user_agent: navigator.userAgent,
                 ip_address: await this.obterIP()
             };
@@ -293,8 +484,20 @@ class CanvasNichoICP {
             document.getElementById('dores').value = obj.dores || '';
             document.getElementById('financeiro').value = obj.financeiro || '';
             document.getElementById('acesso').value = obj.acesso || '';
-            document.getElementById('entregaveis').value = obj.entregaveis || '';
-            document.getElementById('precificacao').value = obj.precificacao || '';
+            
+            // Carregar serviços selecionados
+            if (obj.servicos && Array.isArray(obj.servicos)) {
+                obj.servicos.forEach(servicoData => {
+                    const checkbox = document.querySelector(`input[name="servicos"][value="${servicoData.servico}"]`);
+                    if (checkbox) {
+                        checkbox.checked = true;
+                        const inputDetalhes = checkbox.parentElement.querySelector('.servico-input');
+                        if (inputDetalhes && servicoData.detalhes) {
+                            inputDetalhes.value = servicoData.detalhes;
+                        }
+                    }
+                });
+            }
             
             if (obj.checks) {
                 document.getElementById('check1').checked = obj.checks.check1 || false;
@@ -306,6 +509,13 @@ class CanvasNichoICP {
                 document.getElementById('check7').checked = obj.checks.check7 || false;
                 document.getElementById('check8').checked = obj.checks.check8 || false;
             }
+            
+            // Atualizar interface após carregar dados
+            setTimeout(() => {
+                this.servicosPrecificacao.updateServicosSelecionados();
+                this.servicosPrecificacao.detectarCapacidadeFinanceira();
+                this.servicosPrecificacao.calcularPrecificacao();
+            }, 100);
             
             this.validarTriada();
         }

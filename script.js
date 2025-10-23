@@ -586,8 +586,12 @@ class CanvasAutomatizado {
     }
     
     init() {
+        console.log('🔧 CanvasAutomatizado: Iniciando setup...');
         this.setupEventListeners();
+        console.log('🔧 CanvasAutomatizado: Event listeners configurados');
         this.updateAllSelections();
+        console.log('🔧 CanvasAutomatizado: Seleções atualizadas');
+        console.log('✅ CanvasAutomatizado: Inicialização completa');
     }
     
     setupEventListeners() {
@@ -623,10 +627,12 @@ class CanvasAutomatizado {
     }
     
     updateNichoResumo() {
+        console.log('🔧 updateNichoResumo: Iniciando...');
         const selecionado = document.querySelector('input[name="nicho"]:checked');
         const customDiv = document.querySelector('.nicho-custom');
         
         if (selecionado) {
+            console.log('🔧 updateNichoResumo: Nicho selecionado:', selecionado.value);
             const temOutro = selecionado.value === 'outro';
             
             // Mostrar/ocultar campo custom
@@ -643,11 +649,20 @@ class CanvasAutomatizado {
                 texto = nicho ? nicho.nome : selecionado.nextElementSibling.textContent;
             }
             
-            document.getElementById('nichoSelecionado').textContent = texto;
+            const elemento = document.getElementById('nichoSelecionado');
+            if (elemento) {
+                elemento.textContent = texto;
+                console.log('✅ updateNichoResumo: Nicho atualizado:', texto);
+            } else {
+                console.error('❌ updateNichoResumo: Elemento nichoSelecionado não encontrado');
+            }
+            
             this.updateResumo();
             this.calcularPrecificacao();
         } else {
-            document.getElementById('nichoSelecionado').textContent = 'Selecione um nicho acima';
+            console.log('🔧 updateNichoResumo: Nenhum nicho selecionado');
+            const elemento = document.getElementById('nichoSelecionado');
+            if (elemento) elemento.textContent = 'Selecione um nicho acima';
             if (customDiv) {
                 customDiv.style.display = 'none';
             }
@@ -923,6 +938,7 @@ class CanvasAutomatizado {
     }
     
     updateResumo() {
+        console.log('🔧 updateResumo: Iniciando...');
         // Nicho
         const nicho = document.querySelector('input[name="nicho"]:checked');
         const nichoTexto = nicho ? 
@@ -930,7 +946,13 @@ class CanvasAutomatizado {
                 (document.getElementById('nichoCustom').value.trim() || 'Outro nicho') : 
                 (this.nichos[nicho.value] ? this.nichos[nicho.value].nome : nicho.nextElementSibling.textContent)
             ) : 'Nenhum nicho selecionado';
-        document.getElementById('resumoNichos').textContent = nichoTexto;
+        const elementoNicho = document.getElementById('resumoNichos');
+        if (elementoNicho) {
+            elementoNicho.textContent = nichoTexto;
+            console.log('✅ updateResumo: Nicho atualizado:', nichoTexto);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoNichos não encontrado');
+        }
         
         // Dores
         const dores = Array.from(document.querySelectorAll('input[name="dores"]:checked'));
@@ -942,16 +964,35 @@ class CanvasAutomatizado {
                 }
                 return this.dores[d.value] || d.nextElementSibling.textContent;
             }).join(', ') : 'Nenhuma dor selecionada';
-        // Não atualizar resumoDores pois não existe no HTML
+        const elementoDores = document.getElementById('resumoDores');
+        if (elementoDores) {
+            elementoDores.textContent = doresTexto;
+            console.log('✅ updateResumo: Dores atualizadas:', doresTexto);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoDores não encontrado');
+        }
         
         // Capacidade
         const capacidade = this.capacidadeFinanceira || 'Não definida';
-        document.getElementById('resumoCapacidade').textContent = capacidade;
+        const elementoCapacidade = document.getElementById('resumoCapacidade');
+        if (elementoCapacidade) {
+            elementoCapacidade.textContent = capacidade;
+            console.log('✅ updateResumo: Capacidade atualizada:', capacidade);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoCapacidade não encontrado');
+        }
         
         // Serviços
         const servicos = this.servicosSelecionados || [];
         const servicosTexto = servicos.length > 0 ? servicos.join(', ') : 'Nenhum serviço selecionado';
-        document.getElementById('resumoServicos').textContent = servicosTexto;
+        const elementoServicos = document.getElementById('resumoServicos');
+        if (elementoServicos) {
+            elementoServicos.textContent = servicosTexto;
+            console.log('✅ updateResumo: Serviços atualizados:', servicosTexto);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoServicos não encontrado');
+        }
+        console.log('✅ updateResumo: Concluído');
     }
     
     updateDoresResumo() {

@@ -542,13 +542,6 @@ body {
     box-shadow: 0 0 0 3px rgba(242, 183, 5, 0.2);
 }
 
-.lead-form .form-group input:valid {
-    border-color: #28a745;
-}
-
-.lead-form .form-group input:invalid:not(:placeholder-shown) {
-    border-color: #dc3545;
-}
 
 .checkbox-group {
     margin: 12px 0;

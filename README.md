@@ -54,11 +54,16 @@ npm run build
 3. Teste a conexão preenchendo e salvando um canvas
 
 ### Deploy no Vercel
-1. Instale o Vercel CLI: `npm install -g vercel`
-2. Faça login: `vercel login`
-3. Vincule o projeto: `vercel link --project-id prj_hTAxPkyoXqwnmXZxfRXloUv8pJAZ`
+1. **IMPORTANTE:** Se o repositório for privado, torne-o público ou configure o Vercel para acessar repositórios privados
+2. Acesse [https://vercel.com/dashboard](https://vercel.com/dashboard)
+3. Importe o projeto: `romulofreitas-byte/canvas-nicho-icp`
 4. Configure as variáveis de ambiente no dashboard
-5. Deploy: `vercel --prod`
+5. Deploy: Clique em "Deploy"
+
+### Teste Local Imediato
+- Abra o arquivo `test-local.html` diretamente no navegador
+- Digite a senha: `mundopodium`
+- Funciona 100% sem servidor!
 
 ## 🎯 Metodologia Pódium
 

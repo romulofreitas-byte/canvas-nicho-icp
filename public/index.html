@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Canvas de Nicho e ICP - Método Pódium</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <div class="container">
+        <!-- HEADER -->
+        <div class="header">
+            <h1>🏁 Canvas de Nicho e ICP</h1>
+            <p>Método Pódium - Primeira Fase: Definição de Nicho e Perfil de Cliente Ideal</p>
+            
+            <div class="triada-info">
+                <div class="triada-item">
+                    <div class="triada-icon">✓</div>
+                    <span>Eu sei prestar esse serviço</span>
+                </div>
+                <div class="triada-item">
+                    <div class="triada-icon">✓</div>
+                    <span>O mercado precisa do meu serviço</span>
+                </div>
+                <div class="triada-item">
+                    <div class="triada-icon">✓</div>
+                    <span>O mercado está disposto a pagar</span>
+                </div>
+            </div>
+        </div>
+
+        <!-- CANVAS PRINCIPAL -->
+        <form id="canvasForm">
+            <div class="canvas-wrapper">
+                <!-- TRÍADE DO NICHO -->
+                <div class="canvas-section triada">
+                    <h2>🎯 A TRÍADE DO NICHO - Validação Fundamental</h2>
+                    <p style="margin-bottom: 20px; font-size: 0.95em;">Antes de escolher um nicho, você PRECISA validar esses três pilares. Se um deles falhar, o nicho não é viável.</p>
+                    
+                    <div class="triada-grid">
+                        <div class="triada-box">
+                            <h3>1️⃣ EU SEI PRESTAR</h3>
+                            <p>Tenho expertise, experiência e capacidade técnica para entregar esse serviço com excelência.</p>
+                            <div class="triada-checkbox">
+                                <input type="checkbox" id="triada1" name="triada1">
+                                <label for="triada1">Validado ✓</label>
+                            </div>
+                        </div>
+                        
+                        <div class="triada-box">
+                            <h3>2️⃣ MERCADO PRECISA</h3>
+                            <p>Existe uma dor real, urgente e recorrente nesse mercado que meu serviço resolve.</p>
+                            <div class="triada-checkbox">
+                                <input type="checkbox" id="triada2" name="triada2">
+                                <label for="triada2">Validado ✓</label>
+                            </div>
+                        </div>
+                        
+                        <div class="triada-box">
+                            <h3>3️⃣ MERCADO PAGA</h3>
+                            <p>O mercado tem orçamento e está disposto a pagar pelo meu serviço.</p>
+                            <div class="triada-checkbox">
+                                <input type="checkbox" id="triada3" name="triada3">
+                                <label for="triada3">Validado ✓</label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="resultado" id="resultadoTriada">
+                        <h4>✅ TRÍADE VALIDADA!</h4>
+                        <p>Você passou na validação fundamental. Agora é hora de detalhar seu nicho e ICP.</p>
+                    </div>
+                </div>
+
+                <!-- SEÇÕES DO CANVAS -->
+                <div class="canvas-grid">
+                    <!-- 1. NICHO -->
+                    <div class="canvas-section">
+                        <h2>1. NICHO</h2>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Qual é o segmento de mercado específico que você vai focar?</p>
+                        <textarea id="nicho" name="nicho" placeholder="Ex: Barbearias, Advogados autônomos, Engenheiros, etc."></textarea>
+                        <p style="font-size: 0.85em; color: #999; margin-top: 10px;">💡 Dica: Quanto mais específico, melhor!</p>
+                    </div>
+
+                    <!-- 2. DORES DO MERCADO -->
+                    <div class="canvas-section">
+                        <h2>2. DORES PRINCIPAIS</h2>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Quais são as 3 principais dores desse mercado?</p>
+                        <textarea id="dores" name="dores" placeholder="1. Dor 1&#10;2. Dor 2&#10;3. Dor 3"></textarea>
+                    </div>
+
+                    <!-- 3. CAPACIDADE FINANCEIRA -->
+                    <div class="canvas-section">
+                        <h2>3. CAPACIDADE FINANCEIRA</h2>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Qual é o orçamento típico desse mercado?</p>
+                        <textarea id="financeiro" name="financeiro" placeholder="Faturamento mensal, orçamento disponível, ticket médio esperado, etc."></textarea>
+                    </div>
+
+                    <!-- 4. ACESSO AO DECISOR -->
+                    <div class="canvas-section">
+                        <h2>4. ACESSO AO DECISOR</h2>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Como você vai encontrar e contatar o tomador de decisão?</p>
+                        <textarea id="acesso" name="acesso" placeholder="Google Maps, LinkedIn, OAB, CREA, Portais específicos, etc."></textarea>
+                    </div>
+
+                    <!-- 5. ENTREGÁVEIS (JORNADAS) -->
+                    <div class="canvas-section">
+                        <h2>5. ENTREGÁVEIS (JORNADAS)</h2>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Quais são os serviços/soluções que você vai oferecer?</p>
+                        <textarea id="entregaveis" name="entregaveis" placeholder="Jornada 1: ...&#10;Jornada 2: ...&#10;Jornada 3: ..."></textarea>
+                    </div>
+
+                    <!-- 6. PRECIFICAÇÃO -->
+                    <div class="canvas-section">
+                        <h2>6. PRECIFICAÇÃO</h2>
+                        <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Qual é o preço de cada jornada?</p>
+                        <textarea id="precificacao" name="precificacao" placeholder="Jornada 1: R$ ...&#10;Jornada 2: R$ ...&#10;Jornada 3: R$ ..."></textarea>
+                    </div>
+                </div>
+
+                <!-- SEÇÃO DE ANÁLISE -->
+                <div class="analise-section">
+                    <h3>✓ CHECKLIST DE VALIDAÇÃO</h3>
+                    <p style="margin-bottom: 20px; color: #666;">Antes de começar a prospectar, valide esses pontos:</p>
+                    
+                    <div class="checklist">
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check1" name="check1">
+                            <label for="check1">Tríade do nicho validada (3/3)</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check2" name="check2">
+                            <label for="check2">Nicho específico e bem definido</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check3" name="check3">
+                            <label for="check3">Dores do mercado claramente identificadas</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check4" name="check4">
+                            <label for="check4">Capacidade financeira validada</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check5" name="check5">
+                            <label for="check5">Acesso ao decisor confirmado</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check6" name="check6">
+                            <label for="check6">Entregáveis (jornadas) bem estruturadas</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check7" name="check7">
+                            <label for="check7">Precificação estratégica definida</label>
+                        </div>
+                        <div class="checklist-item">
+                            <input type="checkbox" id="check8" name="check8">
+                            <label for="check8">Pronto para começar a prospectar</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- BOTÕES -->
+            <div class="button-group">
+                <button type="button" class="btn-primary" onclick="salvarDados()">💾 SALVAR DADOS</button>
+                <button type="button" class="btn-secondary" onclick="limparDados()">🔄 LIMPAR TUDO</button>
+                <button type="button" class="btn-print" onclick="window.print()">🖨️ IMPRIMIR</button>
+            </div>
+        </form>
+
+        <!-- SEÇÃO DA COMUNIDADE -->
+        <div class="community-section">
+            <div class="community-content">
+                <div class="community-icon">📱</div>
+                <div class="community-text">
+                    <h3>🚀 Comunidade Pódium: Construindo Empresários</h3>
+                    <p>Junte-se à nossa comunidade gratuita no WhatsApp e conecte-se com outros empreendedores que estão aplicando o Método Pódium para acelerar seus resultados comerciais.</p>
+                    <p><strong>✨ Comunidade 100% gratuita</strong> • Troca de experiências • Networking • Dicas exclusivas</p>
+                </div>
+            </div>
+            <a href="https://chat.whatsapp.com/L4camOPOJMxDb8et6M80oN" target="_blank" rel="noopener noreferrer" class="btn-whatsapp">
+                📱 Entrar na Comunidade WhatsApp
+            </a>
+        </div>
+
+        <!-- FOOTER -->
+        <div class="footer">
+            <p>Canvas de Nicho e ICP - Método Pódium</p>
+            <p>Desenvolvido para a Primeira Fase do Método Pódium: Definição de Nicho e ICP</p>
+            <p style="margin-top: 10px; color: #999;">Seus dados são salvos localmente e no Supabase</p>
+        </div>
+    </div>
+
+    <!-- Modal de Senha -->
+    <div id="passwordModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏁 Canvas Exclusivo - Método Pódium</h2>
+                <p>Digite a senha para acessar</p>
+            </div>
+            
+            <form id="passwordForm" class="password-form">
+                <div class="form-group">
+                    <label for="password">Senha de Acesso</label>
+                    <input type="password" id="password" name="password" placeholder="Digite a senha" required>
+                </div>
+                
+                <button type="submit" class="btn-unlock">🔓 Acessar Canvas</button>
+            </form>
+            
+            <div class="modal-footer">
+                <p>Entre em contato com a equipe Pódium se você não tem a senha</p>
+            </div>
+        </div>
+    </div>
+    
+    <script src="config.js"></script>
+    <script src="script.js"></script>
+    
+    <!-- Vercel Analytics -->
+    <script>
+        window.va = window.va || function () { (window.vaq = window.vaq || []).push(arguments); };
+    </script>
+    <script defer src="/_vercel/insights/script.js"></script>
+    
+    <!-- Fallback Analytics Script -->
+    <script>
+        setTimeout(() => {
+            if (typeof window.va !== 'function') {
+                console.warn('⚠️ Vercel Analytics não carregou automaticamente');
+                // Tentar carregar o script do Vercel Analytics
+                const script = document.createElement('script');
+                script.src = '/_vercel/insights/script.js';
+                script.defer = true;
+                script.onerror = function() {
+                    console.log('ℹ️ Vercel Analytics não disponível (ambiente local ou erro de rede)');
+                };
+                document.head.appendChild(script);
+            } else {
+                console.log('✅ Vercel Analytics carregado com sucesso');
+            }
+        }, 3000);
+    </script>
+</body>
+</html>

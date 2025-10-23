@@ -23,7 +23,11 @@ class LeadCapture {
         this.blockedEmails = [
             'test@test.com', 'email@email.com', 'fake@fake.com', 'spam@spam.com',
             'admin@admin.com', 'user@user.com', 'example@example.com',
-            'temp@temp.com', 'demo@demo.com', 'sample@sample.com'
+            'temp@temp.com', 'demo@demo.com', 'sample@sample.com',
+            'teste@teste.com', 'romulo@teste.com', 'teste@test.com',
+            'test@teste.com', 'teste@teste.br', 'test@test.br',
+            'email@teste.com', 'email@test.com', 'usuario@teste.com',
+            'usuario@test.com', 'admin@teste.com', 'admin@test.com'
         ];
         
         // Lista negra de nomes genéricos
@@ -163,6 +167,23 @@ class LeadCapture {
         // Verificar lista negra
         if (this.blockedEmails.includes(value.toLowerCase())) {
             this.showFieldError(field, 'Por favor, use um email válido');
+            return false;
+        }
+        
+        // Verificar padrões de emails de teste
+        const emailPatterns = [
+            /@teste\./i,
+            /@test\./i,
+            /teste@/i,
+            /test@/i,
+            /@fake\./i,
+            /@spam\./i,
+            /@example\./i,
+            /@demo\./i
+        ];
+        
+        if (emailPatterns.some(pattern => pattern.test(value))) {
+            this.showFieldError(field, 'Por favor, use um email válido e real');
             return false;
         }
         

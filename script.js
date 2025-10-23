@@ -52,6 +52,11 @@ class LeadCapture {
     init() {
         console.log('🔧 Inicializando LeadCapture...');
         
+        // TEMPORÁRIO: Sempre esconder o modal para permitir acesso direto ao canvas
+        console.log('🔓 Modo temporário: Modal sempre escondido');
+        this.hideModal();
+        
+        /* CÓDIGO ORIGINAL COMENTADO - DESCOMENTAR QUANDO QUISER REATIVAR O FORMULÁRIO
         // Verificar se já está autenticado
         if (!this.isAuthenticated()) {
             console.log('🔓 Usuário não autenticado - exibindo modal');
@@ -60,14 +65,19 @@ class LeadCapture {
             console.log('✅ Usuário já autenticado - escondendo modal');
             this.hideModal();
         }
+        */
         
-        // Listener para o form
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        // Listener para o form (mantido caso queira reativar depois)
+        if (this.form) {
+            this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        }
         
-        // Máscara para telefone
-        this.phoneInput.addEventListener('input', (e) => this.formatPhone(e));
+        // Máscara para telefone (mantido caso queira reativar depois)
+        if (this.phoneInput) {
+            this.phoneInput.addEventListener('input', (e) => this.formatPhone(e));
+        }
         
-        console.log('✅ LeadCapture inicializado com sucesso');
+        console.log('✅ LeadCapture inicializado com sucesso (modo temporário)');
     }
     
     formatPhone(event) {
@@ -83,6 +93,11 @@ class LeadCapture {
     }
     
     isAuthenticated() {
+        // TEMPORÁRIO: Sempre retornar true para permitir acesso direto ao canvas
+        console.log('🔓 Modo temporário: Acesso direto ao canvas habilitado');
+        return true;
+        
+        /* CÓDIGO ORIGINAL COMENTADO - DESCOMENTAR QUANDO QUISER REATIVAR O FORMULÁRIO
         const authData = localStorage.getItem('canvas-lead-auth');
         console.log('🔍 Verificando autenticação...', authData ? 'Dados encontrados' : 'Nenhum dado');
         
@@ -111,6 +126,7 @@ class LeadCapture {
             localStorage.removeItem('canvas-lead-auth');
             return false;
         }
+        */
     }
     
     async handleSubmit(event) {

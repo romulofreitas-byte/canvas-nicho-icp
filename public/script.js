@@ -4,161 +4,9 @@
  */
 
 // ========================================
-// CLASSE: Lead Capture
+// FORMULÁRIO DE CAPTURA DE LEADS REMOVIDO
 // ========================================
-class LeadCapture {
-    constructor() {
-        this.modal = document.getElementById('leadModal');
-        this.form = document.getElementById('leadForm');
-        this.nameInput = document.getElementById('leadName');
-        this.emailInput = document.getElementById('leadEmail');
-        this.phoneInput = document.getElementById('leadPhone');
-        this.termsInput = document.getElementById('leadTerms');
-        
-        // Configurar Supabase
-        this.supabase = null;
-        this.initSupabase();
-        this.init();
-    }
-    
-    initSupabase() {
-        try {
-            // Usar as configurações do config.js
-            if (window.SUPABASE_URL && window.SUPABASE_ANON_KEY) {
-                this.supabase = window.supabase.createClient(window.SUPABASE_URL, window.SUPABASE_ANON_KEY);
-                console.log('✅ Supabase inicializado com sucesso');
-            } else {
-                console.warn('⚠️ Configurações do Supabase não encontradas');
-            }
-        } catch (error) {
-            console.error('❌ Erro ao inicializar Supabase:', error);
-        }
-    }
-    
-    init() {
-        // Verificar se já está autenticado
-        if (!this.isAuthenticated()) {
-            this.showModal();
-        } else {
-            this.hideModal();
-        }
-        
-        // Listener para o form
-        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
-        
-        // Máscara para telefone
-        this.phoneInput.addEventListener('input', (e) => this.formatPhone(e));
-    }
-    
-    formatPhone(event) {
-        let value = event.target.value.replace(/\D/g, '');
-        if (value.length >= 11) {
-            value = value.replace(/(\d{2})(\d{5})(\d{4})/, '($1) $2-$3');
-        } else if (value.length >= 7) {
-            value = value.replace(/(\d{2})(\d{4})(\d{0,4})/, '($1) $2-$3');
-        } else if (value.length >= 3) {
-            value = value.replace(/(\d{2})(\d{0,5})/, '($1) $2');
-        }
-        event.target.value = value;
-    }
-    
-    isAuthenticated() {
-        const authData = localStorage.getItem('canvas-lead-auth');
-        if (!authData) return false;
-        
-        const parsed = JSON.parse(authData);
-        const expiryDate = new Date(parsed.expiry);
-        
-        // Verificar se ainda está dentro do prazo (30 dias)
-        if (new Date() > expiryDate) {
-            localStorage.removeItem('canvas-lead-auth');
-            return false;
-        }
-        
-        return true;
-    }
-    
-    async handleSubmit(event) {
-        event.preventDefault();
-        
-        const formData = {
-            name: this.nameInput.value.trim(),
-            email: this.emailInput.value.trim(),
-            phone: this.phoneInput.value.trim(),
-            terms: this.termsInput.checked,
-            created_at: new Date().toISOString(),
-            source: 'canvas-nicho-icp'
-        };
-        
-        // Validações
-        if (!formData.name || !formData.email || !formData.phone) {
-            alert('❌ Por favor, preencha todos os campos obrigatórios.');
-            return;
-        }
-        
-        if (!formData.terms) {
-            alert('❌ Você deve aceitar receber conteúdos do Método Pódium.');
-            return;
-        }
-        
-        // Validar email
-        const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
-        if (!emailRegex.test(formData.email)) {
-            alert('❌ Por favor, insira um e-mail válido.');
-            return;
-        }
-        
-        try {
-            // Salvar no Supabase
-            if (this.supabase) {
-                const { data, error } = await this.supabase
-                    .from('leads')
-                    .insert([formData]);
-                
-                if (error) {
-                    console.error('Erro ao salvar no Supabase:', error);
-                    // Continuar mesmo com erro no Supabase
-                } else {
-                    console.log('✅ Lead salvo no Supabase:', data);
-                }
-            }
-            
-            // Salvar autenticação local (30 dias)
-            const expiryDate = new Date();
-            expiryDate.setDate(expiryDate.getDate() + 30);
-            
-            localStorage.setItem('canvas-lead-auth', JSON.stringify({
-                authenticated: true,
-                lead: formData,
-                expiry: expiryDate.toISOString(),
-                date: new Date().toISOString()
-            }));
-            
-            this.hideModal();
-            alert('✅ Acesso liberado! Bem-vindo ao Canvas de Nicho e ICP, ' + formData.name + '!');
-            
-            // Track analytics
-            if (typeof window.va === 'function') {
-                window.va('track', 'Lead Captured', {
-                    lead_name: formData.name,
-                    lead_email: formData.email
-                });
-            }
-            
-        } catch (error) {
-            console.error('Erro ao processar lead:', error);
-            alert('❌ Ocorreu um erro. Tente novamente.');
-        }
-    }
-    
-    showModal() {
-        this.modal.classList.remove('hidden');
-    }
-    
-    hideModal() {
-        this.modal.classList.add('hidden');
-    }
-}
+// O formulário foi completamente removido para permitir acesso direto ao canvas
 
 // ========================================
 // CLASSE: Serviços e Precificação
@@ -634,17 +482,32 @@ function limparDados() {
 // INICIALIZAÇÃO
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
-    // Inicializar autenticação
-    window.leadCapture = new LeadCapture();
+    console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
     
-    // Inicializar canvas
-    window.canvas = new CanvasNichoICP();
-    
-    // Inicializar Vercel Analytics
-    if (typeof window.va === 'function') {
-        window.va('track', 'Page View', {
-            page: 'Canvas Nicho ICP'
-        });
+    try {
+        // LeadCapture removido - acesso direto ao canvas
+        console.log('🔧 Pulando inicialização do LeadCapture (removido)');
+        
+        // Inicializar canvas
+        console.log('🔧 Criando CanvasNichoICP...');
+        window.canvas = new CanvasNichoICP();
+        console.log('✅ CanvasNichoICP criado:', !!window.canvas);
+        
+        // Inicializar canvas automatizado
+        console.log('🔧 Criando CanvasAutomatizado...');
+        window.canvasAutomatizado = new CanvasAutomatizado();
+        console.log('✅ CanvasAutomatizado criado:', !!window.canvasAutomatizado);
+        
+        // Inicializar Vercel Analytics
+        if (typeof window.va === 'function') {
+            window.va('track', 'Page View', {
+                page: 'Canvas Nicho ICP'
+            });
+        }
+        
+        console.log('🎉 Inicialização completa! (sem LeadCapture)');
+    } catch (error) {
+        console.error('❌ Erro durante inicialização:', error);
     }
 });
 
@@ -723,8 +586,12 @@ class CanvasAutomatizado {
     }
     
     init() {
+        console.log('🔧 CanvasAutomatizado: Iniciando setup...');
         this.setupEventListeners();
+        console.log('🔧 CanvasAutomatizado: Event listeners configurados');
         this.updateAllSelections();
+        console.log('🔧 CanvasAutomatizado: Seleções atualizadas');
+        console.log('✅ CanvasAutomatizado: Inicialização completa');
     }
     
     setupEventListeners() {
@@ -760,10 +627,12 @@ class CanvasAutomatizado {
     }
     
     updateNichoResumo() {
+        console.log('🔧 updateNichoResumo: Iniciando...');
         const selecionado = document.querySelector('input[name="nicho"]:checked');
         const customDiv = document.querySelector('.nicho-custom');
         
         if (selecionado) {
+            console.log('🔧 updateNichoResumo: Nicho selecionado:', selecionado.value);
             const temOutro = selecionado.value === 'outro';
             
             // Mostrar/ocultar campo custom
@@ -771,24 +640,15 @@ class CanvasAutomatizado {
                 customDiv.style.display = temOutro ? 'block' : 'none';
             }
             
-            let texto;
-            if (temOutro) {
-                const custom = document.getElementById('nichoCustom').value.trim();
-                texto = custom || 'Outro nicho';
-            } else {
-                const nicho = this.nichos[selecionado.value];
-                texto = nicho ? `${nicho.icon} ${nicho.nome}` : selecionado.nextElementSibling.textContent;
-            }
-            
-            document.getElementById('nichoSelecionado').textContent = texto;
             this.updateResumo();
             this.calcularPrecificacao();
         } else {
-            document.getElementById('nichoSelecionado').textContent = 'Selecione um nicho acima';
+            console.log('🔧 updateNichoResumo: Nenhum nicho selecionado');
             if (customDiv) {
                 customDiv.style.display = 'none';
             }
         }
+    }
     
     updateCanais() {
         const selecionados = [];
@@ -810,23 +670,31 @@ class CanvasAutomatizado {
     }
     
     updateServicos() {
+        console.log('🔧 updateServicos: Iniciando...');
         const checkboxes = document.querySelectorAll('input[name="servicos"]:checked');
         const selecionados = [];
         
         checkboxes.forEach(checkbox => {
-            const label = checkbox.parentElement.querySelector('.servico-nome').textContent;
-            const detalhe = checkbox.parentElement.querySelector('.servico-input').value.trim();
+            const labelElement = checkbox.parentElement.querySelector('.servico-nome');
+            const detalheElement = checkbox.parentElement.querySelector('.servico-input');
+            
+            const label = labelElement ? labelElement.textContent : checkbox.value;
+            const detalhe = detalheElement ? detalheElement.value.trim() : '';
+            
             let texto = label;
             if (detalhe) {
                 texto += ` (${detalhe})`;
             }
             selecionados.push(texto);
+            console.log(`🔧 updateServicos: Serviço adicionado: ${texto}`);
         });
         
         this.servicosSelecionados = selecionados;
-        this.updateLista('listaServicos', selecionados, 'servico-selecionado');
+        console.log('🔧 updateServicos: Serviços selecionados:', selecionados);
+        
         this.updateResumo();
         this.calcularPrecificacao();
+        console.log('✅ updateServicos: Concluído');
     }
     
     updateOutrosServicos() {
@@ -835,8 +703,10 @@ class CanvasAutomatizado {
         
         checkboxes.forEach(checkbox => {
             const servico = this.outrosServicos[checkbox.value];
-            const detalhe = checkbox.parentElement.querySelector('.servico-input').value.trim();
-            let texto = `${servico.icon} ${servico.nome}`;
+            const detalheElement = checkbox.parentElement.querySelector('.servico-input');
+            const detalhe = detalheElement ? detalheElement.value.trim() : '';
+            
+            let texto = servico ? servico.nome : checkbox.value;
             if (detalhe) {
                 texto += ` (${detalhe})`;
             }
@@ -862,14 +732,22 @@ class CanvasAutomatizado {
     }
     
     calcularCapacidadeEstrutura() {
+        console.log('🔧 calcularCapacidadeEstrutura: Iniciando...');
         const estruturaFisica = document.querySelector('input[name="estruturaFisica"]:checked')?.value;
         const tamanhoEquipe = document.querySelector('input[name="tamanhoEquipe"]:checked')?.value;
         const volumeClientes = document.querySelector('input[name="volumeClientes"]:checked')?.value;
         const ticketMedio = document.querySelector('input[name="ticketMedio"]:checked')?.value;
         const investeMarketing = document.querySelector('input[name="investeMarketing"]:checked')?.value;
         
+        console.log('🔧 calcularCapacidadeEstrutura: Valores coletados:', {
+            estruturaFisica, tamanhoEquipe, volumeClientes, ticketMedio, investeMarketing
+        });
+        
         if (!estruturaFisica || !tamanhoEquipe || !volumeClientes || !ticketMedio || !investeMarketing) {
-            document.getElementById('capacidadeEstimada').innerHTML = '<span class="capacidade-texto">Responda todas as perguntas</span>';
+            const elemento = document.getElementById('capacidadeEstimada');
+            if (elemento) {
+                elemento.innerHTML = '<span class="capacidade-texto">Responda todas as perguntas</span>';
+            }
             return;
         }
         
@@ -896,34 +774,45 @@ class CanvasAutomatizado {
         const investScores = { '0': 1, '500': 2, '500-2000': 3, '2000-5000': 4, '5000+': 5 };
         score += investScores[investeMarketing] || 1;
         
+        console.log('🔧 calcularCapacidadeEstrutura: Score calculado:', score);
+        
         // Determinar faixa baseada no score
-        let faixa, estimativa;
+        let faixa, estimativa, capacidadeKey;
         if (score <= 8) {
             faixa = 'Micro';
             estimativa = 'R$ 5k/mês (3-5% = R$ 150-250 em marketing)';
+            capacidadeKey = 'micro';
         } else if (score <= 12) {
             faixa = 'Pequeno';
             estimativa = 'R$ 25k/mês (3-5% = R$ 750-1.250)';
+            capacidadeKey = 'pequeno';
         } else if (score <= 16) {
             faixa = 'Médio';
             estimativa = 'R$ 125k/mês (3-5% = R$ 3.750-6.250)';
+            capacidadeKey = 'medio';
         } else {
             faixa = 'Grande';
             estimativa = 'R$ 300k+/mês (3-5% = R$ 9k-15k)';
+            capacidadeKey = 'grande';
         }
         
-        document.getElementById('capacidadeEstimada').innerHTML = `
+        const elemento = document.getElementById('capacidadeEstimada');
+        if (elemento) {
+            elemento.innerHTML = `
             <span class="capacidade-texto">${faixa}</span>
             <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
         `;
+        }
         
-        // Atualizar resumo da capacidade
-        document.getElementById('capacidadeSelecionada').innerHTML = `
-            <span class="badge">${faixa}</span>
-            <small style="display: block; margin-top: 5px; opacity: 0.8;">${estimativa}</small>
-        `;
+        // Atualizar capacidade financeira detectada na precificação
+        const capacidadeDetectada = document.getElementById('capacidadeDetectada');
+        if (capacidadeDetectada) {
+            capacidadeDetectada.innerHTML = `<span class="capacidade-texto">${faixa}</span>`;
+        }
         
-        this.capacidadeFinanceira = faixa.toLowerCase();
+        this.capacidadeFinanceira = capacidadeKey;
+        console.log('✅ calcularCapacidadeEstrutura: Capacidade definida como:', capacidadeKey);
+        
         this.updateResumo();
         this.calcularPrecificacao();
     }
@@ -938,57 +827,58 @@ class CanvasAutomatizado {
     }
     
     calcularPrecificacao() {
-        if (!this.capacidadeFinanceira) return;
+        console.log('🔧 calcularPrecificacao: Iniciando...');
+        console.log('🔧 calcularPrecificacao: Capacidade financeira:', this.capacidadeFinanceira);
+        
+        if (!this.capacidadeFinanceira) {
+            console.log('⚠️ calcularPrecificacao: Capacidade financeira não definida');
+            return;
+        }
         
         const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(cb => cb.value);
-        const outrosSelecionados = Array.from(document.querySelectorAll('input[name="outrosServicos"]:checked')).map(cb => cb.value);
+        console.log('🔧 calcularPrecificacao: Serviços selecionados:', servicosSelecionados);
         
         let total = 0;
         const servicosIncluidos = [];
         
         // Calcular serviços de marketing
         servicosSelecionados.forEach(servico => {
-            const preco = this.precos[servico][this.capacidadeFinanceira];
+            const preco = this.precos[servico] ? this.precos[servico][this.capacidadeFinanceira] : 0;
             total += preco;
+            const servicoInfo = this.servicos[servico];
             servicosIncluidos.push({
-                nome: this.servicos[servico].nome,
+                nome: servicoInfo ? servicoInfo.nome : servico,
                 preco: preco,
-                icon: this.servicos[servico].icon
+                icon: servicoInfo ? servicoInfo.icon : '📦'
             });
-        });
-        
-        // Calcular outros serviços
-        outrosSelecionados.forEach(servico => {
-            const preco = this.precos[servico][this.capacidadeFinanceira];
-            total += preco;
-            servicosIncluidos.push({
-                nome: this.outrosServicos[servico].nome,
-                preco: preco,
-                icon: this.outrosServicos[servico].icon
-            });
+            console.log(`🔧 calcularPrecificacao: ${servico} = R$ ${preco}`);
         });
         
         // Aplicar multiplicador do nicho
-        const nichosSelecionados = Array.from(document.querySelectorAll('input[name="nichos"]:checked')).map(cb => cb.value);
+        const nichoSelecionado = document.querySelector('input[name="nicho"]:checked');
         let multiplicadorNicho = 1;
         
-        nichosSelecionados.forEach(nicho => {
-            if (nicho !== 'outro' && this.nichos[nicho]) {
-                multiplicadorNicho = Math.max(multiplicadorNicho, this.nichos[nicho].multiplicador);
-            }
-        });
+        if (nichoSelecionado && nichoSelecionado.value !== 'outro' && this.nichos[nichoSelecionado.value]) {
+            multiplicadorNicho = this.nichos[nichoSelecionado.value].multiplicador;
+            console.log(`🔧 calcularPrecificacao: Multiplicador do nicho ${nichoSelecionado.value}: ${multiplicadorNicho}`);
+        }
         
         total *= multiplicadorNicho;
+        console.log(`🔧 calcularPrecificacao: Total calculado: R$ ${total}`);
         
         // Calcular jornadas
         const enxuta = Math.round(total * 0.6);
         const padrao = Math.round(total * 0.8);
         const completa = Math.round(total);
         
+        console.log(`🔧 calcularPrecificacao: Jornadas - Enxuta: R$ ${enxuta}, Padrão: R$ ${padrao}, Completa: R$ ${completa}`);
+        
         // Atualizar interface
         this.atualizarResultadoPrecificacao(servicosIncluidos, total);
         this.atualizarJornadas(enxuta, padrao, completa);
         this.atualizarResumoJornadas(enxuta, padrao, completa);
+        
+        console.log('✅ calcularPrecificacao: Concluído');
     }
     
     atualizarResultadoPrecificacao(servicosIncluidos, total) {
@@ -1020,26 +910,52 @@ class CanvasAutomatizado {
     }
     
     atualizarJornadas(enxuta, padrao, completa) {
-        document.getElementById('pacoteBasico').querySelector('.pacote-preco').textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
-        document.getElementById('pacoteIntermediario').querySelector('.pacote-preco').textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
-        document.getElementById('pacotePremium').querySelector('.pacote-preco').textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+        const pacoteBasico = document.getElementById('pacoteBasico');
+        const pacoteIntermediario = document.getElementById('pacoteIntermediario');
+        const pacotePremium = document.getElementById('pacotePremium');
+        
+        if (pacoteBasico) {
+            const precoElement = pacoteBasico.querySelector('.pacote-preco');
+            if (precoElement) precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+        }
+        
+        if (pacoteIntermediario) {
+            const precoElement = pacoteIntermediario.querySelector('.pacote-preco');
+            if (precoElement) precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+        }
+        
+        if (pacotePremium) {
+            const precoElement = pacotePremium.querySelector('.pacote-preco');
+            if (precoElement) precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+        }
     }
     
     atualizarResumoJornadas(enxuta, padrao, completa) {
-        document.getElementById('resumoEnxuta').textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
-        document.getElementById('resumoPadrao').textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
-        document.getElementById('resumoCompleta').textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+        const resumoEnxuta = document.getElementById('resumoEnxuta');
+        const resumoPadrao = document.getElementById('resumoPadrao');
+        const resumoCompleta = document.getElementById('resumoCompleta');
+        
+        if (resumoEnxuta) resumoEnxuta.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+        if (resumoPadrao) resumoPadrao.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+        if (resumoCompleta) resumoCompleta.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
     }
     
     updateResumo() {
+        console.log('🔧 updateResumo: Iniciando...');
         // Nicho
         const nicho = document.querySelector('input[name="nicho"]:checked');
         const nichoTexto = nicho ? 
             (nicho.value === 'outro' ? 
                 (document.getElementById('nichoCustom').value.trim() || 'Outro nicho') : 
-                (this.nichos[nicho.value] ? `${this.nichos[nicho.value].icon} ${this.nichos[nicho.value].nome}` : nicho.nextElementSibling.textContent)
+                (this.nichos[nicho.value] ? this.nichos[nicho.value].nome : nicho.nextElementSibling.textContent)
             ) : 'Nenhum nicho selecionado';
-        document.getElementById('resumoNichos').textContent = nichoTexto;
+        const elementoNicho = document.getElementById('resumoNichos');
+        if (elementoNicho) {
+            elementoNicho.textContent = nichoTexto;
+            console.log('✅ updateResumo: Nicho atualizado:', nichoTexto);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoNichos não encontrado');
+        }
         
         // Dores
         const dores = Array.from(document.querySelectorAll('input[name="dores"]:checked'));
@@ -1049,18 +965,47 @@ class CanvasAutomatizado {
                     const custom = document.getElementById('dorCustom').value.trim();
                     return custom || 'Outra dor';
                 }
-                return this.dores[d.value] ? `${this.dores[d.value].icon} ${this.dores[d.value].nome}` : d.nextElementSibling.textContent;
+                return this.dores[d.value] || d.nextElementSibling.textContent;
             }).join(', ') : 'Nenhuma dor selecionada';
-        document.getElementById('resumoDores').textContent = doresTexto;
+        const elementoDores = document.getElementById('resumoDores');
+        if (elementoDores) {
+            elementoDores.textContent = doresTexto;
+            console.log('✅ updateResumo: Dores atualizadas:', doresTexto);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoDores não encontrado');
+        }
         
         // Capacidade
-        const capacidade = this.capacidadeFinanceira || 'Não definida';
-        document.getElementById('resumoCapacidade').textContent = capacidade;
+        let capacidadeTexto = 'Não definida';
+        if (this.capacidadeFinanceira) {
+            const capacidadeMap = {
+                'micro': 'Micro (até R$ 5k/mês)',
+                'pequeno': 'Pequeno (R$ 5k-25k/mês)',
+                'medio': 'Médio (R$ 25k-125k/mês)',
+                'grande': 'Grande (acima R$ 125k/mês)'
+            };
+            capacidadeTexto = capacidadeMap[this.capacidadeFinanceira] || this.capacidadeFinanceira;
+        }
+        
+        const elementoCapacidade = document.getElementById('resumoCapacidade');
+        if (elementoCapacidade) {
+            elementoCapacidade.textContent = capacidadeTexto;
+            console.log('✅ updateResumo: Capacidade atualizada:', capacidadeTexto);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoCapacidade não encontrado');
+        }
         
         // Serviços
         const servicos = this.servicosSelecionados || [];
         const servicosTexto = servicos.length > 0 ? servicos.join(', ') : 'Nenhum serviço selecionado';
-        document.getElementById('resumoServicos').textContent = servicosTexto;
+        const elementoServicos = document.getElementById('resumoServicos');
+        if (elementoServicos) {
+            elementoServicos.textContent = servicosTexto;
+            console.log('✅ updateResumo: Serviços atualizados:', servicosTexto);
+        } else {
+            console.error('❌ updateResumo: Elemento resumoServicos não encontrado');
+        }
+        console.log('✅ updateResumo: Concluído');
     }
     
     updateDoresResumo() {
@@ -1072,26 +1017,6 @@ class CanvasAutomatizado {
         // Mostrar/ocultar campo custom
         if (customDiv) {
             customDiv.style.display = temOutra ? 'block' : 'none';
-        }
-        
-        const textos = [];
-        selecionadas.forEach(checkbox => {
-            if (checkbox.value === 'outra') {
-                const custom = document.getElementById('dorCustom').value.trim();
-                if (custom) {
-                    textos.push(custom);
-                }
-            } else {
-                const dor = this.dores[checkbox.value];
-                textos.push(dor ? `${dor.icon} ${dor.nome}` : checkbox.nextElementSibling.textContent);
-            }
-        });
-        
-        const container = document.getElementById('doresSelecionadas');
-        if (textos.length > 0) {
-            container.innerHTML = textos.map(texto => `<span class="tag">${texto}</span>`).join(' ');
-        } else {
-            container.textContent = 'Selecione as dores acima';
         }
         
         this.updateResumo();
@@ -1121,7 +1046,7 @@ class CanvasAutomatizado {
                 } else {
                     const dor = this.dores[option.value];
                     if (dor) {
-                        selecionadas.push(`${dor.icon} ${dor.nome}`);
+                        selecionadas.push(dor);
                     }
                 }
             });
@@ -1157,18 +1082,4 @@ function exportarPDF() {
     html2pdf().set(opt).from(element).save();
 }
 
-// Atualizar inicialização para incluir CanvasAutomatizado
-document.addEventListener('DOMContentLoaded', function() {
-    new LeadCapture();
-    new CanvasNichoICP();
-    
-    // Inicializar canvas automatizado
-    new CanvasAutomatizado();
-    
-    // Inicializar Vercel Analytics
-    if (typeof window.va === 'function') {
-        window.va('track', 'Page View', {
-            page: 'Canvas Nicho ICP'
-        });
-    }
-});
+// Inicialização já feita acima - removendo duplicação

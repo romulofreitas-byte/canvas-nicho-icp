@@ -227,6 +227,10 @@ body {
     padding: 25px;
     border-radius: 8px;
     margin-top: 30px;
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .analise-section h3 {
@@ -1113,6 +1117,10 @@ body {
     border-radius: 12px;
     margin: 30px 0;
     box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    width: 100%;
+    max-width: none;
+    margin-left: 0;
+    margin-right: 0;
 }
 
 .resumo-section h3 {
@@ -1212,10 +1220,41 @@ body {
     }
 }
 
-/* Seções de Largura Total */
-.canvas-section.full-width {
+/* Forçar layout de bloco no form */
+#canvasForm {
+    display: block !important;
+}
+
+/* Garantir que canvas-wrapper não interfira */
+.canvas-wrapper {
+    display: block !important;
+}
+
+/* Seções de Largura Total - Regras Mais Agressivas */
+.canvas-section.full-width,
+.resumo-section.full-width,
+.analise-section.full-width {
     margin-top: 25px;
-    width: 100%;
+    width: 100% !important;
+    max-width: 100% !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: block !important;
+    float: none !important;
+    clear: both !important;
+    position: relative !important;
+    grid-column: 1 / -1 !important;
+    box-sizing: border-box !important;
+}
+
+/* Garantir que analise-section tenha largura total */
+.analise-section {
+    width: 100% !important;
+    max-width: none !important;
+    margin-left: 0 !important;
+    margin-right: 0 !important;
+    display: block !important;
+    clear: both !important;
 }
 
 /* Grid de Serviços */

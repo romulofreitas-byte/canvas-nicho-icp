@@ -55,7 +55,6 @@ body {
     background: rgba(255, 255, 255, 0.1);
     padding: 12px 20px;
     border-radius: 8px;
-    backdrop-filter: blur(10px);
 }
 
 .triada-icon {
@@ -1148,7 +1147,6 @@ body.modal-active .modal {
 
 .resumo-item {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     border-radius: 8px;
     padding: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);

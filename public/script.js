@@ -938,10 +938,16 @@ function melhorarUsabilidadeCards() {
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
     
-    // Detectar reload da página e limpar dados
-    if (performance.navigation.type === 1 || performance.getEntriesByType('navigation')[0]?.type === 'reload') {
-        console.log('🔄 Página recarregada - limpando dados do canvas...');
+    // Detectar se é uma nova sessão e limpar dados do canvas
+    // Usar sessionStorage para detectar nova aba/janela
+    const isNewSession = !sessionStorage.getItem('canvasSessionActive');
+    
+    if (isNewSession) {
+        console.log('🆕 Nova sessão detectada - limpando dados do canvas...');
         localStorage.removeItem('canvasNichoICP');
+        sessionStorage.setItem('canvasSessionActive', 'true');
+    } else {
+        console.log('♻️ Sessão existente - mantendo dados do canvas');
     }
     
     try {

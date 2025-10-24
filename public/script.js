@@ -819,6 +819,11 @@ class CanvasNichoICP {
                 // Atualizar interface após carregar dados
                 this.validarTriada();
                 
+                // Forçar atualização de todas as automações
+                if (window.canvasAutomatizado) {
+                    window.canvasAutomatizado.atualizarResumos();
+                }
+                
                 console.log('✅ Dados carregados com sucesso');
             } catch (error) {
                 console.error('❌ Erro ao carregar dados do localStorage:', error);
@@ -863,11 +868,46 @@ function limparDados() {
     }
 }
 
+function resetarCanvas() {
+    if (confirm('⚠️ Tem certeza que deseja resetar o canvas?\n\nTodos os dados serão apagados e você retornará ao início.')) {
+        // Limpar localStorage
+        localStorage.removeItem('canvasNichoICP');
+        
+        // Resetar formulário se canvas existir
+        if (window.canvas && window.canvas.form) {
+            window.canvas.form.reset();
+            window.canvas.validarTriada();
+        }
+        
+        // Scroll suave para o topo
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+        
+        // Recarregar página após scroll
+        setTimeout(() => {
+            location.reload();
+        }, 500);
+        
+        // Track analytics
+        if (typeof window.va === 'function') {
+            window.va('track', 'Canvas Reset');
+        }
+    }
+}
+
 // ========================================
 // INICIALIZAÇÃO
 // ========================================
 document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
+    
+    // Detectar reload da página e limpar dados
+    if (performance.navigation.type === 1 || performance.getEntriesByType('navigation')[0]?.type === 'reload') {
+        console.log('🔄 Página recarregada - limpando dados do canvas...');
+        localStorage.removeItem('canvasNichoICP');
+    }
     
     try {
         // Inicializar LeadCapture (modal de captura)

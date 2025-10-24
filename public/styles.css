@@ -461,6 +461,30 @@ body {
     }
 }
 
+/* Reset Canvas Button */
+.btn-reset-canvas {
+    margin-top: 30px;
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid rgba(255, 255, 255, 0.2);
+    color: #999;
+    border-radius: 5px;
+    cursor: pointer;
+    font-size: 0.85em;
+    transition: all 0.3s ease;
+}
+
+.btn-reset-canvas:hover {
+    background: rgba(255, 255, 255, 0.05);
+    border-color: #F2b705;
+    color: #F2b705;
+    transform: translateY(-2px);
+}
+
+.btn-reset-canvas:active {
+    transform: translateY(0);
+}
+
 /* Footer */
 .footer {
     text-align: center;

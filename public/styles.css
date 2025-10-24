@@ -121,8 +121,34 @@ body {
 
 /* Tríade do Nicho */
 .triada {
-    background: linear-gradient(135deg, #fffef0 0%, #ffffff 100%);
-    border: 3px solid #F2b705;
+    background: linear-gradient(135deg, #FFA726 0%, #FF9800 100%);
+    border: 3px solid #FFD700;
+    border-radius: 16px;
+    box-shadow: 0 8px 32px rgba(255, 152, 0, 0.3);
+    position: relative;
+    overflow: hidden;
+}
+
+.triada::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: url('data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.05)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.05)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>');
+    opacity: 0.3;
+    pointer-events: none;
+}
+
+.triada h2 {
+    color: #ffffff;
+    font-size: 1.8rem;
+    margin-bottom: 20px;
+    font-weight: bold;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+    position: relative;
+    z-index: 1;
 }
 
 .triada-grid {
@@ -133,31 +159,36 @@ body {
 }
 
 .triada-box {
-    background: white;
-    padding: 20px;
-    border-radius: 8px;
-    border: 2px solid #e9ecef;
+    background: rgba(255, 255, 255, 0.95);
+    padding: 25px;
+    border-radius: 12px;
+    border: 2px solid rgba(255, 255, 255, 0.3);
     text-align: center;
     transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
 }
 
 .triada-box:hover {
-    border-color: #F2b705;
-    transform: translateY(-2px);
-    box-shadow: 0 4px 12px rgba(242, 183, 5, 0.2);
+    border-color: #FFD700;
+    transform: translateY(-4px) scale(1.02);
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
 }
 
 .triada-box h3 {
-    color: #000000;
-    font-size: 1.2rem;
-    margin-bottom: 10px;
+    color: #333333;
+    font-size: 1.3rem;
+    margin-bottom: 12px;
     font-weight: bold;
 }
 
 .triada-box p {
-    color: #666;
-    margin-bottom: 15px;
-    font-size: 0.9rem;
+    color: #555555;
+    margin-bottom: 18px;
+    font-size: 0.95rem;
+    line-height: 1.4;
 }
 
 .triada-checkbox {
@@ -183,14 +214,19 @@ body {
 
 /* Resultado da Tríade */
 .resultado {
-    background: linear-gradient(135deg, #F2b705 0%, #d99a04 100%);
-    color: white;
-    padding: 20px;
-    border-radius: 8px;
-    margin-top: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    color: #333333;
+    padding: 25px;
+    border-radius: 12px;
+    margin-top: 25px;
     display: none;
     text-align: center;
     animation: slideIn 0.5s ease-out;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    backdrop-filter: blur(10px);
+    position: relative;
+    z-index: 1;
+    border: 2px solid rgba(255, 255, 255, 0.3);
 }
 
 .resultado.ativo {
@@ -198,8 +234,10 @@ body {
 }
 
 .resultado h4 {
-    font-size: 1.3rem;
-    margin-bottom: 8px;
+    font-size: 1.4rem;
+    margin-bottom: 10px;
+    color: #FF9800;
+    font-weight: bold;
 }
 
 @keyframes slideIn {
@@ -1531,6 +1569,11 @@ body {
     color: #FF9800;
     margin-bottom: 10px;
     text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+}
+
+.jornada-recomendada .jornada-preco {
+    color: #ffffff;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
 }
 
 .jornada-badge {

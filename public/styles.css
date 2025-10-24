@@ -659,7 +659,7 @@ body {
     gap: 4px;
 }
 
-.error-message::before {
+.error-message:not(:empty)::before {
     content: '⚠️';
     font-size: 10px;
 }

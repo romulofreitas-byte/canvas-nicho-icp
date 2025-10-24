@@ -1428,11 +1428,14 @@ body {
     backdrop-filter: blur(10px);
     position: relative;
     z-index: 1;
+    width: 100%;
+    max-width: none;
 }
 
 .alerta-jornadas-header {
     display: flex;
     align-items: center;
+    justify-content: center;
     gap: 8px;
     margin-bottom: 15px;
 }
@@ -1450,6 +1453,9 @@ body {
     margin-bottom: 8px;
     font-size: 0.95rem;
     font-weight: 500;
+    text-align: center;
+    width: 100%;
+    max-width: none;
 }
 
 .jornadas-grid {

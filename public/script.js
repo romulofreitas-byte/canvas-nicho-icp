@@ -1544,96 +1544,158 @@ class CanvasAutomatizado {
 // ========================================
 
 function exportarPDF() {
-    const element = document.getElementById('canvasForm');
-    const opt = {
-        margin: 1,
-        filename: `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.pdf`,
-        image: { type: 'jpeg', quality: 0.98 },
-        html2canvas: { scale: 2 },
-        jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
-    };
-    
-    html2pdf().set(opt).from(element).save();
-    
-    // Track analytics
-    if (typeof window.va === 'function') {
-        window.va('track', 'Export PDF');
+    try {
+        console.log('🔄 Iniciando exportação PDF...');
+        
+        // Verificar se html2pdf está disponível
+        if (typeof html2pdf === 'undefined') {
+            alert('❌ Biblioteca de PDF não carregada. Recarregue a página e tente novamente.');
+            return;
+        }
+        
+        const element = document.getElementById('canvasForm');
+        if (!element) {
+            alert('❌ Elemento do canvas não encontrado.');
+            return;
+        }
+        
+        const opt = {
+            margin: 1,
+            filename: `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.pdf`,
+            image: { type: 'jpeg', quality: 0.98 },
+            html2canvas: { scale: 2 },
+            jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
+        };
+        
+        console.log('📄 Gerando PDF...');
+        html2pdf().set(opt).from(element).save().then(() => {
+            console.log('✅ PDF exportado com sucesso');
+        }).catch((error) => {
+            console.error('❌ Erro ao exportar PDF:', error);
+            alert('❌ Erro ao gerar PDF. Tente novamente.');
+        });
+        
+        // Track analytics
+        if (typeof window.va === 'function') {
+            window.va('track', 'Export PDF');
+        }
+    } catch (error) {
+        console.error('❌ Erro na função exportarPDF:', error);
+        alert('❌ Erro inesperado ao exportar PDF.');
     }
 }
 
 function exportarExcel() {
-    // Coletar dados do canvas
-    const dados = window.canvas ? window.canvas.coletarDados() : {};
-    
-    // Criar conteúdo CSV
-    let csv = 'Canvas de Nicho e ICP - Método Pódium\n\n';
-    csv += `Data de Exportação:,${new Date().toLocaleDateString('pt-BR')}\n\n`;
-    
-    // Tríade
-    csv += 'TRÍADE DO NICHO\n';
-    csv += `Eu sei prestar,${dados.triada1 ? 'Sim' : 'Não'}\n`;
-    csv += `Mercado precisa,${dados.triada2 ? 'Sim' : 'Não'}\n`;
-    csv += `Mercado paga,${dados.triada3 ? 'Sim' : 'Não'}\n\n`;
-    
-    // Nicho
-    csv += 'NICHO SELECIONADO\n';
-    csv += `${dados.nicho || 'Não definido'}\n\n`;
-    
-    // Dores
-    csv += 'DORES IDENTIFICADAS\n';
-    csv += `${dados.dores || 'Não definidas'}\n\n`;
-    
-    // Capacidade Financeira
-    csv += 'CAPACIDADE FINANCEIRA\n';
-    csv += `${dados.capacidadeFinanceira || 'Não definida'}\n\n`;
-    
-    // Serviços
-    csv += 'SERVIÇOS SELECIONADOS\n';
-    if (dados.servicos && dados.servicos.length > 0) {
-        dados.servicos.forEach(s => {
-            csv += `${s.servico},${s.detalhes || ''}\n`;
-        });
-    } else {
-        csv += 'Nenhum serviço selecionado\n';
-    }
-    
-    // Download do arquivo
-    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.csv`;
-    link.click();
-    
-    // Track analytics
-    if (typeof window.va === 'function') {
-        window.va('track', 'Export Excel');
+    try {
+        console.log('🔄 Iniciando exportação Excel/CSV...');
+        
+        // Coletar dados do canvas
+        const dados = window.canvas ? window.canvas.coletarDados() : {};
+        console.log('📊 Dados coletados:', dados);
+        
+        // Criar conteúdo CSV
+        let csv = 'Canvas de Nicho e ICP - Método Pódium\n\n';
+        csv += `Data de Exportação:,${new Date().toLocaleDateString('pt-BR')}\n\n`;
+        
+        // Tríade
+        csv += 'TRÍADE DO NICHO\n';
+        csv += `Eu sei prestar,${dados.triada1 ? 'Sim' : 'Não'}\n`;
+        csv += `Mercado precisa,${dados.triada2 ? 'Sim' : 'Não'}\n`;
+        csv += `Mercado paga,${dados.triada3 ? 'Sim' : 'Não'}\n\n`;
+        
+        // Nicho
+        csv += 'NICHO SELECIONADO\n';
+        csv += `${dados.nicho || 'Não definido'}\n\n`;
+        
+        // Dores
+        csv += 'DORES IDENTIFICADAS\n';
+        csv += `${dados.dores || 'Não definidas'}\n\n`;
+        
+        // Capacidade Financeira
+        csv += 'CAPACIDADE FINANCEIRA\n';
+        csv += `${dados.capacidadeFinanceira || 'Não definida'}\n\n`;
+        
+        // Serviços
+        csv += 'SERVIÇOS SELECIONADOS\n';
+        if (dados.servicos && dados.servicos.length > 0) {
+            dados.servicos.forEach(s => {
+                csv += `${s.servico},${s.detalhes || ''}\n`;
+            });
+        } else {
+            csv += 'Nenhum serviço selecionado\n';
+        }
+        
+        console.log('📝 Conteúdo CSV gerado');
+        
+        // Download do arquivo
+        const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.csv`;
+        
+        // Adicionar ao DOM temporariamente
+        document.body.appendChild(link);
+        link.click();
+        
+        // Limpar
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+        
+        console.log('✅ CSV exportado com sucesso');
+        
+        // Track analytics
+        if (typeof window.va === 'function') {
+            window.va('track', 'Export Excel');
+        }
+    } catch (error) {
+        console.error('❌ Erro na função exportarExcel:', error);
+        alert('❌ Erro ao exportar Excel/CSV. Tente novamente.');
     }
 }
 
 function exportarJSON() {
-    // Coletar dados do canvas
-    const dados = window.canvas ? window.canvas.coletarDados() : {};
-    
-    // Adicionar metadados
-    const exportData = {
-        metadata: {
-            exportDate: new Date().toISOString(),
-            version: '1.0',
-            source: 'Canvas de Nicho e ICP - Método Pódium'
-        },
-        canvas: dados
-    };
-    
-    // Download do arquivo
-    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
-    const link = document.createElement('a');
-    link.href = URL.createObjectURL(blob);
-    link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.json`;
-    link.click();
-    
-    // Track analytics
-    if (typeof window.va === 'function') {
-        window.va('track', 'Export JSON');
+    try {
+        console.log('🔄 Iniciando exportação JSON...');
+        
+        // Coletar dados do canvas
+        const dados = window.canvas ? window.canvas.coletarDados() : {};
+        console.log('📊 Dados coletados:', dados);
+        
+        // Adicionar metadados
+        const exportData = {
+            metadata: {
+                exportDate: new Date().toISOString(),
+                version: '1.0',
+                source: 'Canvas de Nicho e ICP - Método Pódium'
+            },
+            canvas: dados
+        };
+        
+        console.log('📝 Dados JSON estruturados');
+        
+        // Download do arquivo
+        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const link = document.createElement('a');
+        link.href = URL.createObjectURL(blob);
+        link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.json`;
+        
+        // Adicionar ao DOM temporariamente
+        document.body.appendChild(link);
+        link.click();
+        
+        // Limpar
+        document.body.removeChild(link);
+        URL.revokeObjectURL(link.href);
+        
+        console.log('✅ JSON exportado com sucesso');
+        
+        // Track analytics
+        if (typeof window.va === 'function') {
+            window.va('track', 'Export JSON');
+        }
+    } catch (error) {
+        console.error('❌ Erro na função exportarJSON:', error);
+        alert('❌ Erro ao exportar JSON. Tente novamente.');
     }
 }
 

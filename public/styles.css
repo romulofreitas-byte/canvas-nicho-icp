@@ -55,7 +55,6 @@ body {
     background: rgba(255, 255, 255, 0.1);
     padding: 12px 20px;
     border-radius: 8px;
-    backdrop-filter: blur(10px);
 }
 
 .triada-icon {
@@ -423,7 +422,6 @@ body {
     background-color: rgba(0, 0, 0, 0.85);
     align-items: center;
     justify-content: center;
-    backdrop-filter: blur(8px);
     animation: fadeIn 0.3s ease-out;
 }
 
@@ -688,7 +686,6 @@ body {
 .canvas-bloqueado {
     pointer-events: none;
     opacity: 0.3;
-    filter: blur(2px);
     transition: all 0.3s ease;
 }
 
@@ -1395,7 +1392,6 @@ body {
 
 .resumo-item {
     background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(10px);
     border-radius: 8px;
     padding: 20px;
     border: 1px solid rgba(255, 255, 255, 0.2);

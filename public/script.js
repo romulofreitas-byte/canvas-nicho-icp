@@ -1865,6 +1865,32 @@ function exportarPDF() {
 function gerarTemplatePDFEstrategico(dados, metricas) {
     const { triadaScore, readinessScore, capacidadeScore, estimatedBudget, ticketMedioNumero, metaMensal, contratosNecessarios, servicosCount } = metricas;
     
+    // Processar dados de forma mais robusta
+    const nichoTexto = dados.nicho || 'Não definido';
+    const doresTexto = dados.dores || 'Não identificadas';
+    const canaisTexto = dados.canais || 'Não definidos';
+    
+    // Processar serviços
+    let servicosTexto = 'Nenhum serviço selecionado';
+    if (dados.servicos && dados.servicos.length > 0) {
+        servicosTexto = dados.servicos.map((s, i) => {
+            const nome = typeof s === 'string' ? s : s.servico;
+            return `${i + 1}. ${nome}`;
+        }).join('\n');
+    }
+    
+    // Processar capacidade financeira
+    let capFinanceiraTexto = 'Não definida';
+    if (dados.capacidadeFinanceira) {
+        const cf = dados.capacidadeFinanceira;
+        capFinanceiraTexto = `
+Estrutura Física: ${cf.estruturaFisica || 'N/A'}
+Tamanho da Equipe: ${cf.tamanhoEquipe || 'N/A'}
+Volume de Clientes/Mês: ${cf.volumeClientes || 'N/A'}
+Ticket Médio: ${cf.ticketMedio || 'N/A'}
+Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
+    }
+    
     return `
     <!DOCTYPE html>
     <html>
@@ -1872,251 +1898,231 @@ function gerarTemplatePDFEstrategico(dados, metricas) {
         <meta charset="UTF-8">
         <style>
             * { margin: 0; padding: 0; box-sizing: border-box; }
-            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
-            .pdf-container { max-width: 8.5in; margin: 0 auto; padding: 20px; }
-            .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #F2b705; padding-bottom: 20px; }
-            .logo { font-size: 24px; font-weight: bold; color: #F2b705; margin-bottom: 10px; }
-            .subtitle { color: #666; font-size: 14px; }
-            .page { page-break-after: always; margin-bottom: 30px; }
-            .page:last-child { page-break-after: avoid; }
-            .section { margin-bottom: 25px; }
-            .section-title { font-size: 18px; font-weight: bold; color: #F2b705; margin-bottom: 15px; border-left: 4px solid #F2b705; padding-left: 15px; }
-            .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
-            .metric-card { background: #F2b705; color: white; padding: 15px; border-radius: 8px; text-align: center; }
-            .metric-value { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
-            .metric-label { font-size: 12px; opacity: 0.9; }
-            .progress-circle { width: 80px; height: 80px; border-radius: 50%; background: #F2b705; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 5px solid #e0e0e0; }
-            .progress-text { background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; }
-            .triada-status { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
-            .triada-item { text-align: center; }
-            .triada-check { width: 30px; height: 30px; border-radius: 50%; background: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-weight: bold; }
-            .triada-uncheck { width: 30px; height: 30px; border-radius: 50%; background: #f44336; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-weight: bold; }
-            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
-            .info-card { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #F2b705; }
-            .info-label { font-weight: bold; color: #666; font-size: 12px; margin-bottom: 5px; }
-            .info-value { font-size: 16px; color: #333; }
-            .pricing-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
-            .pricing-card { background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; text-align: center; }
-            .pricing-card.recommended { border-color: #F2b705; background: #fff9e6; }
-            .pricing-title { font-weight: bold; margin-bottom: 10px; }
-            .pricing-value { font-size: 20px; color: #F2b705; font-weight: bold; }
-            .action-checklist { margin: 20px 0; }
-            .checklist-item { display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; }
-            .checklist-check { width: 20px; height: 20px; border-radius: 50%; background: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 12px; }
-            .checklist-uncheck { width: 20px; height: 20px; border-radius: 50%; background: #e0e0e0; color: #666; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 12px; }
-            .calculator-cta { background: #F2b705; color: white; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; }
-            .calculator-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
-            .calculator-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
-            .calculator-metric { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; }
-            .calculator-button { background: white; color: #F2b705; padding: 12px 25px; border: none; border-radius: 25px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 15px; }
-            .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px; }
+            body { 
+                font-family: Arial, sans-serif; 
+                line-height: 1.8; 
+                color: #333; 
+                padding: 40px;
+                max-width: 800px;
+                margin: 0 auto;
+            }
+            h1 { 
+                color: #F2b705; 
+                font-size: 24px; 
+                margin-bottom: 10px;
+                text-align: center;
+                border-bottom: 3px solid #F2b705;
+                padding-bottom: 15px;
+            }
+            h2 { 
+                color: #F2b705; 
+                font-size: 18px; 
+                margin-top: 30px;
+                margin-bottom: 15px;
+                border-left: 4px solid #F2b705;
+                padding-left: 10px;
+            }
+            h3 { 
+                color: #333; 
+                font-size: 14px; 
+                margin-top: 20px;
+                margin-bottom: 10px;
+                font-weight: bold;
+            }
+            p, li { 
+                font-size: 12px; 
+                margin-bottom: 8px;
+                line-height: 1.6;
+            }
+            .header-subtitle {
+                text-align: center;
+                color: #666;
+                font-size: 12px;
+                margin-bottom: 30px;
+            }
+            .section {
+                margin-bottom: 25px;
+            }
+            .metrics {
+                background: #f8f9fa;
+                padding: 15px;
+                margin: 20px 0;
+                border-radius: 5px;
+            }
+            .metric-row {
+                display: flex;
+                justify-content: space-between;
+                margin: 8px 0;
+                font-size: 12px;
+            }
+            .metric-label {
+                font-weight: bold;
+                color: #666;
+            }
+            .metric-value {
+                color: #F2b705;
+                font-weight: bold;
+            }
+            ul {
+                margin-left: 20px;
+                margin-top: 10px;
+            }
+            .highlight {
+                background: #fff9e6;
+                padding: 15px;
+                border-left: 4px solid #F2b705;
+                margin: 15px 0;
+            }
+            .footer {
+                text-align: center;
+                margin-top: 40px;
+                padding-top: 20px;
+                border-top: 1px solid #ddd;
+                color: #999;
+                font-size: 10px;
+            }
+            .status-ok { color: #4CAF50; font-weight: bold; }
+            .status-pending { color: #f44336; font-weight: bold; }
+            .page-break { page-break-after: always; }
         </style>
     </head>
     <body>
-        <div class="pdf-container">
-            <!-- PÁGINA 1: RESUMO EXECUTIVO -->
-            <div class="page">
-                <div class="header">
-                    <div class="logo">🏁 Canvas de Nicho e ICP</div>
-                    <div class="subtitle">Calculadora de Precificação Inteligente | Método Pódium</div>
+        <h1>Canvas de Nicho e ICP - Método Pódium</h1>
+        <p class="header-subtitle">Calculadora de Precificação Inteligente | Exportado em ${new Date().toLocaleDateString('pt-BR')}</p>
+        
+        <div class="section">
+            <h2>RESUMO EXECUTIVO</h2>
+            <div class="metrics">
+                <div class="metric-row">
+                    <span class="metric-label">Score de Prontidão:</span>
+                    <span class="metric-value">${readinessScore}%</span>
                 </div>
-                
-                <div class="section">
-                    <div class="progress-circle">
-                        <div class="progress-text">${readinessScore}%</div>
-                    </div>
-                    <h2 style="text-align: center; margin-bottom: 20px;">Score de Prontidão para Prospecção</h2>
+                <div class="metric-row">
+                    <span class="metric-label">Tríade Validada:</span>
+                    <span class="metric-value">${triadaScore}/3</span>
                 </div>
-                
-                <div class="metrics-grid">
-                    <div class="metric-card">
-                        <div class="metric-value">${triadaScore}/3</div>
-                        <div class="metric-label">Tríade Validada</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">${dados.nicho || 'N/A'}</div>
-                        <div class="metric-label">Nicho Selecionado</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">${capacidadeScore}</div>
-                        <div class="metric-label">Capacidade Financeira</div>
-                    </div>
-                    <div class="metric-card">
-                        <div class="metric-value">${servicosCount}</div>
-                        <div class="metric-label">Serviços Definidos</div>
-                    </div>
+                <div class="metric-row">
+                    <span class="metric-label">Nicho Selecionado:</span>
+                    <span class="metric-value">${nichoTexto}</span>
                 </div>
-                
-                <div class="section">
-                    <div class="section-title">Status da Tríade do Nicho</div>
-                    <div class="triada-status">
-                        <div class="triada-item">
-                            <div class="${dados.triada1 ? 'triada-check' : 'triada-uncheck'}">${dados.triada1 ? '✓' : '✗'}</div>
-                            <div>Sei Prestar</div>
-                        </div>
-                        <div class="triada-item">
-                            <div class="${dados.triada2 ? 'triada-check' : 'triada-uncheck'}">${dados.triada2 ? '✓' : '✗'}</div>
-                            <div>Mercado Precisa</div>
-                        </div>
-                        <div class="triada-item">
-                            <div class="${dados.triada3 ? 'triada-check' : 'triada-uncheck'}">${dados.triada3 ? '✓' : '✗'}</div>
-                            <div>Mercado Paga</div>
-                        </div>
-                    </div>
+                <div class="metric-row">
+                    <span class="metric-label">Capacidade Financeira (Score):</span>
+                    <span class="metric-value">${capacidadeScore}/5</span>
                 </div>
+                <div class="metric-row">
+                    <span class="metric-label">Serviços Definidos:</span>
+                    <span class="metric-value">${servicosCount}</span>
+                </div>
+            </div>
+        </div>
+
+        
+        <div class="section">
+            <h2>1. TRÍADE DO NICHO</h2>
+            <p><strong>Status da Tríade:</strong></p>
+            <ul>
+                <li class="${dados.triada1 ? 'status-ok' : 'status-pending'}">${dados.triada1 ? '✓' : '✗'} Sei Prestar o Serviço</li>
+                <li class="${dados.triada2 ? 'status-ok' : 'status-pending'}">${dados.triada2 ? '✓' : '✗'} Mercado Precisa</li>
+                <li class="${dados.triada3 ? 'status-ok' : 'status-pending'}">${dados.triada3 ? '✓' : '✗'} Mercado Paga</li>
+            </ul>
+            ${triadaScore === 3 ? '<p class="status-ok">✓ Tríade completamente validada - você está pronto para prosseguir!</p>' : '<p class="status-pending">⚠ Complete a tríade antes de avançar na prospecção.</p>'}
+        </div>
+        
+        <div class="section">
+            <h2>2. DEFINIÇÃO DE NICHO</h2>
+            <p><strong>Nicho Selecionado:</strong> ${nichoTexto}</p>
+        </div>
+        
+        <div class="section">
+            <h2>3. DORES DO MERCADO</h2>
+            <p><strong>Principais Dores Identificadas:</strong></p>
+            <p>${doresTexto}</p>
+        </div>
+        
+        <div class="section">
+            <h2>4. PERFIL DO ICP - CAPACIDADE FINANCEIRA</h2>
+            <pre style="white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 12px;">${capFinanceiraTexto}</pre>
+            <p><strong>Score de Capacidade Financeira:</strong> <span class="metric-value">${capacidadeScore}/5</span></p>
+        </div>
+        
+        <div class="section">
+            <h2>5. ACESSO AO DECISOR</h2>
+            <p><strong>Canais de Acesso Selecionados:</strong></p>
+            <p>${canaisTexto}</p>
+        </div>
+        
+        <div class="section">
+            <h2>6. PORTFÓLIO DE SERVIÇOS</h2>
+            <p><strong>Serviços Definidos (${servicosCount}):</strong></p>
+            <pre style="white-space: pre-wrap; font-family: Arial, sans-serif; font-size: 12px;">${servicosTexto}</pre>
+        </div>
+        
+        <div class="section page-break">
+            <h2>7. PRECIFICAÇÃO ESTRATÉGICA</h2>
+            <div class="highlight">
+                <h3>Jornadas de Precificação Sugeridas:</h3>
+                <p><strong>• Proposta Conservadora:</strong> R$ ${Math.round(estimatedBudget.min * 0.7).toLocaleString('pt-BR')}/mês</p>
+                <p><strong>• Proposta Padrão (RECOMENDADA):</strong> R$ ${estimatedBudget.min.toLocaleString('pt-BR')}/mês</p>
+                <p><strong>• Proposta Premium:</strong> R$ ${Math.round(estimatedBudget.max * 0.8).toLocaleString('pt-BR')}/mês</p>
             </div>
             
-            <!-- PÁGINA 2: ANÁLISE DE NICHO E ICP -->
-            <div class="page">
-                <div class="section">
-                    <div class="section-title">Definição de Nicho</div>
-                    <div class="info-card">
-                        <div class="info-label">Nicho Selecionado</div>
-                        <div class="info-value">${dados.nicho || 'Não definido'}</div>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">Dores do Mercado Identificadas</div>
-                    <div class="info-card">
-                        <div class="info-value">${dados.dores || 'Não identificadas'}</div>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">Perfil do ICP - Capacidade Financeira</div>
-                    <div class="info-grid">
-                        <div class="info-card">
-                            <div class="info-label">Estrutura Física</div>
-                            <div class="info-value">${dados.capacidadeFinanceira?.estruturaFisica || 'Não definida'}</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-label">Tamanho da Equipe</div>
-                            <div class="info-value">${dados.capacidadeFinanceira?.tamanhoEquipe || 'Não definido'}</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-label">Volume de Clientes/Mês</div>
-                            <div class="info-value">${dados.capacidadeFinanceira?.volumeClientes || 'Não definido'}</div>
-                        </div>
-                        <div class="info-card">
-                            <div class="info-label">Ticket Médio</div>
-                            <div class="info-value">${dados.capacidadeFinanceira?.ticketMedio || 'Não definido'}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <h3>Fatores que Influenciam a Precificação:</h3>
+            <ul>
+                <li>Complexidade do nicho escolhido</li>
+                <li>Capacidade financeira do ICP identificado</li>
+                <li>Valor percebido dos serviços oferecidos</li>
+                <li>Competitividade do mercado</li>
+                <li>Urgência das dores identificadas</li>
+            </ul>
             
-            <!-- PÁGINA 3: ESTRATÉGIA E PORTFÓLIO -->
-            <div class="page">
-                <div class="section">
-                    <div class="section-title">Estratégia de Acesso</div>
-                    <div class="info-card">
-                        <div class="info-label">Canais Selecionados</div>
-                        <div class="info-value">${dados.canais || 'Não definidos'}</div>
-                    </div>
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">Portfólio de Serviços</div>
-                    ${dados.servicos && dados.servicos.length > 0 ? dados.servicos.map(servico => {
-                        // Handle both old format (object) and new format (string)
-                        const servicoNome = typeof servico === 'string' ? servico : servico.servico;
-                        return `
-                        <div class="info-card" style="margin-bottom: 10px;">
-                            <div class="info-label">${servicoNome}</div>
-                        </div>
-                    `;
-                    }).join('') : '<div class="info-card"><div class="info-value">Nenhum serviço selecionado</div></div>'}
-                </div>
-                
-                <div class="section">
-                    <div class="section-title">Precificação Sugerida</div>
-                    <div class="pricing-tiers">
-                        <div class="pricing-card">
-                            <div class="pricing-title">Conservadora</div>
-                            <div class="pricing-value">R$ ${Math.round(estimatedBudget.min * 0.7).toLocaleString()}</div>
-                        </div>
-                        <div class="pricing-card recommended">
-                            <div class="pricing-title">Padrão</div>
-                            <div class="pricing-value">R$ ${estimatedBudget.min.toLocaleString()}</div>
-                        </div>
-                        <div class="pricing-card">
-                            <div class="pricing-title">Premium</div>
-                            <div class="pricing-value">R$ ${Math.round(estimatedBudget.max * 0.8).toLocaleString()}</div>
-                        </div>
-                    </div>
-                </div>
-            </div>
+            <p><em>Nota: A precificação informada é uma sugestão baseada no ICP identificado. Outros fatores podem influenciar o valor final da proposta.</em></p>
+        </div>
+        
+        <div class="section">
+            <h2>8. PLANO DE AÇÃO ESTRATÉGICO</h2>
             
-            <!-- PÁGINA 4: PLANO DE AÇÃO -->
-            <div class="page">
-                <div class="section">
-                    <div class="section-title">Checklist de Validação</div>
-                    <div class="action-checklist">
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check1 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check1 ? '✓' : '○'}</div>
-                            <div>Tríade do nicho validada</div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check2 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check2 ? '✓' : '○'}</div>
-                            <div>Nicho específico e bem definido</div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check3 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check3 ? '✓' : '○'}</div>
-                            <div>Dores do mercado claramente identificadas</div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check4 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check4 ? '✓' : '○'}</div>
-                            <div>Capacidade financeira validada</div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check5 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check5 ? '✓' : '○'}</div>
-                            <div>Acesso ao decisor confirmado</div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check6 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check6 ? '✓' : '○'}</div>
-                            <div>Serviços selecionados e bem definidos</div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check7 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check7 ? '✓' : '○'}</div>
-                            <div>Precificação calculada baseada na capacidade financeira</div>
-                        </div>
-                        <div class="checklist-item">
-                            <div class="${dados.checks.check8 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check8 ? '✓' : '○'}</div>
-                            <div>Pronto para começar a prospectar</div>
-                        </div>
-                    </div>
-                </div>
-                
-                <div class="calculator-cta">
-                    <div class="calculator-title">📊 PRÓXIMO PASSO: CALCULE SUAS LIGAÇÕES</div>
-                    <div class="calculator-metrics">
-                        <div class="calculator-metric">
-                            <div style="font-size: 14px; margin-bottom: 5px;">Ticket Médio</div>
-                            <div style="font-size: 18px; font-weight: bold;">R$ ${ticketMedioNumero.toLocaleString()}</div>
-                        </div>
-                        <div class="calculator-metric">
-                            <div style="font-size: 14px; margin-bottom: 5px;">Meta Sugerida</div>
-                            <div style="font-size: 18px; font-weight: bold;">R$ ${metaMensal.toLocaleString()}/mês</div>
-                        </div>
-                        <div class="calculator-metric">
-                            <div style="font-size: 14px; margin-bottom: 5px;">Contratos Necessários</div>
-                            <div style="font-size: 18px; font-weight: bold;">${contratosNecessarios}</div>
-                        </div>
-                    </div>
-                    <div style="margin: 20px 0;">
-                        <strong>Acesse a Calculadora de Contratos Pódium para calcular quantas ligações você precisa fazer para atingir sua meta!</strong>
-                    </div>
-                    <a href="https://calculadora-contratos-podium.vercel.app/" class="calculator-button" target="_blank">
-                        🚀 Acessar Calculadora Pódium
-                    </a>
-                </div>
-                
-                <div class="footer">
-                    <div>Canvas de Nicho e ICP - Método Pódium | Exportado em ${new Date().toLocaleDateString('pt-BR')}</div>
-                    <div>Calculadora de Precificação Inteligente | Versão 1.0</div>
-                </div>
+            <h3>Checklist de Validação:</h3>
+            <ul>
+                <li class="${dados.checks?.check1 ? 'status-ok' : 'status-pending'}">${dados.checks?.check1 ? '✓' : '○'} Tríade do nicho validada</li>
+                <li class="${dados.checks?.check2 ? 'status-ok' : 'status-pending'}">${dados.checks?.check2 ? '✓' : '○'} Nicho específico e bem definido</li>
+                <li class="${dados.checks?.check3 ? 'status-ok' : 'status-pending'}">${dados.checks?.check3 ? '✓' : '○'} Dores do mercado claramente identificadas</li>
+                <li class="${dados.checks?.check4 ? 'status-ok' : 'status-pending'}">${dados.checks?.check4 ? '✓' : '○'} Capacidade financeira validada</li>
+                <li class="${dados.checks?.check5 ? 'status-ok' : 'status-pending'}">${dados.checks?.check5 ? '✓' : '○'} Acesso ao decisor confirmado</li>
+                <li class="${dados.checks?.check6 ? 'status-ok' : 'status-pending'}">${dados.checks?.check6 ? '✓' : '○'} Serviços selecionados e bem definidos</li>
+                <li class="${dados.checks?.check7 ? 'status-ok' : 'status-pending'}">${dados.checks?.check7 ? '✓' : '○'} Precificação calculada baseada na capacidade financeira</li>
+                <li class="${dados.checks?.check8 ? 'status-ok' : 'status-pending'}">${dados.checks?.check8 ? '✓' : '○'} Pronto para começar a prospectar</li>
+            </ul>
+            
+            <h3>Próximos Passos Imediatos:</h3>
+            <ol>
+                <li><strong>Validar o Nicho:</strong> Faça pesquisa de mercado e converse com potenciais clientes do nicho escolhido.</li>
+                <li><strong>Refinar o ICP:</strong> Identifique empresas específicas que se encaixam no perfil de capacidade financeira mapeado.</li>
+                <li><strong>Preparar Abordagem:</strong> Crie scripts de cold call focados nas dores identificadas.</li>
+                <li><strong>Estruturar Portfólio:</strong> Documente seus serviços de forma clara e alinhada com as dores do ICP.</li>
+                <li><strong>Definir Metas:</strong> Estabeleça quantos contratos você precisa fechar para atingir seus objetivos financeiros.</li>
+                <li><strong>Iniciar Prospecção:</strong> Comece a abordar leads utilizando os canais de acesso definidos.</li>
+            </ol>
+        </div>
+        
+        <div class="section">
+            <div class="highlight">
+                <h2>📊 PRÓXIMO PASSO: CALCULADORA DE CONTRATOS PÓDIUM</h2>
+                <p><strong>Métricas para sua Calculadora:</strong></p>
+                <ul>
+                    <li><strong>Ticket Médio Estimado:</strong> R$ ${ticketMedioNumero.toLocaleString('pt-BR')}</li>
+                    <li><strong>Meta Mensal Sugerida:</strong> R$ ${metaMensal.toLocaleString('pt-BR')}</li>
+                    <li><strong>Contratos Necessários/Mês:</strong> ${contratosNecessarios}</li>
+                </ul>
+                <p><em>Importante: As propostas estão em valores mensais. Bons empresários pensam no valor do projeto completo, pois isso influencia o número de ligações necessárias para atingir a meta.</em></p>
+                <p><strong>→ Acesse:</strong> https://calculadora-contratos-podium.vercel.app/</p>
+                <p>Calcule quantas ligações você precisa fazer para fechar ${contratosNecessarios} contratos e atingir sua meta de R$ ${metaMensal.toLocaleString('pt-BR')}/mês!</p>
             </div>
+        </div>
+        
+        <div class="footer">
+            <p>Canvas de Nicho e ICP - Método Pódium | Calculadora de Precificação Inteligente</p>
+            <p>Exportado em ${new Date().toLocaleDateString('pt-BR')} às ${new Date().toLocaleTimeString('pt-BR')}</p>
+            <p>Versão 2.0 - Formato Estratégico Simplificado</p>
         </div>
     </body>
     </html>

@@ -629,13 +629,7 @@ class CanvasNichoICP {
         const canaisSelecionados = Array.from(document.querySelectorAll('input[name="canais"]:checked')).map(cb => cb.value);
         
         // Coletar serviços selecionados
-        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(checkbox => {
-            const detalhesInput = checkbox.parentElement.querySelector('.servico-input');
-            return {
-                servico: checkbox.value,
-                detalhes: detalhesInput ? detalhesInput.value : ''
-            };
-        });
+        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(checkbox => checkbox.value);
         
         return {
             triada1: document.getElementById('triada1')?.checked || false,
@@ -796,14 +790,12 @@ class CanvasNichoICP {
                 
                 // Carregar serviços selecionados
                 if (obj.servicos && Array.isArray(obj.servicos)) {
-                    obj.servicos.forEach(servicoData => {
-                        const checkbox = document.querySelector(`input[name="servicos"][value="${servicoData.servico}"]`);
+                    obj.servicos.forEach(servico => {
+                        // Handle both old format (object) and new format (string)
+                        const servicoValue = typeof servico === 'string' ? servico : servico.servico;
+                        const checkbox = document.querySelector(`input[name="servicos"][value="${servicoValue}"]`);
                         if (checkbox) {
                             checkbox.checked = true;
-                            const inputDetalhes = checkbox.parentElement.querySelector('.servico-input');
-                            if (inputDetalhes && servicoData.detalhes) {
-                                inputDetalhes.value = servicoData.detalhes;
-                            }
                         }
                     });
                 }
@@ -897,6 +889,49 @@ function resetarCanvas() {
     }
 }
 
+// Melhorar usabilidade de clique nos cards
+function melhorarUsabilidadeCards() {
+    // Acesso ao Decisor - Canais
+    document.querySelectorAll('.canal-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Não processar se já clicou no checkbox ou label
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+                return;
+            }
+            
+            // Encontrar o checkbox dentro do item
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                
+                // Disparar evento change para atualizar automações
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+    
+    // Entregáveis - Serviços (simplificado sem inputs)
+    document.querySelectorAll('.servico-item').forEach(item => {
+        item.addEventListener('click', function(e) {
+            // Não processar se já clicou no checkbox ou label
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL' || e.target.closest('label')) {
+                return;
+            }
+            
+            // Encontrar o checkbox dentro do item
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                
+                // Disparar evento change para atualizar automações
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+    
+    console.log('✅ Usabilidade de clique melhorada nos cards');
+}
+
 // ========================================
 // INICIALIZAÇÃO
 // ========================================
@@ -979,6 +1014,11 @@ function liberarCanvas() {
             console.log('🔧 Criando CanvasAutomatizado...');
             window.canvasAutomatizado = new CanvasAutomatizado();
             console.log('✅ CanvasAutomatizado criado:', !!window.canvasAutomatizado);
+            
+            // Melhorar usabilidade após canvas estar pronto
+            setTimeout(() => {
+                melhorarUsabilidadeCards();
+            }, 100);
             
             console.log('✅ Canvas inicializado com sucesso!');
         } catch (error) {

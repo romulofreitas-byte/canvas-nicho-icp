@@ -610,31 +610,57 @@ class CanvasNichoICP {
     }
     
     coletarDados() {
+        // Coletar nicho selecionado (radio button)
+        const nichoSelecionado = document.querySelector('input[name="nicho"]:checked');
+        const nichoCustom = document.getElementById('nichoCustom');
+        const nicho = nichoSelecionado ? (nichoSelecionado.value === 'outro' && nichoCustom ? nichoCustom.value : nichoSelecionado.value) : '';
+        
+        // Coletar dores selecionadas (checkboxes)
+        const doresSelecionadas = Array.from(document.querySelectorAll('input[name="dores"]:checked')).map(cb => cb.value);
+        
+        // Coletar dados de capacidade financeira
+        const estruturaFisica = document.querySelector('input[name="estruturaFisica"]:checked');
+        const tamanhoEquipe = document.querySelector('input[name="tamanhoEquipe"]:checked');
+        const volumeClientes = document.querySelector('input[name="volumeClientes"]:checked');
+        const ticketMedio = document.querySelector('input[name="ticketMedio"]:checked');
+        const investeMarketing = document.querySelector('input[name="investeMarketing"]:checked');
+        
+        // Coletar canais de acesso (checkboxes)
+        const canaisSelecionados = Array.from(document.querySelectorAll('input[name="canais"]:checked')).map(cb => cb.value);
+        
         // Coletar serviços selecionados
-        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(checkbox => ({
-            servico: checkbox.value,
-            detalhes: checkbox.parentElement.querySelector('.servico-input').value
-        }));
+        const servicosSelecionados = Array.from(document.querySelectorAll('input[name="servicos"]:checked')).map(checkbox => {
+            const detalhesInput = checkbox.parentElement.querySelector('.servico-input');
+            return {
+                servico: checkbox.value,
+                detalhes: detalhesInput ? detalhesInput.value : ''
+            };
+        });
         
         return {
-            triada1: document.getElementById('triada1').checked,
-            triada2: document.getElementById('triada2').checked,
-            triada3: document.getElementById('triada3').checked,
-            nicho: document.getElementById('nicho').value,
-            dores: document.getElementById('dores').value,
-            financeiro: document.getElementById('financeiro').value,
-            acesso: document.getElementById('acesso').value,
+            triada1: document.getElementById('triada1')?.checked || false,
+            triada2: document.getElementById('triada2')?.checked || false,
+            triada3: document.getElementById('triada3')?.checked || false,
+            nicho: nicho,
+            dores: doresSelecionadas.join(', '),
+            capacidadeFinanceira: {
+                estruturaFisica: estruturaFisica ? estruturaFisica.value : '',
+                tamanhoEquipe: tamanhoEquipe ? tamanhoEquipe.value : '',
+                volumeClientes: volumeClientes ? volumeClientes.value : '',
+                ticketMedio: ticketMedio ? ticketMedio.value : '',
+                investeMarketing: investeMarketing ? investeMarketing.value : ''
+            },
+            canais: canaisSelecionados.join(', '),
             servicos: servicosSelecionados,
-            capacidadeFinanceira: 'micro',
             checks: {
-                check1: document.getElementById('check1').checked,
-                check2: document.getElementById('check2').checked,
-                check3: document.getElementById('check3').checked,
-                check4: document.getElementById('check4').checked,
-                check5: document.getElementById('check5').checked,
-                check6: document.getElementById('check6').checked,
-                check7: document.getElementById('check7').checked,
-                check8: document.getElementById('check8').checked,
+                check1: document.getElementById('check1')?.checked || false,
+                check2: document.getElementById('check2')?.checked || false,
+                check3: document.getElementById('check3')?.checked || false,
+                check4: document.getElementById('check4')?.checked || false,
+                check5: document.getElementById('check5')?.checked || false,
+                check6: document.getElementById('check6')?.checked || false,
+                check7: document.getElementById('check7')?.checked || false,
+                check8: document.getElementById('check8')?.checked || false,
             }
         };
     }
@@ -1661,7 +1687,20 @@ function exportarExcel() {
         
         // Capacidade Financeira
         csv += 'CAPACIDADE FINANCEIRA\n';
-        csv += `${dados.capacidadeFinanceira || 'Não definida'}\n\n`;
+        if (dados.capacidadeFinanceira) {
+            csv += `Estrutura Física,${dados.capacidadeFinanceira.estruturaFisica || 'Não definida'}\n`;
+            csv += `Tamanho da Equipe,${dados.capacidadeFinanceira.tamanhoEquipe || 'Não definido'}\n`;
+            csv += `Volume de Clientes,${dados.capacidadeFinanceira.volumeClientes || 'Não definido'}\n`;
+            csv += `Ticket Médio,${dados.capacidadeFinanceira.ticketMedio || 'Não definido'}\n`;
+            csv += `Investe em Marketing,${dados.capacidadeFinanceira.investeMarketing || 'Não definido'}\n`;
+        } else {
+            csv += 'Não definida\n';
+        }
+        csv += '\n';
+        
+        // Canais de Acesso
+        csv += 'CANAIS DE ACESSO\n';
+        csv += `${dados.canais || 'Não definidos'}\n\n`;
         
         // Serviços
         csv += 'SERVIÇOS SELECIONADOS\n';

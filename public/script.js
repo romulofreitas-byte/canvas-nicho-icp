@@ -1799,6 +1799,8 @@ function exportarPDF() {
         });
         
         console.log('📝 Template PDF estratégico gerado');
+        console.log('📊 Dados do template:', { triadaScore, readinessScore, capacidadeScore, servicosCount });
+        console.log('📏 Tamanho do template:', templateHTML.length, 'caracteres');
         
         // Configurações do html2pdf
         const opt = {
@@ -1880,10 +1882,10 @@ function gerarTemplatePDFEstrategico(dados, metricas) {
             .section { margin-bottom: 25px; }
             .section-title { font-size: 18px; font-weight: bold; color: #F2b705; margin-bottom: 15px; border-left: 4px solid #F2b705; padding-left: 15px; }
             .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
-            .metric-card { background: linear-gradient(135deg, #F2b705, #E6A500); color: white; padding: 15px; border-radius: 8px; text-align: center; }
+            .metric-card { background: #F2b705; color: white; padding: 15px; border-radius: 8px; text-align: center; }
             .metric-value { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
             .metric-label { font-size: 12px; opacity: 0.9; }
-            .progress-circle { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#F2b705 ${readinessScore * 3.6}deg, #e0e0e0 0deg); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; }
+            .progress-circle { width: 80px; height: 80px; border-radius: 50%; background: #F2b705; display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; border: 5px solid #e0e0e0; }
             .progress-text { background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; }
             .triada-status { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
             .triada-item { text-align: center; }
@@ -1902,7 +1904,7 @@ function gerarTemplatePDFEstrategico(dados, metricas) {
             .checklist-item { display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; }
             .checklist-check { width: 20px; height: 20px; border-radius: 50%; background: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 12px; }
             .checklist-uncheck { width: 20px; height: 20px; border-radius: 50%; background: #e0e0e0; color: #666; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 12px; }
-            .calculator-cta { background: linear-gradient(135deg, #F2b705, #E6A500); color: white; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; }
+            .calculator-cta { background: #F2b705; color: white; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; }
             .calculator-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
             .calculator-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
             .calculator-metric { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; }

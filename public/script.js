@@ -750,43 +750,80 @@ class CanvasNichoICP {
         const dados = localStorage.getItem('canvasNichoICP');
         
         if (dados) {
-            const obj = JSON.parse(dados);
-            
-            document.getElementById('triada1').checked = obj.triada1 || false;
-            document.getElementById('triada2').checked = obj.triada2 || false;
-            document.getElementById('triada3').checked = obj.triada3 || false;
-            document.getElementById('nicho').value = obj.nicho || '';
-            document.getElementById('dores').value = obj.dores || '';
-            document.getElementById('financeiro').value = obj.financeiro || '';
-            document.getElementById('acesso').value = obj.acesso || '';
-            
-            // Carregar serviços selecionados
-            if (obj.servicos && Array.isArray(obj.servicos)) {
-                obj.servicos.forEach(servicoData => {
-                    const checkbox = document.querySelector(`input[name="servicos"][value="${servicoData.servico}"]`);
-                    if (checkbox) {
-                        checkbox.checked = true;
-                        const inputDetalhes = checkbox.parentElement.querySelector('.servico-input');
-                        if (inputDetalhes && servicoData.detalhes) {
-                            inputDetalhes.value = servicoData.detalhes;
+            try {
+                const obj = JSON.parse(dados);
+                
+                // Carregar tríada com validação
+                const triada1 = document.getElementById('triada1');
+                const triada2 = document.getElementById('triada2');
+                const triada3 = document.getElementById('triada3');
+                
+                if (triada1) triada1.checked = obj.triada1 || false;
+                if (triada2) triada2.checked = obj.triada2 || false;
+                if (triada3) triada3.checked = obj.triada3 || false;
+                
+                // Carregar nicho selecionado (radio button)
+                if (obj.nicho) {
+                    const nichoRadio = document.querySelector(`input[name="nicho"][value="${obj.nicho}"]`);
+                    if (nichoRadio) nichoRadio.checked = true;
+                }
+                
+                // Carregar dores selecionadas (checkboxes)
+                if (obj.dores) {
+                    const doresArray = typeof obj.dores === 'string' ? obj.dores.split(', ') : [];
+                    doresArray.forEach(dor => {
+                        const dorCheckbox = document.querySelector(`input[name="dores"][value="${dor}"]`);
+                        if (dorCheckbox) dorCheckbox.checked = true;
+                    });
+                }
+                
+                // Carregar capacidade financeira (radio buttons)
+                if (obj.capacidadeFinanceira && typeof obj.capacidadeFinanceira === 'object') {
+                    Object.keys(obj.capacidadeFinanceira).forEach(key => {
+                        const radio = document.querySelector(`input[name="${key}"][value="${obj.capacidadeFinanceira[key]}"]`);
+                        if (radio) radio.checked = true;
+                    });
+                }
+                
+                // Carregar canais de acesso (checkboxes)
+                if (obj.canais) {
+                    const canaisArray = typeof obj.canais === 'string' ? obj.canais.split(', ') : [];
+                    canaisArray.forEach(canal => {
+                        const canalCheckbox = document.querySelector(`input[name="canais"][value="${canal}"]`);
+                        if (canalCheckbox) canalCheckbox.checked = true;
+                    });
+                }
+                
+                // Carregar serviços selecionados
+                if (obj.servicos && Array.isArray(obj.servicos)) {
+                    obj.servicos.forEach(servicoData => {
+                        const checkbox = document.querySelector(`input[name="servicos"][value="${servicoData.servico}"]`);
+                        if (checkbox) {
+                            checkbox.checked = true;
+                            const inputDetalhes = checkbox.parentElement.querySelector('.servico-input');
+                            if (inputDetalhes && servicoData.detalhes) {
+                                inputDetalhes.value = servicoData.detalhes;
+                            }
                         }
+                    });
+                }
+                
+                // Carregar checklist com validação
+                if (obj.checks) {
+                    for (let i = 1; i <= 8; i++) {
+                        const checkElem = document.getElementById(`check${i}`);
+                        if (checkElem) checkElem.checked = obj.checks[`check${i}`] || false;
                     }
-                });
+                }
+                
+                // Atualizar interface após carregar dados
+                this.validarTriada();
+                
+                console.log('✅ Dados carregados com sucesso');
+            } catch (error) {
+                console.error('❌ Erro ao carregar dados do localStorage:', error);
+                // Não propagar o erro para evitar loop infinito
             }
-            
-            if (obj.checks) {
-                document.getElementById('check1').checked = obj.checks.check1 || false;
-                document.getElementById('check2').checked = obj.checks.check2 || false;
-                document.getElementById('check3').checked = obj.checks.check3 || false;
-                document.getElementById('check4').checked = obj.checks.check4 || false;
-                document.getElementById('check5').checked = obj.checks.check5 || false;
-                document.getElementById('check6').checked = obj.checks.check6 || false;
-                document.getElementById('check7').checked = obj.checks.check7 || false;
-                document.getElementById('check8').checked = obj.checks.check8 || false;
-            }
-            
-            // Atualizar interface após carregar dados
-            this.validarTriada();
         }
     }
     

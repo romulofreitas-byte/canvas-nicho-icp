@@ -1794,7 +1794,8 @@ function exportarPDF() {
             estimatedBudget,
             ticketMedioNumero,
             metaMensal,
-            contratosNecessarios
+            contratosNecessarios,
+            servicosCount
         });
         
         console.log('📝 Template PDF estratégico gerado');
@@ -1842,7 +1843,7 @@ function exportarPDF() {
 }
 
 function gerarTemplatePDFEstrategico(dados, metricas) {
-    const { triadaScore, readinessScore, capacidadeScore, estimatedBudget, ticketMedioNumero, metaMensal, contratosNecessarios } = metricas;
+    const { triadaScore, readinessScore, capacidadeScore, estimatedBudget, ticketMedioNumero, metaMensal, contratosNecessarios, servicosCount } = metricas;
     
     return `
     <!DOCTYPE html>

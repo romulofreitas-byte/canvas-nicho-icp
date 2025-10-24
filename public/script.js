@@ -1559,20 +1559,27 @@ function exportarPDF() {
             return;
         }
         
+        console.log('📄 Elemento encontrado, gerando PDF...');
+        
         const opt = {
             margin: 1,
             filename: `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
-            html2canvas: { scale: 2 },
+            html2canvas: { 
+                scale: 2,
+                useCORS: true,
+                allowTaint: true,
+                scrollX: 0,
+                scrollY: 0
+            },
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
         
-        console.log('📄 Gerando PDF...');
         html2pdf().set(opt).from(element).save().then(() => {
             console.log('✅ PDF exportado com sucesso');
         }).catch((error) => {
             console.error('❌ Erro ao exportar PDF:', error);
-            alert('❌ Erro ao gerar PDF. Tente novamente.');
+            alert('❌ Erro ao gerar PDF: ' + error.message);
         });
         
         // Track analytics
@@ -1581,7 +1588,7 @@ function exportarPDF() {
         }
     } catch (error) {
         console.error('❌ Erro na função exportarPDF:', error);
-        alert('❌ Erro inesperado ao exportar PDF.');
+        alert('❌ Erro inesperado ao exportar PDF: ' + error.message);
     }
 }
 
@@ -1589,9 +1596,23 @@ function exportarExcel() {
     try {
         console.log('🔄 Iniciando exportação Excel/CSV...');
         
+        // Verificar se window.canvas existe
+        if (!window.canvas) {
+            console.error('❌ window.canvas não está disponível');
+            alert('❌ Canvas não inicializado. Recarregue a página e tente novamente.');
+            return;
+        }
+        
         // Coletar dados do canvas
-        const dados = window.canvas ? window.canvas.coletarDados() : {};
+        const dados = window.canvas.coletarDados();
         console.log('📊 Dados coletados:', dados);
+        
+        // Verificar se dados foram coletados
+        if (!dados || Object.keys(dados).length === 0) {
+            console.error('❌ Nenhum dado coletado do canvas');
+            alert('❌ Nenhum dado encontrado para exportar. Preencha o canvas primeiro.');
+            return;
+        }
         
         // Criar conteúdo CSV
         let csv = 'Canvas de Nicho e ICP - Método Pódium\n\n';
@@ -1625,7 +1646,7 @@ function exportarExcel() {
             csv += 'Nenhum serviço selecionado\n';
         }
         
-        console.log('📝 Conteúdo CSV gerado');
+        console.log('📝 Conteúdo CSV gerado:', csv.substring(0, 200) + '...');
         
         // Download do arquivo
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
@@ -1649,7 +1670,7 @@ function exportarExcel() {
         }
     } catch (error) {
         console.error('❌ Erro na função exportarExcel:', error);
-        alert('❌ Erro ao exportar Excel/CSV. Tente novamente.');
+        alert('❌ Erro ao exportar Excel/CSV: ' + error.message);
     }
 }
 
@@ -1657,9 +1678,23 @@ function exportarJSON() {
     try {
         console.log('🔄 Iniciando exportação JSON...');
         
+        // Verificar se window.canvas existe
+        if (!window.canvas) {
+            console.error('❌ window.canvas não está disponível');
+            alert('❌ Canvas não inicializado. Recarregue a página e tente novamente.');
+            return;
+        }
+        
         // Coletar dados do canvas
-        const dados = window.canvas ? window.canvas.coletarDados() : {};
+        const dados = window.canvas.coletarDados();
         console.log('📊 Dados coletados:', dados);
+        
+        // Verificar se dados foram coletados
+        if (!dados || Object.keys(dados).length === 0) {
+            console.error('❌ Nenhum dado coletado do canvas');
+            alert('❌ Nenhum dado encontrado para exportar. Preencha o canvas primeiro.');
+            return;
+        }
         
         // Adicionar metadados
         const exportData = {
@@ -1695,7 +1730,7 @@ function exportarJSON() {
         }
     } catch (error) {
         console.error('❌ Erro na função exportarJSON:', error);
-        alert('❌ Erro ao exportar JSON. Tente novamente.');
+        alert('❌ Erro ao exportar JSON: ' + error.message);
     }
 }
 

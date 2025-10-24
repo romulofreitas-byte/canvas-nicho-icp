@@ -1598,25 +1598,88 @@ class CanvasAutomatizado {
 
 function exportarPDF() {
     try {
-        console.log('🔄 Iniciando exportação PDF...');
+        console.log('🔄 Iniciando exportação PDF estratégico...');
         
-        // Verificar se html2pdf está disponível
-        if (typeof html2pdf === 'undefined') {
-            alert('❌ Biblioteca de PDF não carregada. Recarregue a página e tente novamente.');
+        // Verificar se window.canvas existe
+        if (!window.canvas) {
+            console.error('❌ window.canvas não está disponível');
+            alert('❌ Canvas não inicializado. Recarregue a página e tente novamente.');
             return;
         }
         
-        const element = document.getElementById('canvasForm');
-        if (!element) {
-            alert('❌ Elemento do canvas não encontrado.');
+        // Coletar dados do canvas
+        const dados = window.canvas.coletarDados();
+        console.log('📊 Dados coletados:', dados);
+        
+        // Verificar se dados foram coletados
+        if (!dados || Object.keys(dados).length === 0) {
+            console.error('❌ Nenhum dado coletado do canvas');
+            alert('❌ Nenhum dado encontrado para exportar. Preencha o canvas primeiro.');
             return;
         }
         
-        console.log('📄 Elemento encontrado, gerando PDF...');
+        // Calcular métricas estratégicas
+        const triadaScore = [dados.triada1, dados.triada2, dados.triada3].filter(Boolean).length;
+        const checksCompletos = Object.values(dados.checks).filter(Boolean).length;
+        const readinessScore = Math.round((checksCompletos / 8) * 100);
+        const servicosCount = dados.servicos ? dados.servicos.length : 0;
         
+        // Calcular score de capacidade financeira
+        let capacidadeScore = 'Baixo';
+        let estimatedBudget = { min: 1000, max: 3000 };
+        
+        if (dados.capacidadeFinanceira) {
+            const { estruturaFisica, tamanhoEquipe, ticketMedio, investeMarketing } = dados.capacidadeFinanceira;
+            let score = 0;
+            
+            if (estruturaFisica === 'propria') score += 2;
+            else if (estruturaFisica === 'alugada') score += 1;
+            
+            if (tamanhoEquipe === '11-50' || tamanhoEquipe === '50+') score += 2;
+            else if (tamanhoEquipe === '3-10') score += 1;
+            
+            if (ticketMedio === '2000-10000' || ticketMedio === '10000+') score += 2;
+            else if (ticketMedio === '500-2000') score += 1;
+            
+            if (investeMarketing === 'sim') score += 1;
+            
+            if (score >= 6) {
+                capacidadeScore = 'Alto';
+                estimatedBudget = { min: 5000, max: 15000 };
+            } else if (score >= 3) {
+                capacidadeScore = 'Médio';
+                estimatedBudget = { min: 3000, max: 8000 };
+            }
+        }
+        
+        // Calcular meta de contratos para calculadora
+        const ticketMedio = dados.capacidadeFinanceira?.ticketMedio || '500-2000';
+        let ticketMedioNumero = 1000;
+        
+        if (ticketMedio === '500-2000') ticketMedioNumero = 1250;
+        else if (ticketMedio === '2000-10000') ticketMedioNumero = 6000;
+        else if (ticketMedio === '10000+') ticketMedioNumero = 15000;
+        
+        const metaMensal = estimatedBudget.max;
+        const contratosNecessarios = Math.ceil(metaMensal / ticketMedioNumero);
+        
+        // Gerar template HTML estratégico
+        const templateHTML = gerarTemplatePDFEstrategico(dados, {
+            triadaScore,
+            readinessScore,
+            capacidadeScore,
+            estimatedBudget,
+            ticketMedioNumero,
+            metaMensal,
+            contratosNecessarios
+        });
+        
+        console.log('📝 Template PDF estratégico gerado');
+        
+        // Configurações do html2pdf
         const opt = {
-            margin: 1,
-            filename: `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.pdf`,
+            margin: 0.5,
+            filename: `canvas-estrategico-${new Date().toISOString().split('T')[0]}.pdf`,
             image: { type: 'jpeg', quality: 0.98 },
             html2canvas: { 
                 scale: 2,
@@ -1628,16 +1691,26 @@ function exportarPDF() {
             jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' }
         };
         
-        html2pdf().set(opt).from(element).save().then(() => {
-            console.log('✅ PDF exportado com sucesso');
-        }).catch((error) => {
-            console.error('❌ Erro ao exportar PDF:', error);
-            alert('❌ Erro ao gerar PDF: ' + error.message);
+        console.log('📝 Gerando PDF estratégico...');
+        
+        // Criar elemento temporário com o template
+        const tempDiv = document.createElement('div');
+        tempDiv.innerHTML = templateHTML;
+        tempDiv.style.position = 'absolute';
+        tempDiv.style.left = '-9999px';
+        tempDiv.style.top = '-9999px';
+        document.body.appendChild(tempDiv);
+        
+        // Gerar PDF do template
+        html2pdf().set(opt).from(tempDiv).save().then(() => {
+            // Remover elemento temporário
+            document.body.removeChild(tempDiv);
+            console.log('✅ PDF estratégico exportado com sucesso');
         });
         
         // Track analytics
         if (typeof window.va === 'function') {
-            window.va('track', 'Export PDF');
+            window.va('track', 'Export PDF Strategic');
         }
     } catch (error) {
         console.error('❌ Erro na função exportarPDF:', error);
@@ -1645,9 +1718,267 @@ function exportarPDF() {
     }
 }
 
+function gerarTemplatePDFEstrategico(dados, metricas) {
+    const { triadaScore, readinessScore, capacidadeScore, estimatedBudget, ticketMedioNumero, metaMensal, contratosNecessarios } = metricas;
+    
+    return `
+    <!DOCTYPE html>
+    <html>
+    <head>
+        <meta charset="UTF-8">
+        <style>
+            * { margin: 0; padding: 0; box-sizing: border-box; }
+            body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; line-height: 1.6; color: #333; }
+            .pdf-container { max-width: 8.5in; margin: 0 auto; padding: 20px; }
+            .header { text-align: center; margin-bottom: 30px; border-bottom: 3px solid #F2b705; padding-bottom: 20px; }
+            .logo { font-size: 24px; font-weight: bold; color: #F2b705; margin-bottom: 10px; }
+            .subtitle { color: #666; font-size: 14px; }
+            .page { page-break-after: always; margin-bottom: 30px; }
+            .page:last-child { page-break-after: avoid; }
+            .section { margin-bottom: 25px; }
+            .section-title { font-size: 18px; font-weight: bold; color: #F2b705; margin-bottom: 15px; border-left: 4px solid #F2b705; padding-left: 15px; }
+            .metrics-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 15px; margin-bottom: 25px; }
+            .metric-card { background: linear-gradient(135deg, #F2b705, #E6A500); color: white; padding: 15px; border-radius: 8px; text-align: center; }
+            .metric-value { font-size: 24px; font-weight: bold; margin-bottom: 5px; }
+            .metric-label { font-size: 12px; opacity: 0.9; }
+            .progress-circle { width: 80px; height: 80px; border-radius: 50%; background: conic-gradient(#F2b705 ${readinessScore * 3.6}deg, #e0e0e0 0deg); display: flex; align-items: center; justify-content: center; margin: 0 auto 15px; }
+            .progress-text { background: white; width: 60px; height: 60px; border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: #333; }
+            .triada-status { display: flex; justify-content: center; gap: 20px; margin: 20px 0; }
+            .triada-item { text-align: center; }
+            .triada-check { width: 30px; height: 30px; border-radius: 50%; background: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-weight: bold; }
+            .triada-uncheck { width: 30px; height: 30px; border-radius: 50%; background: #f44336; color: white; display: flex; align-items: center; justify-content: center; margin: 0 auto 5px; font-weight: bold; }
+            .info-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+            .info-card { background: #f8f9fa; padding: 15px; border-radius: 8px; border-left: 4px solid #F2b705; }
+            .info-label { font-weight: bold; color: #666; font-size: 12px; margin-bottom: 5px; }
+            .info-value { font-size: 16px; color: #333; }
+            .pricing-tiers { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+            .pricing-card { background: white; border: 2px solid #e0e0e0; padding: 15px; border-radius: 8px; text-align: center; }
+            .pricing-card.recommended { border-color: #F2b705; background: #fff9e6; }
+            .pricing-title { font-weight: bold; margin-bottom: 10px; }
+            .pricing-value { font-size: 20px; color: #F2b705; font-weight: bold; }
+            .action-checklist { margin: 20px 0; }
+            .checklist-item { display: flex; align-items: center; margin-bottom: 10px; padding: 10px; background: #f8f9fa; border-radius: 5px; }
+            .checklist-check { width: 20px; height: 20px; border-radius: 50%; background: #4CAF50; color: white; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 12px; }
+            .checklist-uncheck { width: 20px; height: 20px; border-radius: 50%; background: #e0e0e0; color: #666; display: flex; align-items: center; justify-content: center; margin-right: 15px; font-size: 12px; }
+            .calculator-cta { background: linear-gradient(135deg, #F2b705, #E6A500); color: white; padding: 25px; border-radius: 12px; text-align: center; margin: 30px 0; }
+            .calculator-title { font-size: 20px; font-weight: bold; margin-bottom: 15px; }
+            .calculator-metrics { display: grid; grid-template-columns: repeat(3, 1fr); gap: 15px; margin: 20px 0; }
+            .calculator-metric { background: rgba(255,255,255,0.2); padding: 15px; border-radius: 8px; }
+            .calculator-button { background: white; color: #F2b705; padding: 12px 25px; border: none; border-radius: 25px; font-weight: bold; text-decoration: none; display: inline-block; margin-top: 15px; }
+            .footer { text-align: center; margin-top: 30px; padding-top: 20px; border-top: 1px solid #e0e0e0; color: #666; font-size: 12px; }
+        </style>
+    </head>
+    <body>
+        <div class="pdf-container">
+            <!-- PÁGINA 1: RESUMO EXECUTIVO -->
+            <div class="page">
+                <div class="header">
+                    <div class="logo">🏁 Canvas de Nicho e ICP</div>
+                    <div class="subtitle">Calculadora de Precificação Inteligente | Método Pódium</div>
+                </div>
+                
+                <div class="section">
+                    <div class="progress-circle">
+                        <div class="progress-text">${readinessScore}%</div>
+                    </div>
+                    <h2 style="text-align: center; margin-bottom: 20px;">Score de Prontidão para Prospecção</h2>
+                </div>
+                
+                <div class="metrics-grid">
+                    <div class="metric-card">
+                        <div class="metric-value">${triadaScore}/3</div>
+                        <div class="metric-label">Tríade Validada</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${dados.nicho || 'N/A'}</div>
+                        <div class="metric-label">Nicho Selecionado</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${capacidadeScore}</div>
+                        <div class="metric-label">Capacidade Financeira</div>
+                    </div>
+                    <div class="metric-card">
+                        <div class="metric-value">${servicosCount}</div>
+                        <div class="metric-label">Serviços Definidos</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Status da Tríade do Nicho</div>
+                    <div class="triada-status">
+                        <div class="triada-item">
+                            <div class="${dados.triada1 ? 'triada-check' : 'triada-uncheck'}">${dados.triada1 ? '✓' : '✗'}</div>
+                            <div>Sei Prestar</div>
+                        </div>
+                        <div class="triada-item">
+                            <div class="${dados.triada2 ? 'triada-check' : 'triada-uncheck'}">${dados.triada2 ? '✓' : '✗'}</div>
+                            <div>Mercado Precisa</div>
+                        </div>
+                        <div class="triada-item">
+                            <div class="${dados.triada3 ? 'triada-check' : 'triada-uncheck'}">${dados.triada3 ? '✓' : '✗'}</div>
+                            <div>Mercado Paga</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PÁGINA 2: ANÁLISE DE NICHO E ICP -->
+            <div class="page">
+                <div class="section">
+                    <div class="section-title">Definição de Nicho</div>
+                    <div class="info-card">
+                        <div class="info-label">Nicho Selecionado</div>
+                        <div class="info-value">${dados.nicho || 'Não definido'}</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Dores do Mercado Identificadas</div>
+                    <div class="info-card">
+                        <div class="info-value">${dados.dores || 'Não identificadas'}</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Perfil do ICP - Capacidade Financeira</div>
+                    <div class="info-grid">
+                        <div class="info-card">
+                            <div class="info-label">Estrutura Física</div>
+                            <div class="info-value">${dados.capacidadeFinanceira?.estruturaFisica || 'Não definida'}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Tamanho da Equipe</div>
+                            <div class="info-value">${dados.capacidadeFinanceira?.tamanhoEquipe || 'Não definido'}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Volume de Clientes/Mês</div>
+                            <div class="info-value">${dados.capacidadeFinanceira?.volumeClientes || 'Não definido'}</div>
+                        </div>
+                        <div class="info-card">
+                            <div class="info-label">Ticket Médio</div>
+                            <div class="info-value">${dados.capacidadeFinanceira?.ticketMedio || 'Não definido'}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PÁGINA 3: ESTRATÉGIA E PORTFÓLIO -->
+            <div class="page">
+                <div class="section">
+                    <div class="section-title">Estratégia de Acesso</div>
+                    <div class="info-card">
+                        <div class="info-label">Canais Selecionados</div>
+                        <div class="info-value">${dados.canais || 'Não definidos'}</div>
+                    </div>
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Portfólio de Serviços</div>
+                    ${dados.servicos && dados.servicos.length > 0 ? dados.servicos.map(servico => `
+                        <div class="info-card" style="margin-bottom: 10px;">
+                            <div class="info-label">${servico.servico}</div>
+                            <div class="info-value">${servico.detalhes || 'Sem detalhes adicionais'}</div>
+                        </div>
+                    `).join('') : '<div class="info-card"><div class="info-value">Nenhum serviço selecionado</div></div>'}
+                </div>
+                
+                <div class="section">
+                    <div class="section-title">Precificação Sugerida</div>
+                    <div class="pricing-tiers">
+                        <div class="pricing-card">
+                            <div class="pricing-title">Conservadora</div>
+                            <div class="pricing-value">R$ ${Math.round(estimatedBudget.min * 0.7).toLocaleString()}</div>
+                        </div>
+                        <div class="pricing-card recommended">
+                            <div class="pricing-title">Padrão</div>
+                            <div class="pricing-value">R$ ${estimatedBudget.min.toLocaleString()}</div>
+                        </div>
+                        <div class="pricing-card">
+                            <div class="pricing-title">Premium</div>
+                            <div class="pricing-value">R$ ${Math.round(estimatedBudget.max * 0.8).toLocaleString()}</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- PÁGINA 4: PLANO DE AÇÃO -->
+            <div class="page">
+                <div class="section">
+                    <div class="section-title">Checklist de Validação</div>
+                    <div class="action-checklist">
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check1 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check1 ? '✓' : '○'}</div>
+                            <div>Tríade do nicho validada</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check2 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check2 ? '✓' : '○'}</div>
+                            <div>Nicho específico e bem definido</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check3 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check3 ? '✓' : '○'}</div>
+                            <div>Dores do mercado claramente identificadas</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check4 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check4 ? '✓' : '○'}</div>
+                            <div>Capacidade financeira validada</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check5 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check5 ? '✓' : '○'}</div>
+                            <div>Acesso ao decisor confirmado</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check6 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check6 ? '✓' : '○'}</div>
+                            <div>Serviços selecionados e bem definidos</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check7 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check7 ? '✓' : '○'}</div>
+                            <div>Precificação calculada baseada na capacidade financeira</div>
+                        </div>
+                        <div class="checklist-item">
+                            <div class="${dados.checks.check8 ? 'checklist-check' : 'checklist-uncheck'}">${dados.checks.check8 ? '✓' : '○'}</div>
+                            <div>Pronto para começar a prospectar</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="calculator-cta">
+                    <div class="calculator-title">📊 PRÓXIMO PASSO: CALCULE SUAS LIGAÇÕES</div>
+                    <div class="calculator-metrics">
+                        <div class="calculator-metric">
+                            <div style="font-size: 14px; margin-bottom: 5px;">Ticket Médio</div>
+                            <div style="font-size: 18px; font-weight: bold;">R$ ${ticketMedioNumero.toLocaleString()}</div>
+                        </div>
+                        <div class="calculator-metric">
+                            <div style="font-size: 14px; margin-bottom: 5px;">Meta Sugerida</div>
+                            <div style="font-size: 18px; font-weight: bold;">R$ ${metaMensal.toLocaleString()}/mês</div>
+                        </div>
+                        <div class="calculator-metric">
+                            <div style="font-size: 14px; margin-bottom: 5px;">Contratos Necessários</div>
+                            <div style="font-size: 18px; font-weight: bold;">${contratosNecessarios}</div>
+                        </div>
+                    </div>
+                    <div style="margin: 20px 0;">
+                        <strong>Acesse a Calculadora de Contratos Pódium para calcular quantas ligações você precisa fazer para atingir sua meta!</strong>
+                    </div>
+                    <a href="https://calculadora-contratos-podium.vercel.app/" class="calculator-button" target="_blank">
+                        🚀 Acessar Calculadora Pódium
+                    </a>
+                </div>
+                
+                <div class="footer">
+                    <div>Canvas de Nicho e ICP - Método Pódium | Exportado em ${new Date().toLocaleDateString('pt-BR')}</div>
+                    <div>Calculadora de Precificação Inteligente | Versão 1.0</div>
+                </div>
+            </div>
+        </div>
+    </body>
+    </html>
+    `;
+}
+
 function exportarExcel() {
     try {
-        console.log('🔄 Iniciando exportação Excel/CSV...');
+        console.log('🔄 Iniciando exportação Excel/CSV estratégico...');
         
         // Verificar se window.canvas existe
         if (!window.canvas) {
@@ -1667,58 +1998,108 @@ function exportarExcel() {
             return;
         }
         
-        // Criar conteúdo CSV
-        let csv = 'Canvas de Nicho e ICP - Método Pódium\n\n';
-        csv += `Data de Exportação:,${new Date().toLocaleDateString('pt-BR')}\n\n`;
+        // Calcular métricas estratégicas
+        const triadaScore = [dados.triada1, dados.triada2, dados.triada3].filter(Boolean).length;
+        const checksCompletos = Object.values(dados.checks).filter(Boolean).length;
+        const readinessScore = Math.round((checksCompletos / 8) * 100);
+        const servicosCount = dados.servicos ? dados.servicos.length : 0;
         
-        // Tríade
-        csv += 'TRÍADE DO NICHO\n';
-        csv += `Eu sei prestar,${dados.triada1 ? 'Sim' : 'Não'}\n`;
-        csv += `Mercado precisa,${dados.triada2 ? 'Sim' : 'Não'}\n`;
-        csv += `Mercado paga,${dados.triada3 ? 'Sim' : 'Não'}\n\n`;
+        // Calcular score de capacidade financeira
+        let capacidadeScore = 'Baixo';
+        if (dados.capacidadeFinanceira) {
+            const { estruturaFisica, tamanhoEquipe, ticketMedio, investeMarketing } = dados.capacidadeFinanceira;
+            let score = 0;
+            
+            if (estruturaFisica === 'propria') score += 2;
+            else if (estruturaFisica === 'alugada') score += 1;
+            
+            if (tamanhoEquipe === '11-50' || tamanhoEquipe === '50+') score += 2;
+            else if (tamanhoEquipe === '3-10') score += 1;
+            
+            if (ticketMedio === '2000-10000' || ticketMedio === '10000+') score += 2;
+            else if (ticketMedio === '500-2000') score += 1;
+            
+            if (investeMarketing === 'sim') score += 1;
+            
+            if (score >= 6) capacidadeScore = 'Alto';
+            else if (score >= 3) capacidadeScore = 'Médio';
+        }
         
-        // Nicho
-        csv += 'NICHO SELECIONADO\n';
-        csv += `${dados.nicho || 'Não definido'}\n\n`;
+        // Criar CSV estruturado estratégico
+        let csv = 'CANVAS DE NICHO E ICP - MÉTODO PÓDIUM - RELATÓRIO ESTRATÉGICO\n';
+        csv += `Data de Exportação,${new Date().toLocaleDateString('pt-BR')}\n`;
+        csv += `Versão do Canvas,1.0\n`;
+        csv += `Score de Prontidão,${readinessScore}%\n\n`;
         
-        // Dores
-        csv += 'DORES IDENTIFICADAS\n';
-        csv += `${dados.dores || 'Não definidas'}\n\n`;
+        // SEÇÃO 1: DEFINIÇÃO DE NICHO
+        csv += 'SEÇÃO 1: DEFINIÇÃO DE NICHO\n';
+        csv += `Tríade Validada,${triadaScore}/3\n`;
+        csv += `Nicho Selecionado,${dados.nicho || 'Não definido'}\n`;
+        csv += `Dores Identificadas,"${dados.dores || 'Não definidas'}"\n\n`;
         
-        // Capacidade Financeira
-        csv += 'CAPACIDADE FINANCEIRA\n';
+        // SEÇÃO 2: PERFIL DO ICP
+        csv += 'SEÇÃO 2: PERFIL DO ICP\n';
         if (dados.capacidadeFinanceira) {
             csv += `Estrutura Física,${dados.capacidadeFinanceira.estruturaFisica || 'Não definida'}\n`;
             csv += `Tamanho da Equipe,${dados.capacidadeFinanceira.tamanhoEquipe || 'Não definido'}\n`;
-            csv += `Volume de Clientes,${dados.capacidadeFinanceira.volumeClientes || 'Não definido'}\n`;
+            csv += `Volume de Clientes/Mês,${dados.capacidadeFinanceira.volumeClientes || 'Não definido'}\n`;
             csv += `Ticket Médio,${dados.capacidadeFinanceira.ticketMedio || 'Não definido'}\n`;
             csv += `Investe em Marketing,${dados.capacidadeFinanceira.investeMarketing || 'Não definido'}\n`;
         } else {
-            csv += 'Não definida\n';
+            csv += 'Capacidade Financeira,Não definida\n';
         }
-        csv += '\n';
+        csv += `Score de Capacidade Financeira,${capacidadeScore}\n\n`;
         
-        // Canais de Acesso
-        csv += 'CANAIS DE ACESSO\n';
-        csv += `${dados.canais || 'Não definidos'}\n\n`;
+        // SEÇÃO 3: ESTRATÉGIA DE ACESSO
+        csv += 'SEÇÃO 3: ESTRATÉGIA DE ACESSO\n';
+        const canaisArray = dados.canais ? dados.canais.split(', ') : [];
+        const coldCallPrioritario = canaisArray.includes('cold-call') ? 'Sim' : 'Não';
+        csv += `Canal Prioritário,Cold Call (${coldCallPrioritario})\n`;
+        csv += `Canais Selecionados,"${dados.canais || 'Nenhum selecionado'}"\n`;
+        csv += `Total de Canais,${canaisArray.length}\n\n`;
         
-        // Serviços
-        csv += 'SERVIÇOS SELECIONADOS\n';
+        // SEÇÃO 4: PORTFÓLIO DE SERVIÇOS
+        csv += 'SEÇÃO 4: PORTFÓLIO DE SERVIÇOS\n';
         if (dados.servicos && dados.servicos.length > 0) {
-            dados.servicos.forEach(s => {
-                csv += `${s.servico},${s.detalhes || ''}\n`;
+            dados.servicos.forEach((servico, index) => {
+                csv += `Serviço ${index + 1},${servico.servico}\n`;
+                csv += `Detalhes Serviço ${index + 1},"${servico.detalhes || ''}"\n`;
             });
         } else {
-            csv += 'Nenhum serviço selecionado\n';
+            csv += 'Serviços Selecionados,Nenhum serviço selecionado\n';
         }
+        csv += `Total de Serviços,${servicosCount}\n\n`;
         
-        console.log('📝 Conteúdo CSV gerado:', csv.substring(0, 200) + '...');
+        // SEÇÃO 5: PLANO DE AÇÃO
+        csv += 'SEÇÃO 5: PLANO DE AÇÃO\n';
+        const checklistItems = [
+            { id: 'check1', desc: 'Tríade do nicho validada' },
+            { id: 'check2', desc: 'Nicho específico e bem definido' },
+            { id: 'check3', desc: 'Dores do mercado claramente identificadas' },
+            { id: 'check4', desc: 'Capacidade financeira validada' },
+            { id: 'check5', desc: 'Acesso ao decisor confirmado' },
+            { id: 'check6', desc: 'Serviços selecionados e bem definidos' },
+            { id: 'check7', desc: 'Precificação calculada baseada na capacidade financeira' },
+            { id: 'check8', desc: 'Pronto para começar a prospectar' }
+        ];
+        
+        checklistItems.forEach((item, index) => {
+            const status = dados.checks[item.id] ? 'Concluído' : 'Pendente';
+            csv += `Item ${index + 1},${item.desc}\n`;
+            csv += `Status ${index + 1},${status}\n`;
+        });
+        
+        csv += `\nTaxa de Conclusão,${readinessScore}%\n`;
+        csv += `Próximo Passo,Calcular meta de ligações na Calculadora Pódium\n`;
+        csv += `URL Calculadora,https://calculadora-contratos-podium.vercel.app/\n`;
+        
+        console.log('📝 CSV estratégico gerado');
         
         // Download do arquivo
         const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.csv`;
+        link.download = `canvas-estrategico-${new Date().toISOString().split('T')[0]}.csv`;
         
         // Adicionar ao DOM temporariamente
         document.body.appendChild(link);
@@ -1728,11 +2109,11 @@ function exportarExcel() {
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
         
-        console.log('✅ CSV exportado com sucesso');
+        console.log('✅ CSV estratégico exportado com sucesso');
         
         // Track analytics
         if (typeof window.va === 'function') {
-            window.va('track', 'Export Excel');
+            window.va('track', 'Export Excel Strategic');
         }
     } catch (error) {
         console.error('❌ Erro na função exportarExcel:', error);
@@ -1742,7 +2123,7 @@ function exportarExcel() {
 
 function exportarJSON() {
     try {
-        console.log('🔄 Iniciando exportação JSON...');
+        console.log('🔄 Iniciando exportação JSON estratégico...');
         
         // Verificar se window.canvas existe
         if (!window.canvas) {
@@ -1762,23 +2143,143 @@ function exportarJSON() {
             return;
         }
         
-        // Adicionar metadados
-        const exportData = {
+        // Calcular métricas estratégicas
+        const triadaScore = [dados.triada1, dados.triada2, dados.triada3].filter(Boolean).length;
+        const checksCompletos = Object.values(dados.checks).filter(Boolean).length;
+        const readinessScore = Math.round((checksCompletos / 8) * 100);
+        const servicosCount = dados.servicos ? dados.servicos.length : 0;
+        
+        // Calcular score de capacidade financeira
+        let capacidadeScore = 'Baixo';
+        let estimatedBudget = { min: 1000, max: 3000 };
+        
+        if (dados.capacidadeFinanceira) {
+            const { estruturaFisica, tamanhoEquipe, ticketMedio, investeMarketing } = dados.capacidadeFinanceira;
+            let score = 0;
+            
+            if (estruturaFisica === 'propria') score += 2;
+            else if (estruturaFisica === 'alugada') score += 1;
+            
+            if (tamanhoEquipe === '11-50' || tamanhoEquipe === '50+') score += 2;
+            else if (tamanhoEquipe === '3-10') score += 1;
+            
+            if (ticketMedio === '2000-10000' || ticketMedio === '10000+') score += 2;
+            else if (ticketMedio === '500-2000') score += 1;
+            
+            if (investeMarketing === 'sim') score += 1;
+            
+            if (score >= 6) {
+                capacidadeScore = 'Alto';
+                estimatedBudget = { min: 5000, max: 15000 };
+            } else if (score >= 3) {
+                capacidadeScore = 'Médio';
+                estimatedBudget = { min: 3000, max: 8000 };
+            }
+        }
+        
+        // Calcular meta de contratos para calculadora
+        const ticketMedio = dados.capacidadeFinanceira?.ticketMedio || '500-2000';
+        let ticketMedioNumero = 1000;
+        
+        if (ticketMedio === '500-2000') ticketMedioNumero = 1250;
+        else if (ticketMedio === '2000-10000') ticketMedioNumero = 6000;
+        else if (ticketMedio === '10000+') ticketMedioNumero = 15000;
+        
+        const metaMensal = estimatedBudget.max;
+        const contratosNecessarios = Math.ceil(metaMensal / ticketMedioNumero);
+        
+        // Criar estrutura JSON estratégica
+        const jsonEstrategico = {
             metadata: {
                 exportDate: new Date().toISOString(),
-                version: '1.0',
-                source: 'Canvas de Nicho e ICP - Método Pódium'
+                version: "1.0",
+                source: "Canvas de Nicho e ICP - Método Pódium",
+                readinessScore: readinessScore,
+                completionPercentage: readinessScore
             },
-            canvas: dados
+            businessIntelligence: {
+                nicheValidation: {
+                    triadaScore: `${triadaScore}/3`,
+                    validated: triadaScore === 3,
+                    selectedNiche: dados.nicho || null,
+                    customNiche: dados.nichoCustom || null
+                },
+                marketPainPoints: dados.dores ? dados.dores.split(', ').map(dor => ({
+                    pain: dor.trim(),
+                    priority: 'high',
+                    selected: true
+                })) : []
+            },
+            icpProfile: {
+                financialCapacity: {
+                    structure: dados.capacidadeFinanceira?.estruturaFisica || null,
+                    teamSize: dados.capacidadeFinanceira?.tamanhoEquipe || null,
+                    clientVolume: dados.capacidadeFinanceira?.volumeClientes || null,
+                    averageTicket: dados.capacidadeFinanceira?.ticketMedio || null,
+                    marketingInvestment: dados.capacidadeFinanceira?.investeMarketing || null,
+                    capacityScore: capacidadeScore.toLowerCase(),
+                    estimatedBudget: {
+                        min: estimatedBudget.min,
+                        max: estimatedBudget.max,
+                        currency: "BRL"
+                    }
+                }
+            },
+            accessStrategy: {
+                channels: dados.canais ? dados.canais.split(', ').map((canal, index) => ({
+                    channel: canal.trim(),
+                    priority: index + 1,
+                    isPodiumMethod: canal.trim() === 'cold-call'
+                })) : [],
+                recommendedApproach: dados.canais && dados.canais.includes('cold-call') ? 'outbound-first' : 'mixed'
+            },
+            servicePortfolio: dados.servicos ? dados.servicos.map(servico => ({
+                service: servico.servico,
+                details: servico.detalhes || '',
+                pricing: {
+                    conservative: Math.round(estimatedBudget.min * 0.7),
+                    standard: Math.round(estimatedBudget.min),
+                    premium: Math.round(estimatedBudget.max * 0.8),
+                    currency: "BRL",
+                    period: "monthly"
+                }
+            })) : [],
+            actionPlan: {
+                validationChecklist: {
+                    items: [
+                        { id: "check1", description: "Tríade do nicho validada", completed: dados.checks.check1 || false },
+                        { id: "check2", description: "Nicho específico e bem definido", completed: dados.checks.check2 || false },
+                        { id: "check3", description: "Dores do mercado claramente identificadas", completed: dados.checks.check3 || false },
+                        { id: "check4", description: "Capacidade financeira validada", completed: dados.checks.check4 || false },
+                        { id: "check5", description: "Acesso ao decisor confirmado", completed: dados.checks.check5 || false },
+                        { id: "check6", description: "Serviços selecionados e bem definidos", completed: dados.checks.check6 || false },
+                        { id: "check7", description: "Precificação calculada baseada na capacidade financeira", completed: dados.checks.check7 || false },
+                        { id: "check8", description: "Pronto para começar a prospectar", completed: dados.checks.check8 || false }
+                    ],
+                    completionRate: readinessScore / 100
+                },
+                nextSteps: [
+                    readinessScore < 100 ? "Completar validações pendentes no canvas" : "Iniciar prospecção via Cold Call",
+                    "Preparar pitch de vendas personalizado",
+                    "Calcular meta de ligações na Calculadora Pódium"
+                ],
+                calculatorIntegration: {
+                    suggestedGoal: metaMensal,
+                    averageTicket: ticketMedioNumero,
+                    contractsNeeded: contratosNecessarios,
+                    calculatorUrl: "https://calculadora-contratos-podium.vercel.app/"
+                }
+            }
         };
         
-        console.log('📝 Dados JSON estruturados');
+        console.log('📝 JSON estratégico gerado:', jsonEstrategico);
         
         // Download do arquivo
-        const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+        const jsonString = JSON.stringify(jsonEstrategico, null, 2);
+        const blob = new Blob([jsonString], { type: 'application/json;charset=utf-8;' });
         const link = document.createElement('a');
         link.href = URL.createObjectURL(blob);
-        link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.json`;
+        link.download = `canvas-estrategico-${new Date().toISOString().split('T')[0]}.json`;
         
         // Adicionar ao DOM temporariamente
         document.body.appendChild(link);
@@ -1788,11 +2289,11 @@ function exportarJSON() {
         document.body.removeChild(link);
         URL.revokeObjectURL(link.href);
         
-        console.log('✅ JSON exportado com sucesso');
+        console.log('✅ JSON estratégico exportado com sucesso');
         
         // Track analytics
         if (typeof window.va === 'function') {
-            window.va('track', 'Export JSON');
+            window.va('track', 'Export JSON Strategic');
         }
     } catch (error) {
         console.error('❌ Erro na função exportarJSON:', error);

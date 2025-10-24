@@ -1885,6 +1885,94 @@ body {
     font-weight: 500;
 }
 
+/* Card de Download no Resumo */
+.resumo-download {
+    background: rgba(255, 255, 255, 0.15) !important;
+    border: 2px solid rgba(255, 255, 255, 0.3) !important;
+}
+
+.download-buttons {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+}
+
+.btn-download {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    padding: 15px 20px;
+    background: rgba(255, 255, 255, 0.95);
+    border: 2px solid rgba(255, 255, 255, 0.3);
+    border-radius: 10px;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    text-align: left;
+    width: 100%;
+}
+
+.btn-download:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+}
+
+.btn-pdf:hover {
+    border-color: #dc3545;
+    background: linear-gradient(135deg, #fff5f5 0%, #ffffff 100%);
+}
+
+.btn-excel:hover {
+    border-color: #28a745;
+    background: linear-gradient(135deg, #f5fff5 0%, #ffffff 100%);
+}
+
+.btn-json:hover {
+    border-color: #007bff;
+    background: linear-gradient(135deg, #f5f9ff 0%, #ffffff 100%);
+}
+
+.download-icon {
+    font-size: 2rem;
+    flex-shrink: 0;
+}
+
+.download-info {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.download-info strong {
+    color: #333333;
+    font-size: 1rem;
+    display: block;
+}
+
+.download-info small {
+    color: #666666;
+    font-size: 0.85rem;
+    display: block;
+}
+
+/* Responsividade para downloads */
+@media (max-width: 768px) {
+    .btn-download {
+        padding: 12px 15px;
+    }
+    
+    .download-icon {
+        font-size: 1.5rem;
+    }
+    
+    .download-info strong {
+        font-size: 0.9rem;
+    }
+    
+    .download-info small {
+        font-size: 0.75rem;
+    }
+}
+
 /* ===== RESPONSIVIDADE ===== */
 
 @media (max-width: 768px) {

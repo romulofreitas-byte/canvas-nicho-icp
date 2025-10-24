@@ -1540,8 +1540,9 @@ class CanvasAutomatizado {
 }
 
 // ========================================
-// FUNÇÃO: Exportar PDF
+// FUNÇÕES DE EXPORTAÇÃO
 // ========================================
+
 function exportarPDF() {
     const element = document.getElementById('canvasForm');
     const opt = {
@@ -1553,6 +1554,87 @@ function exportarPDF() {
     };
     
     html2pdf().set(opt).from(element).save();
+    
+    // Track analytics
+    if (typeof window.va === 'function') {
+        window.va('track', 'Export PDF');
+    }
+}
+
+function exportarExcel() {
+    // Coletar dados do canvas
+    const dados = window.canvas ? window.canvas.coletarDados() : {};
+    
+    // Criar conteúdo CSV
+    let csv = 'Canvas de Nicho e ICP - Método Pódium\n\n';
+    csv += `Data de Exportação:,${new Date().toLocaleDateString('pt-BR')}\n\n`;
+    
+    // Tríade
+    csv += 'TRÍADE DO NICHO\n';
+    csv += `Eu sei prestar,${dados.triada1 ? 'Sim' : 'Não'}\n`;
+    csv += `Mercado precisa,${dados.triada2 ? 'Sim' : 'Não'}\n`;
+    csv += `Mercado paga,${dados.triada3 ? 'Sim' : 'Não'}\n\n`;
+    
+    // Nicho
+    csv += 'NICHO SELECIONADO\n';
+    csv += `${dados.nicho || 'Não definido'}\n\n`;
+    
+    // Dores
+    csv += 'DORES IDENTIFICADAS\n';
+    csv += `${dados.dores || 'Não definidas'}\n\n`;
+    
+    // Capacidade Financeira
+    csv += 'CAPACIDADE FINANCEIRA\n';
+    csv += `${dados.capacidadeFinanceira || 'Não definida'}\n\n`;
+    
+    // Serviços
+    csv += 'SERVIÇOS SELECIONADOS\n';
+    if (dados.servicos && dados.servicos.length > 0) {
+        dados.servicos.forEach(s => {
+            csv += `${s.servico},${s.detalhes || ''}\n`;
+        });
+    } else {
+        csv += 'Nenhum serviço selecionado\n';
+    }
+    
+    // Download do arquivo
+    const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.csv`;
+    link.click();
+    
+    // Track analytics
+    if (typeof window.va === 'function') {
+        window.va('track', 'Export Excel');
+    }
+}
+
+function exportarJSON() {
+    // Coletar dados do canvas
+    const dados = window.canvas ? window.canvas.coletarDados() : {};
+    
+    // Adicionar metadados
+    const exportData = {
+        metadata: {
+            exportDate: new Date().toISOString(),
+            version: '1.0',
+            source: 'Canvas de Nicho e ICP - Método Pódium'
+        },
+        canvas: dados
+    };
+    
+    // Download do arquivo
+    const blob = new Blob([JSON.stringify(exportData, null, 2)], { type: 'application/json' });
+    const link = document.createElement('a');
+    link.href = URL.createObjectURL(blob);
+    link.download = `canvas-nicho-icp-${new Date().toISOString().split('T')[0]}.json`;
+    link.click();
+    
+    // Track analytics
+    if (typeof window.va === 'function') {
+        window.va('track', 'Export JSON');
+    }
 }
 
 // Inicialização já feita acima - removendo duplicação

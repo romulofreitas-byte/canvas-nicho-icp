@@ -883,6 +883,39 @@
         </div>
     </div>
 
+    <!-- Modal de Captura de Leads -->
+    <div class="modal" id="leadModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>🏁 Acesse o Canvas Pódium</h2>
+                <p>Desbloqueie a ferramenta preenchendo seus dados</p>
+            </div>
+            
+            <form class="lead-form" id="leadForm">
+                <div class="form-group">
+                    <label for="nomeCompleto">Nome Completo *</label>
+                    <input type="text" id="nomeCompleto" name="nomeCompleto" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="telefone">Telefone com DDD *</label>
+                    <input type="tel" id="telefone" name="telefone" placeholder="(XX) 99999-9999" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="email">E-mail *</label>
+                    <input type="email" id="email" name="email" required>
+                </div>
+                
+                <button type="submit" class="btn-unlock">🔓 Desbloquear Canvas</button>
+            </form>
+            
+            <div class="modal-footer">
+                <p>Seus dados serão usados apenas para enviar atualizações sobre o Método Pódium</p>
+            </div>
+        </div>
+    </div>
+
     
     <script src="config.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>

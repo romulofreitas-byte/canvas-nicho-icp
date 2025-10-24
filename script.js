@@ -4,9 +4,136 @@
  */
 
 // ========================================
-// FORMULÁRIO DE CAPTURA DE LEADS REMOVIDO
+// CLASSE: Lead Capture Modal
 // ========================================
-// O formulário foi completamente removido para permitir acesso direto ao canvas
+class LeadCaptureModal {
+    constructor() {
+        this.modal = document.getElementById('leadModal');
+        this.form = document.getElementById('leadForm');
+        this.isUnlocked = localStorage.getItem('canvasUnlocked') === 'true';
+        this.init();
+    }
+    
+    init() {
+        if (!this.isUnlocked) {
+            this.showModal();
+        } else {
+            this.hideModal();
+        }
+        
+        this.setupEventListeners();
+    }
+    
+    setupEventListeners() {
+        // Form submission
+        this.form.addEventListener('submit', (e) => this.handleSubmit(e));
+        
+        // Close modal on background click
+        this.modal.addEventListener('click', (e) => {
+            if (e.target === this.modal) {
+                // Não permitir fechar clicando fora - força o preenchimento
+                return;
+            }
+        });
+        
+        // Prevent form submission without filling
+        this.form.addEventListener('submit', (e) => {
+            const nome = document.getElementById('nomeCompleto').value.trim();
+            const telefone = document.getElementById('telefone').value.trim();
+            const email = document.getElementById('email').value.trim();
+            
+            if (!nome || !telefone || !email) {
+                e.preventDefault();
+                alert('⚠️ Por favor, preencha todos os campos obrigatórios.');
+                return;
+            }
+        });
+    }
+    
+    showModal() {
+        this.modal.classList.remove('hidden');
+        document.body.classList.add('modal-active');
+    }
+    
+    hideModal() {
+        this.modal.classList.add('hidden');
+        document.body.classList.remove('modal-active');
+    }
+    
+    async handleSubmit(e) {
+        e.preventDefault();
+        
+        const formData = new FormData(this.form);
+        const leadData = {
+            nome: formData.get('nomeCompleto'),
+            telefone: formData.get('telefone'),
+            email: formData.get('email'),
+            timestamp: new Date().toISOString(),
+            userAgent: navigator.userAgent
+        };
+        
+        try {
+            // Salvar lead no Supabase
+            await this.saveLead(leadData);
+            
+            // Marcar como desbloqueado
+            localStorage.setItem('canvasUnlocked', 'true');
+            this.isUnlocked = true;
+            
+            // Esconder modal
+            this.hideModal();
+            
+            // Mostrar mensagem de sucesso
+            alert('✅ Canvas desbloqueado com sucesso!\n\nAgora você pode usar todas as funcionalidades da ferramenta.');
+            
+            // Track analytics
+            if (typeof window.va === 'function') {
+                window.va('track', 'Canvas Unlocked', {
+                    lead_captured: true
+                });
+            }
+            
+        } catch (error) {
+            console.error('Erro ao salvar lead:', error);
+            alert('⚠️ Erro ao processar seus dados. Tente novamente.');
+        }
+    }
+    
+    async saveLead(leadData) {
+        if (!window.SUPABASE_CONFIG) {
+            console.warn('Configuração do Supabase não encontrada - salvando apenas localmente');
+            localStorage.setItem('leadData', JSON.stringify(leadData));
+            return;
+        }
+        
+        try {
+            const response = await fetch(
+                `${window.SUPABASE_CONFIG.URL}/rest/v1/leads`,
+                {
+                    method: 'POST',
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'apikey': window.SUPABASE_CONFIG.ANON_KEY,
+                        'Authorization': `Bearer ${window.SUPABASE_CONFIG.ANON_KEY}`
+                    },
+                    body: JSON.stringify(leadData)
+                }
+            );
+            
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+            
+            console.log('✅ Lead salvo no Supabase');
+            
+        } catch (error) {
+            console.error('Erro ao salvar no Supabase:', error);
+            // Salvar localmente como fallback
+            localStorage.setItem('leadData', JSON.stringify(leadData));
+            throw error;
+        }
+    }
+}
 
 // ========================================
 // CLASSE: Canvas Nicho ICP
@@ -287,6 +414,20 @@ function limparDados() {
     }
 }
 
+function testarModal() {
+    // Função para testar o modal (apenas para desenvolvimento)
+    if (window.leadModal) {
+        localStorage.removeItem('canvasUnlocked');
+        window.leadModal.showModal();
+    }
+}
+
+function resetarModal() {
+    // Função para resetar o modal (apenas para desenvolvimento)
+    localStorage.removeItem('canvasUnlocked');
+    location.reload();
+}
+
 // ========================================
 // INICIALIZAÇÃO
 // ========================================
@@ -294,8 +435,10 @@ document.addEventListener('DOMContentLoaded', () => {
     console.log('🚀 DOMContentLoaded - Iniciando inicialização...');
     
     try {
-        // LeadCapture removido - acesso direto ao canvas
-        console.log('🔧 Pulando inicialização do LeadCapture (removido)');
+        // Inicializar modal de captura de leads
+        console.log('🔧 Criando LeadCaptureModal...');
+        window.leadModal = new LeadCaptureModal();
+        console.log('✅ LeadCaptureModal criado:', !!window.leadModal);
         
         // Inicializar canvas
         console.log('🔧 Criando CanvasNichoICP...');
@@ -314,7 +457,7 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
-        console.log('🎉 Inicialização completa! (sem LeadCapture)');
+        console.log('🎉 Inicialização completa!');
     } catch (error) {
         console.error('❌ Erro durante inicialização:', error);
     }

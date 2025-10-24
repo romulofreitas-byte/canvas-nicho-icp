@@ -429,6 +429,17 @@ body {
     display: none;
 }
 
+/* Efeito de overlay escuro no canvas quando modal está ativo */
+body.modal-active .container {
+    filter: brightness(0.3) blur(2px);
+    transition: filter 0.3s ease;
+    pointer-events: none;
+}
+
+body.modal-active .modal {
+    pointer-events: auto;
+}
+
 .modal-content {
     background-color: white;
     padding: 40px;

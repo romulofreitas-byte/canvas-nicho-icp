@@ -1991,12 +1991,15 @@ function gerarTemplatePDFEstrategico(dados, metricas) {
                 
                 <div class="section">
                     <div class="section-title">Portfólio de Serviços</div>
-                    ${dados.servicos && dados.servicos.length > 0 ? dados.servicos.map(servico => `
+                    ${dados.servicos && dados.servicos.length > 0 ? dados.servicos.map(servico => {
+                        // Handle both old format (object) and new format (string)
+                        const servicoNome = typeof servico === 'string' ? servico : servico.servico;
+                        return `
                         <div class="info-card" style="margin-bottom: 10px;">
-                            <div class="info-label">${servico.servico}</div>
-                            <div class="info-value">${servico.detalhes || 'Sem detalhes adicionais'}</div>
+                            <div class="info-label">${servicoNome}</div>
                         </div>
-                    `).join('') : '<div class="info-card"><div class="info-value">Nenhum serviço selecionado</div></div>'}
+                    `;
+                    }).join('') : '<div class="info-card"><div class="info-value">Nenhum serviço selecionado</div></div>'}
                 </div>
                 
                 <div class="section">
@@ -2179,8 +2182,9 @@ function exportarExcel() {
         csv += 'SEÇÃO 4: PORTFÓLIO DE SERVIÇOS\n';
         if (dados.servicos && dados.servicos.length > 0) {
             dados.servicos.forEach((servico, index) => {
-                csv += `Serviço ${index + 1},${servico.servico}\n`;
-                csv += `Detalhes Serviço ${index + 1},"${servico.detalhes || ''}"\n`;
+                // Handle both old format (object) and new format (string)
+                const servicoNome = typeof servico === 'string' ? servico : servico.servico;
+                csv += `Serviço ${index + 1},${servicoNome}\n`;
             });
         } else {
             csv += 'Serviços Selecionados,Nenhum serviço selecionado\n';
@@ -2350,17 +2354,20 @@ function exportarJSON() {
                 })) : [],
                 recommendedApproach: dados.canais && dados.canais.includes('cold-call') ? 'outbound-first' : 'mixed'
             },
-            servicePortfolio: dados.servicos ? dados.servicos.map(servico => ({
-                service: servico.servico,
-                details: servico.detalhes || '',
-                pricing: {
-                    conservative: Math.round(estimatedBudget.min * 0.7),
-                    standard: Math.round(estimatedBudget.min),
-                    premium: Math.round(estimatedBudget.max * 0.8),
-                    currency: "BRL",
-                    period: "monthly"
-                }
-            })) : [],
+            servicePortfolio: dados.servicos ? dados.servicos.map(servico => {
+                // Handle both old format (object) and new format (string)
+                const servicoNome = typeof servico === 'string' ? servico : servico.servico;
+                return {
+                    service: servicoNome,
+                    pricing: {
+                        conservative: Math.round(estimatedBudget.min * 0.7),
+                        standard: Math.round(estimatedBudget.min),
+                        premium: Math.round(estimatedBudget.max * 0.8),
+                        currency: "BRL",
+                        period: "monthly"
+                    }
+                };
+            }) : [],
             actionPlan: {
                 validationChecklist: {
                     items: [

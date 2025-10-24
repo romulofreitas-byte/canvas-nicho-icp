@@ -47,9 +47,38 @@ class LeadCapture {
             return;
         }
         
+        // Verificar IP para evitar captura duplicada
+        this.checkIPAndProceed();
+    }
+    
+    async checkIPAndProceed() {
+        try {
+            const userIP = await this.obterIP();
+            const savedIP = localStorage.getItem('leadIP');
+            
+            if (savedIP && savedIP === userIP) {
+                console.log('🔧 LeadCapture: IP já capturado, liberando canvas automaticamente');
+                sessionStorage.setItem('leadCaptured', 'true');
+                this.liberarCanvas();
+                return;
+            }
+        } catch (error) {
+            console.log('🔧 LeadCapture: Erro ao verificar IP, continuando com modal');
+        }
+        
         this.setupEventListeners();
         this.setupValidation();
         console.log('🔧 LeadCapture: Inicializado');
+    }
+    
+    async obterIP() {
+        try {
+            const response = await fetch('https://api.ipify.org?format=json');
+            const data = await response.json();
+            return data.ip;
+        } catch {
+            return 'desconhecido';
+        }
     }
     
     setupEventListeners() {
@@ -373,6 +402,10 @@ class LeadCapture {
             if (success) {
                 // Salvar timestamp da última tentativa
                 localStorage.setItem('leadLastAttempt', Date.now().toString());
+                
+                // Salvar IP para evitar captura duplicada
+                const userIP = await this.obterIP();
+                localStorage.setItem('leadIP', userIP);
                 
                 // Marcar como capturado na sessão
                 sessionStorage.setItem('leadCaptured', 'true');
@@ -1339,17 +1372,17 @@ class CanvasAutomatizado {
         const pacotePremium = document.getElementById('pacotePremium');
         
         if (pacoteBasico) {
-            const precoElement = pacoteBasico.querySelector('.pacote-preco');
+            const precoElement = pacoteBasico.querySelector('.jornada-preco');
             if (precoElement) precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
         }
         
         if (pacoteIntermediario) {
-            const precoElement = pacoteIntermediario.querySelector('.pacote-preco');
+            const precoElement = pacoteIntermediario.querySelector('.jornada-preco');
             if (precoElement) precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
         }
         
         if (pacotePremium) {
-            const precoElement = pacotePremium.querySelector('.pacote-preco');
+            const precoElement = pacotePremium.querySelector('.jornada-preco');
             if (precoElement) precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
         }
     }

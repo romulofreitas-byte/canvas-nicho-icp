@@ -837,6 +837,13 @@ document.addEventListener('DOMContentLoaded', () => {
 function liberarCanvas() {
     console.log('🔧 Liberando canvas...');
     
+    // Verificar se DOM está pronto
+    if (document.readyState !== 'complete') {
+        console.log('⏳ DOM não está pronto, aguardando...');
+        window.addEventListener('load', liberarCanvas, { once: true });
+        return;
+    }
+    
     // Remover classe de bloqueio do container
     const container = document.querySelector('.container');
     if (container) {
@@ -844,9 +851,22 @@ function liberarCanvas() {
         container.classList.add('canvas-liberado');
     }
     
+    // Verificar se já foi inicializado
+    if (window.canvas && window.canvasAutomatizado) {
+        console.log('✅ Canvas já inicializado');
+        return;
+    }
+    
     // Inicializar canvas após um pequeno delay para a animação
     setTimeout(() => {
         try {
+            // Verificar elementos necessários
+            const canvasForm = document.getElementById('canvasForm');
+            if (!canvasForm) {
+                console.error('❌ Elemento canvasForm não encontrado');
+                return;
+            }
+            
             // Inicializar canvas
             console.log('🔧 Criando CanvasNichoICP...');
             window.canvas = new CanvasNichoICP();
@@ -860,6 +880,13 @@ function liberarCanvas() {
             console.log('✅ Canvas inicializado com sucesso!');
         } catch (error) {
             console.error('❌ Erro ao inicializar canvas:', error);
+            // Tentar novamente após 1 segundo
+            setTimeout(() => {
+                console.log('🔄 Tentando reinicializar canvas...');
+                window.canvas = null;
+                window.canvasAutomatizado = null;
+                liberarCanvas();
+            }, 1000);
         }
     }, 300);
 }

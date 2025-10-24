@@ -434,6 +434,33 @@ body {
     box-shadow: 0 5px 15px rgba(37, 211, 102, 0.4);
 }
 
+.btn-calculadora-footer {
+    display: inline-block;
+    background: linear-gradient(135deg, #F2b705 0%, #e0a500 100%);
+    color: #000000;
+    padding: 18px 40px;
+    border-radius: 10px;
+    text-decoration: none;
+    font-size: 1.1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 6px 20px rgba(242, 183, 5, 0.4);
+    margin-top: 20px;
+}
+
+.btn-calculadora-footer:hover {
+    background: linear-gradient(135deg, #e0a500 0%, #d99a04 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(242, 183, 5, 0.5);
+}
+
+@media (max-width: 768px) {
+    .btn-calculadora-footer {
+        padding: 15px 30px;
+        font-size: 1rem;
+    }
+}
+
 /* Footer */
 .footer {
     text-align: center;

@@ -1762,6 +1762,39 @@ body {
     box-shadow: 0 6px 20px rgba(242, 183, 5, 0.4);
 }
 
+.cta-comunidade {
+    background: rgba(37, 211, 102, 0.1);
+    padding: 25px;
+    border-radius: 10px;
+    text-align: center;
+    border: 1px solid rgba(37, 211, 102, 0.3);
+}
+
+.cta-comunidade p {
+    color: #333333;
+    font-size: 1rem;
+    margin-bottom: 15px;
+}
+
+.btn-comunidade {
+    display: inline-block;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: #ffffff;
+    padding: 14px 30px;
+    border-radius: 8px;
+    text-decoration: none;
+    font-size: 1rem;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.btn-comunidade:hover {
+    background: linear-gradient(135deg, #128C7E 0%, #075E54 100%);
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+}
+
 .cta-subtitle {
     color: #666666;
     font-size: 0.85rem;

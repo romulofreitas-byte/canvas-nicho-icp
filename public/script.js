@@ -1820,22 +1820,40 @@ function exportarPDF() {
         // Criar elemento temporário com o template
         const tempDiv = document.createElement('div');
         tempDiv.innerHTML = templateHTML;
-        tempDiv.style.position = 'absolute';
-        tempDiv.style.left = '-9999px';
-        tempDiv.style.top = '-9999px';
+        tempDiv.style.position = 'fixed';
+        tempDiv.style.left = '0';
+        tempDiv.style.top = '0';
+        tempDiv.style.width = '210mm'; // A4 width
+        tempDiv.style.zIndex = '-1000'; // Behind everything but visible
+        tempDiv.style.opacity = '0'; // Invisible to user
+        tempDiv.style.pointerEvents = 'none';
         document.body.appendChild(tempDiv);
+        
+        console.log('📄 Elemento temporário criado, gerando PDF...');
         
         // Gerar PDF do template
         html2pdf().set(opt).from(tempDiv).save().then(() => {
-            // Remover elemento temporário
-            document.body.removeChild(tempDiv);
+            // Remover elemento temporário após geração
             console.log('✅ PDF estratégico exportado com sucesso');
+            setTimeout(() => {
+                if (tempDiv.parentNode) {
+                    document.body.removeChild(tempDiv);
+                    console.log('🧹 Elemento temporário removido');
+                }
+            }, 100);
+            
+            // Track analytics
+            if (typeof window.va === 'function') {
+                window.va('track', 'Export PDF Strategic');
+            }
+        }).catch((error) => {
+            console.error('❌ Erro ao gerar PDF:', error);
+            // Remover elemento em caso de erro
+            if (tempDiv.parentNode) {
+                document.body.removeChild(tempDiv);
+            }
+            alert('❌ Erro ao gerar PDF. Tente novamente.');
         });
-        
-        // Track analytics
-        if (typeof window.va === 'function') {
-            window.va('track', 'Export PDF Strategic');
-        }
     } catch (error) {
         console.error('❌ Erro na função exportarPDF:', error);
         alert('❌ Erro inesperado ao exportar PDF: ' + error.message);

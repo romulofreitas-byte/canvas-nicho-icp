@@ -971,6 +971,11 @@ document.addEventListener('DOMContentLoaded', () => {
             });
         }
         
+        // Inicializar sistema de gamificação da tríade
+        console.log('🔧 Criando TriadaGamification...');
+        window.triadaGamification = new TriadaGamification();
+        console.log('✅ TriadaGamification criado:', !!window.triadaGamification);
+        
         console.log('🎉 Inicialização completa!');
     } catch (error) {
         console.error('❌ Erro durante inicialização:', error);
@@ -2512,5 +2517,137 @@ document.addEventListener('DOMContentLoaded', function() {
     // Initialize progress on page load
     updateProgress();
 });
+
+// ========================================
+// SISTEMA DE GAMIFICAÇÃO DA TRÍADE
+// ========================================
+class TriadaGamification {
+    constructor() {
+        this.cards = document.querySelectorAll('.triada-card-gamified');
+        this.progressFill = document.querySelector('.progress-fill');
+        this.progressText = document.querySelector('.progress-text');
+        this.successMessage = document.querySelector('.triada-success-message');
+        
+        this.unlockedCount = 0;
+        this.totalCards = 3;
+        
+        this.init();
+    }
+    
+    init() {
+        this.updateProgress();
+        this.bindEvents();
+        this.checkExistingState();
+    }
+    
+    bindEvents() {
+        this.cards.forEach((card, index) => {
+            card.addEventListener('click', () => {
+                this.unlockCard(card, index + 1);
+            });
+        });
+    }
+    
+    unlockCard(card, cardNumber) {
+        const isUnlocked = card.getAttribute('data-unlocked') === 'true';
+        if (isUnlocked) return;
+        
+        // Adicionar animação de desbloqueio
+        card.classList.add('unlocking');
+        
+        // Marcar como desbloqueado
+        card.setAttribute('data-unlocked', 'true');
+        
+        // Marcar checkbox
+        const checkbox = card.querySelector('input[type="checkbox"]');
+        if (checkbox) {
+            checkbox.checked = true;
+        }
+        
+        // Atualizar contador
+        this.unlockedCount++;
+        this.updateProgress();
+        
+        // Tocar som de desbloqueio
+        this.playUnlockSound();
+        
+        // Remover animação após delay
+        setTimeout(() => {
+            card.classList.remove('unlocking');
+        }, 600);
+        
+        // Verificar se todos foram desbloqueados
+        if (this.unlockedCount === this.totalCards) {
+            setTimeout(() => {
+                this.showSuccessMessage();
+            }, 500);
+        }
+    }
+    
+    updateProgress() {
+        const percentage = (this.unlockedCount / this.totalCards) * 100;
+        
+        // Atualizar barra de progresso
+        if (this.progressFill) {
+            this.progressFill.style.setProperty('--progress-width', `${percentage}%`);
+            this.progressFill.setAttribute('data-progress', this.unlockedCount);
+        }
+        
+        // Atualizar texto
+        if (this.progressText) {
+            this.progressText.textContent = `${this.unlockedCount}/${this.totalCards} Validados`;
+        }
+    }
+    
+    showSuccessMessage() {
+        if (this.successMessage) {
+            this.successMessage.style.display = 'block';
+            this.successMessage.scrollIntoView({ 
+                behavior: 'smooth', 
+                block: 'center' 
+            });
+        }
+    }
+    
+    playUnlockSound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            oscillator.frequency.value = 800;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.3, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.1);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.1);
+        } catch (error) {
+            console.log('Som de desbloqueio não disponível');
+        }
+    }
+    
+    checkExistingState() {
+        // Verificar se algum card já estava desbloqueado
+        this.cards.forEach(card => {
+            const checkbox = card.querySelector('input[type="checkbox"]');
+            if (checkbox && checkbox.checked) {
+                card.setAttribute('data-unlocked', 'true');
+                this.unlockedCount++;
+            }
+        });
+        
+        this.updateProgress();
+        
+        // Se todos estavam desbloqueados, mostrar mensagem de sucesso
+        if (this.unlockedCount === this.totalCards && this.successMessage) {
+            this.successMessage.style.display = 'block';
+        }
+    }
+}
 
 // Inicialização já feita acima - removendo duplicação

@@ -77,88 +77,99 @@
             <h1>🏁 Canvas de Nicho, ICP e Precificação Inteligente</h1>
             <p>Método Pódium - Primeira Fase: Definição de Nicho, ICP e Precificação Baseada na Capacidade Financeira</p>
             
-            <div class="triada-info-premium">
-                <div class="triada-item-premium" data-step="1">
-                    <div class="triada-icon-premium">
-                        <div class="icon-circle">
-                            <span class="icon-check">✓</span>
-                </div>
-                        <div class="step-number">01</div>
-                </div>
-                    <div class="triada-content">
-                        <h3>Eu sei prestar esse serviço</h3>
-                        <p>Tenho conhecimento técnico e experiência comprovada</p>
-                    </div>
-                </div>
-                
-                <div class="triada-item-premium" data-step="2">
-                    <div class="triada-icon-premium">
-                        <div class="icon-circle">
-                            <span class="icon-check">✓</span>
-                        </div>
-                        <div class="step-number">02</div>
-                    </div>
-                    <div class="triada-content">
-                        <h3>O mercado precisa do meu serviço</h3>
-                        <p>Existe demanda real e problemas a serem resolvidos</p>
-                    </div>
-                </div>
-                
-                <div class="triada-item-premium" data-step="3">
-                    <div class="triada-icon-premium">
-                        <div class="icon-circle">
-                            <span class="icon-check">✓</span>
-                        </div>
-                        <div class="step-number">03</div>
-                    </div>
-                    <div class="triada-content">
-                        <h3>O mercado está disposto a pagar</h3>
-                        <p>Clientes têm capacidade financeira e urgência</p>
-                    </div>
-                </div>
-            </div>
         </div>
 
         <!-- CANVAS PRINCIPAL -->
         <form id="canvasForm">
             <div class="canvas-wrapper">
-                <!-- TRÍADE DO NICHO -->
-                <div class="canvas-section triada">
+                <!-- TRÍADE DO NICHO - GAMIFICADA -->
+                <div class="canvas-section triada-gamification">
                     <h2>🎯 A TRÍADE DO NICHO - Validação Fundamental</h2>
-                    <p style="margin-bottom: 20px; font-size: 0.95em;">Antes de escolher um nicho, você PRECISA validar esses três pilares. Se um deles falhar, o nicho não é viável.</p>
+                    <p class="triada-subtitle">Clique em cada card para validar. Desbloqueie os 3 para acessar a calculadora!</p>
                     
-                    <div class="triada-grid">
-                        <div class="triada-box">
-                            <h3>1️⃣ EU SEI PRESTAR</h3>
-                            <p>Tenho expertise, experiência e capacidade técnica para entregar esse serviço com excelência.</p>
-                            <div class="triada-checkbox">
-                                <input type="checkbox" id="triada1" name="triada1">
-                                <label for="triada1">Validado ✓</label>
+                    <div class="triada-progress-bar">
+                        <div class="progress-fill" data-progress="0"></div>
+                        <span class="progress-text">0/3 Validados</span>
+                    </div>
+                    
+                    <div class="triada-info-premium triada-grid-gamified">
+                        <div class="triada-card-gamified" data-triada="1" data-unlocked="false">
+                            <div class="lock-overlay">
+                                <span class="lock-icon">🔒</span>
+                                <span class="lock-text">Clique para validar</span>
                             </div>
+                            <div class="card-content">
+                                <div class="triada-icon-premium">
+                                    <div class="icon-circle">
+                                        <span class="icon-check">✓</span>
+                                    </div>
+                                    <div class="step-number">01</div>
+                                </div>
+                                <div class="triada-content">
+                                    <h3>🎓 EU SEI PRESTAR</h3>
+                                    <p>Tenho expertise, experiência e capacidade técnica para entregar esse serviço com excelência.</p>
+                                </div>
+                                <div class="unlock-badge">
+                                    <span class="badge-icon">✓</span>
+                                    <span class="badge-text">Validado!</span>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="triada1" name="triada1" style="display: none;">
                         </div>
                         
-                        <div class="triada-box">
-                            <h3>2️⃣ MERCADO PRECISA</h3>
-                            <p>Existe uma dor real, urgente e recorrente nesse mercado que meu serviço resolve.</p>
-                            <div class="triada-checkbox">
-                                <input type="checkbox" id="triada2" name="triada2">
-                                <label for="triada2">Validado ✓</label>
+                        <div class="triada-card-gamified" data-triada="2" data-unlocked="false">
+                            <div class="lock-overlay">
+                                <span class="lock-icon">🔒</span>
+                                <span class="lock-text">Clique para validar</span>
                             </div>
+                            <div class="card-content">
+                                <div class="triada-icon-premium">
+                                    <div class="icon-circle">
+                                        <span class="icon-check">✓</span>
+                                    </div>
+                                    <div class="step-number">02</div>
+                                </div>
+                                <div class="triada-content">
+                                    <h3>💼 O MERCADO PRECISA</h3>
+                                    <p>Existe demanda real, dores latentes e problemas que meu serviço resolve efetivamente.</p>
+                                </div>
+                                <div class="unlock-badge">
+                                    <span class="badge-icon">✓</span>
+                                    <span class="badge-text">Validado!</span>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="triada2" name="triada2" style="display: none;">
                         </div>
                         
-                        <div class="triada-box">
-                            <h3>3️⃣ MERCADO PAGA</h3>
-                            <p>O mercado tem orçamento e está disposto a pagar pelo meu serviço.</p>
-                            <div class="triada-checkbox">
-                                <input type="checkbox" id="triada3" name="triada3">
-                                <label for="triada3">Validado ✓</label>
+                        <div class="triada-card-gamified" data-triada="3" data-unlocked="false">
+                            <div class="lock-overlay">
+                                <span class="lock-icon">🔒</span>
+                                <span class="lock-text">Clique para validar</span>
                             </div>
+                            <div class="card-content">
+                                <div class="triada-icon-premium">
+                                    <div class="icon-circle">
+                                        <span class="icon-check">✓</span>
+                                    </div>
+                                    <div class="step-number">03</div>
+                                </div>
+                                <div class="triada-content">
+                                    <h3>💰 O MERCADO PAGA</h3>
+                                    <p>Clientes têm capacidade financeira, urgência e estão dispostos a investir na solução.</p>
+                                </div>
+                                <div class="unlock-badge">
+                                    <span class="badge-icon">✓</span>
+                                    <span class="badge-text">Validado!</span>
+                                </div>
+                            </div>
+                            <input type="checkbox" id="triada3" name="triada3" style="display: none;">
                         </div>
                     </div>
-
-                    <div class="resultado" id="resultadoTriada">
-                        <h4>✅ TRÍADE VALIDADA!</h4>
-                        <p>Você passou na validação fundamental. Agora é hora de detalhar seu nicho e ICP.</p>
+                    
+                    <div class="triada-success-message" style="display: none;">
+                        <div class="success-icon">🎉</div>
+                        <h3>Parabéns! Tríade Validada</h3>
+                        <p>Você desbloqueou a calculadora de precificação! Continue preenchendo o canvas.</p>
                     </div>
                 </div>
 

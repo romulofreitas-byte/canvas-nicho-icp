@@ -2739,16 +2739,10 @@ class TriadaGamification {
         this.wheelHandler = this.handleScrollAttempt.bind(this);
         this.touchHandler = this.handleScrollAttempt.bind(this);
         this.keyHandler = this.handleKeyScroll.bind(this);
-        this.clickHandler = this.showScrollAlert.bind(this);
         
         window.addEventListener('wheel', this.wheelHandler, { passive: false });
         window.addEventListener('touchmove', this.touchHandler, { passive: false });
         window.addEventListener('keydown', this.keyHandler);
-        
-        // Click no overlay também mostra alerta
-        if (this.scrollLockOverlay) {
-            this.scrollLockOverlay.addEventListener('click', this.clickHandler);
-        }
     }
     
     disableScrollLock() {
@@ -2768,9 +2762,6 @@ class TriadaGamification {
         }
         if (this.keyHandler) {
             window.removeEventListener('keydown', this.keyHandler);
-        }
-        if (this.clickHandler && this.scrollLockOverlay) {
-            this.scrollLockOverlay.removeEventListener('click', this.clickHandler);
         }
     }
     

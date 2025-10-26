@@ -2527,6 +2527,7 @@ class TriadaGamification {
         this.progressFill = document.querySelector('.progress-fill');
         this.progressText = document.querySelector('.progress-text');
         this.successMessage = document.querySelector('.triada-success-message');
+        this.lockedSections = document.querySelectorAll('[data-requires-triada="true"]');
         
         this.unlockedCount = 0;
         this.totalCards = 3;
@@ -2538,6 +2539,7 @@ class TriadaGamification {
         this.updateProgress();
         this.bindEvents();
         this.checkExistingState();
+        this.lockSections();
     }
     
     bindEvents() {
@@ -2578,9 +2580,16 @@ class TriadaGamification {
         
         // Verificar se todos foram desbloqueados
         if (this.unlockedCount === this.totalCards) {
+            // Delay de 300ms para criar suspense
             setTimeout(() => {
                 this.showSuccessMessage();
-            }, 500);
+                this.unlockSections();
+                
+                // Delay adicional de 200ms para o som de vitória
+                setTimeout(() => {
+                    this.playVictorySound();
+                }, 200);
+            }, 300);
         }
     }
     
@@ -2643,11 +2652,83 @@ class TriadaGamification {
         
         this.updateProgress();
         
-        // Se todos estavam desbloqueados, mostrar mensagem de sucesso
+        // Se todos estavam desbloqueados, mostrar mensagem de sucesso e desbloquear seções
         if (this.unlockedCount === this.totalCards && this.successMessage) {
             this.successMessage.style.display = 'block';
+            this.unlockSections();
+        }
+    }
+    
+    lockSections() {
+        this.lockedSections.forEach(section => {
+            section.classList.add('section-locked');
+            section.addEventListener('click', this.showWarningModal.bind(this));
+        });
+    }
+    
+    unlockSections() {
+        this.lockedSections.forEach(section => {
+            section.classList.remove('section-locked');
+            section.removeEventListener('click', this.showWarningModal.bind(this));
+        });
+    }
+    
+    showWarningModal(e) {
+        e.preventDefault();
+        e.stopPropagation();
+        
+        const modal = document.getElementById('triadaWarningModal');
+        const backdrop = document.getElementById('warningBackdrop');
+        
+        backdrop.classList.add('show');
+        modal.classList.add('show');
+        
+        // Scroll para a tríade
+        document.querySelector('.triada-gamification').scrollIntoView({ 
+            behavior: 'smooth', 
+            block: 'center' 
+        });
+    }
+    
+    playVictorySound() {
+        try {
+            const audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            const oscillator = audioContext.createOscillator();
+            const gainNode = audioContext.createGain();
+            
+            oscillator.connect(gainNode);
+            gainNode.connect(audioContext.destination);
+            
+            // Som mais agudo para vitória (1200Hz)
+            oscillator.frequency.value = 1200;
+            oscillator.type = 'sine';
+            
+            gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            
+            oscillator.start(audioContext.currentTime);
+            oscillator.stop(audioContext.currentTime + 0.15);
+        } catch (error) {
+            console.log('Som de vitória não disponível');
         }
     }
 }
+
+// Função global para fechar modal de aviso
+function closeWarningModal() {
+    const modal = document.getElementById('triadaWarningModal');
+    const backdrop = document.getElementById('warningBackdrop');
+    
+    modal.classList.remove('show');
+    backdrop.classList.remove('show');
+}
+
+// Fechar modal ao clicar no backdrop
+document.addEventListener('DOMContentLoaded', function() {
+    const backdrop = document.getElementById('warningBackdrop');
+    if (backdrop) {
+        backdrop.addEventListener('click', closeWarningModal);
+    }
+});
 
 // Inicialização já feita acima - removendo duplicação

@@ -258,7 +258,7 @@
 
             <!-- SEÇÕES FORA DO WRAPPER PARA LARGURA TOTAL -->
             <!-- 1. NICHO - Largura Total -->
-            <div class="canvas-section full-width">
+            <div class="canvas-section full-width" data-requires-triada="true">
                     <h2>1. NICHO</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione o nicho que você vai focar:</p>
                     
@@ -388,7 +388,7 @@
                 </div>
 
                 <!-- 2. DORES - Largura Total -->
-                <div class="canvas-section full-width">
+                <div class="canvas-section full-width" data-requires-triada="true">
                     <h2>2. DORES PRINCIPAIS</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione as principais dores que o marketing digital resolve:</p>
                     
@@ -469,7 +469,7 @@
                 </div>
 
                 <!-- 3. CAPACIDADE FINANCEIRA - Largura Total -->
-                <div class="canvas-section full-width">
+                <div class="canvas-section full-width" data-requires-triada="true">
                     <h2>3. CAPACIDADE FINANCEIRA</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Responda sobre a estrutura do seu ICP para calcular a capacidade financeira:</p>
                     
@@ -543,7 +543,7 @@
                 </div>
 
                 <!-- 4. ACESSO AO DECISOR - Largura Total -->
-                <div class="canvas-section full-width">
+                <div class="canvas-section full-width" data-requires-triada="true">
                     <h2>4. ACESSO AO DECISOR</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione os canais para encontrar e contatar o tomador de decisão:</p>
                     
@@ -598,7 +598,7 @@
                 </div>
 
                 <!-- 5. ENTREGÁVEIS (SERVIÇOS) - Largura Total -->
-                <div class="canvas-section full-width">
+                <div class="canvas-section full-width" data-requires-triada="true">
                     <h2>5. ENTREGÁVEIS (SERVIÇOS)</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione os serviços que você oferece:</p>
                     
@@ -686,7 +686,7 @@
                 </div>
 
                 <!-- 6. CALCULADORA DE PRECIFICAÇÃO - Largura Total -->
-                <div class="canvas-section full-width">
+                <div class="canvas-section full-width" data-requires-triada="true">
                     <h2>6. CALCULADORA DE PRECIFICAÇÃO</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Precificação inteligente baseada na capacidade financeira do seu nicho</p>
                     
@@ -950,7 +950,7 @@
                             </div>
                         </div>
                         
-                        <div class="resumo-item resumo-download">
+                        <div class="resumo-item resumo-download" data-requires-triada="true">
                             <h4>💾 EXPORTAR CANVAS:</h4>
                             <div class="resumo-content">
                                 <p style="margin-bottom: 20px; font-size: 0.9em;">Baixe seu canvas em formatos estratégicos:</p>
@@ -1111,6 +1111,15 @@
                 🔄 Resetar Canvas
             </button>
         </div>
+    </div>
+
+    <!-- Modal de Aviso da Tríade -->
+    <div class="modal-backdrop" id="warningBackdrop"></div>
+    <div class="triada-warning-modal" id="triadaWarningModal">
+        <div class="warning-modal-icon">⚠️</div>
+        <h3 class="warning-modal-title">Valide a Tríade Primeiro!</h3>
+        <p class="warning-modal-text">Você precisa validar os 3 pilares da Tríade do Nicho antes de acessar esta seção.</p>
+        <button class="warning-modal-button" onclick="closeWarningModal()">Entendi</button>
     </div>
 
     

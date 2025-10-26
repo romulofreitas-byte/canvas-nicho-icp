@@ -450,6 +450,27 @@
                             </label>
                         </div>
                         <div class="dor-card">
+                            <input type="checkbox" id="dor9" name="dores" value="falta-autoridade">
+                            <label for="dor9">
+                                <span class="card-icon">🎯</span>
+                                <span class="card-title">Falta de autoridade no mercado</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor10" name="dores" value="processos-comerciais">
+                            <label for="dor10">
+                                <span class="card-icon">📊</span>
+                                <span class="card-title">Processos comerciais desorganizados</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
+                            <input type="checkbox" id="dor11" name="dores" value="dificuldade-precificar">
+                            <label for="dor11">
+                                <span class="card-icon">💰</span>
+                                <span class="card-title">Dificuldade em precificar serviços</span>
+                            </label>
+                        </div>
+                        <div class="dor-card">
                             <input type="checkbox" id="dorOutro" name="dores" value="outra">
                             <label for="dorOutro">
                                 <span class="card-icon">➕</span>
@@ -547,38 +568,48 @@
                     <h2>4. ACESSO AO DECISOR</h2>
                     <p style="font-size: 0.9em; color: #666; margin-bottom: 15px;">Selecione os canais para encontrar e contatar o tomador de decisão:</p>
                     
-                    <div class="canais-grid">
-                        <div class="canal-item canal-destaque">
-                            <input type="checkbox" id="canal7" name="canais" value="cold-call">
-                            <label for="canal7">📞 Cold Call / Prospecção Ativa</label>
+                    <div class="canais-grid-cards">
+                        <div class="canal-card active" data-canal="cold-call">
+                            <div class="canal-icon">📞</div>
+                            <h4>Cold Call</h4>
+                            <p>Ligação direta para o decisor</p>
+                            <div class="canal-badge">Recomendado</div>
+                            <input type="checkbox" id="canal-cold-call" name="canais" value="Cold Call" checked style="display: none;">
                         </div>
-                        <div class="canal-item">
-                            <input type="checkbox" id="canal1" name="canais" value="google-maps">
-                            <label for="canal1">🗺️ Google Maps / Google Meu Negócio</label>
+                        
+                        <div class="canal-card" data-canal="whatsapp">
+                            <div class="canal-icon">💬</div>
+                            <h4>Prospecção via WhatsApp</h4>
+                            <p>Mensagens diretas personalizadas</p>
+                            <input type="checkbox" id="canal-whatsapp" name="canais" value="WhatsApp" style="display: none;">
                         </div>
-                        <div class="canal-item">
-                            <input type="checkbox" id="canal2" name="canais" value="linkedin">
-                            <label for="canal2">💼 LinkedIn (B2B)</label>
+                        
+                        <div class="canal-card" data-canal="linkedin">
+                            <div class="canal-icon">💼</div>
+                            <h4>LinkedIn</h4>
+                            <p>Networking profissional</p>
+                            <input type="checkbox" id="canal-linkedin" name="canais" value="LinkedIn" style="display: none;">
                         </div>
-                        <div class="canal-item">
-                            <input type="checkbox" id="canal3" name="canais" value="instagram-facebook">
-                            <label for="canal3">📱 Instagram / Facebook (B2C)</label>
+                        
+                        <div class="canal-card" data-canal="email">
+                            <div class="canal-icon">📧</div>
+                            <h4>E-mail</h4>
+                            <p>Comunicação formal e estruturada</p>
+                            <input type="checkbox" id="canal-email" name="canais" value="E-mail" style="display: none;">
                         </div>
-                        <div class="canal-item">
-                            <input type="checkbox" id="canal4" name="canais" value="portais-classe">
-                            <label for="canal4">🏛️ Portais de Classe (OAB, CREA, CRM, CRO)</label>
+                        
+                        <div class="canal-card" data-canal="eventos">
+                            <div class="canal-icon">🎤</div>
+                            <h4>Eventos e Networking</h4>
+                            <p>Encontros presenciais</p>
+                            <input type="checkbox" id="canal-eventos" name="canais" value="Eventos" style="display: none;">
                         </div>
-                        <div class="canal-item">
-                            <input type="checkbox" id="canal5" name="canais" value="indicacao">
-                            <label for="canal5">🤝 Indicação / Networking</label>
-                        </div>
-                        <div class="canal-item">
-                            <input type="checkbox" id="canal6" name="canais" value="eventos">
-                            <label for="canal6">🎪 Eventos / Feiras do Setor</label>
-                        </div>
-                        <div class="canal-item">
-                            <input type="checkbox" id="canal8" name="canais" value="anuncios-pagos">
-                            <label for="canal8">💰 Anúncios Pagos</label>
+                        
+                        <div class="canal-card" data-canal="indicacao">
+                            <div class="canal-icon">🤝</div>
+                            <h4>Indicações</h4>
+                            <p>Referências de clientes atuais</p>
+                            <input type="checkbox" id="canal-indicacao" name="canais" value="Indicações" style="display: none;">
                         </div>
                     </div>
                     
@@ -896,6 +927,41 @@
                                 <h4>Múltiplos Fatores</h4>
                             <p>Experiência, portfólio e urgência influenciam</p>
                             </div>
+                    </div>
+                </div>
+
+                <!-- CTA MUNDO PÓDIUM -->
+                <div class="canvas-section full-width mundo-podium-cta">
+                    <div class="cta-content">
+                        <div class="cta-icon">🏁</div>
+                        <h2>Quer Dominar o Método Pódium Completo?</h2>
+                        <p>Aprenda a vender como empresário, precificar estrategicamente e fechar contratos de alto valor com a Escuderia Pódium</p>
+                        
+                        <div class="cta-features">
+                            <div class="cta-feature">
+                                <span class="feature-icon">✓</span>
+                                <span>Mentoria em Grupo</span>
+                            </div>
+                            <div class="cta-feature">
+                                <span class="feature-icon">✓</span>
+                                <span>Método Completo</span>
+                            </div>
+                            <div class="cta-feature">
+                                <span class="feature-icon">✓</span>
+                                <span>Agente Pódium IA</span>
+                            </div>
+                            <div class="cta-feature">
+                                <span class="feature-icon">✓</span>
+                                <span>Sala de Ligação</span>
+                            </div>
+                        </div>
+                        
+                        <a href="https://www.mundopodium.com.br/" target="_blank" class="btn-mundo-podium">
+                            Conhecer a Escuderia Pódium
+                            <span class="btn-arrow">→</span>
+                        </a>
+                        
+                        <p class="cta-disclaimer">Transforme-se de freelancer para empresário em 6 semanas</p>
                     </div>
                 </div>
 

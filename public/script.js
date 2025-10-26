@@ -976,6 +976,9 @@ document.addEventListener('DOMContentLoaded', () => {
         window.triadaGamification = new TriadaGamification();
         console.log('✅ TriadaGamification criado:', !!window.triadaGamification);
         
+        // Melhorar UX - Clique em toda área do card
+        initCardClicks();
+        
         console.log('🎉 Inicialização completa!');
     } catch (error) {
         console.error('❌ Erro durante inicialização:', error);
@@ -2716,6 +2719,98 @@ class TriadaGamification {
             console.log('Som de vitória não disponível');
         }
     }
+}
+
+// Função para melhorar UX - Clique em toda área do card
+function initCardClicks() {
+    console.log('🎯 Inicializando cliques em cards...');
+    
+    // Cards de nicho
+    document.querySelectorAll('.nicho-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+    
+    // Cards de dores
+    document.querySelectorAll('.dor-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+    
+    // Cards de canais (novo layout)
+    document.querySelectorAll('.canal-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                
+                // Atualizar visual do card
+                if (checkbox.checked) {
+                    this.classList.add('active');
+                } else {
+                    this.classList.remove('active');
+                }
+            }
+        });
+    });
+    
+    // Items de canal (layout antigo)
+    document.querySelectorAll('.canal-item').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+    
+    // Cards de serviços
+    document.querySelectorAll('.servico-item').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+    
+    // Cards de pacotes
+    document.querySelectorAll('.pacote-card').forEach(card => {
+        card.style.cursor = 'pointer';
+        card.addEventListener('click', function(e) {
+            e.preventDefault();
+            const checkbox = this.querySelector('input[type="checkbox"]');
+            if (checkbox) {
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            }
+        });
+    });
+    
+    console.log('✅ Cliques em cards inicializados!');
 }
 
 // Inicialização já feita acima - removendo duplicação

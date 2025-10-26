@@ -889,48 +889,6 @@ function resetarCanvas() {
     }
 }
 
-// Melhorar usabilidade de clique nos cards
-function melhorarUsabilidadeCards() {
-    // Acesso ao Decisor - Canais
-    document.querySelectorAll('.canal-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Não processar se já clicou no checkbox ou label
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
-                return;
-            }
-            
-            // Encontrar o checkbox dentro do item
-            const checkbox = this.querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                
-                // Disparar evento change para atualizar automações
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-        });
-    });
-    
-    // Entregáveis - Serviços (simplificado sem inputs)
-    document.querySelectorAll('.servico-item').forEach(item => {
-        item.addEventListener('click', function(e) {
-            // Não processar se já clicou no checkbox ou label
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL' || e.target.closest('label')) {
-                return;
-            }
-            
-            // Encontrar o checkbox dentro do item
-            const checkbox = this.querySelector('input[type="checkbox"]');
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                
-                // Disparar evento change para atualizar automações
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
-            }
-        });
-    });
-    
-    console.log('✅ Usabilidade de clique melhorada nos cards');
-}
 
 // ========================================
 // INICIALIZAÇÃO
@@ -975,9 +933,6 @@ document.addEventListener('DOMContentLoaded', () => {
         console.log('🔧 Criando TriadaGamification...');
         window.triadaGamification = new TriadaGamification();
         console.log('✅ TriadaGamification criado:', !!window.triadaGamification);
-        
-        // Melhorar UX - Clique em toda área do card
-        initCardClicks();
         
         console.log('🎉 Inicialização completa!');
     } catch (error) {
@@ -1029,10 +984,10 @@ function liberarCanvas() {
             window.canvasAutomatizado = new CanvasAutomatizado();
             console.log('✅ CanvasAutomatizado criado:', !!window.canvasAutomatizado);
             
-            // Melhorar usabilidade após canvas estar pronto
-            setTimeout(() => {
-                melhorarUsabilidadeCards();
-            }, 100);
+            // Inicializar cliques em cards APÓS canvas estar pronto
+            console.log('🔧 Inicializando cliques em cards...');
+            initCardClicks();
+            console.log('✅ Cliques em cards inicializados');
             
             console.log('✅ Canvas inicializado com sucesso!');
         } catch (error) {
@@ -1164,8 +1119,9 @@ class CanvasAutomatizado {
     }
     
     updateNichoResumo() {
-        console.log('🔧 updateNichoResumo: Iniciando...');
+        console.log('🔧 updateNichoResumo: CHAMADO!');
         const selecionado = document.querySelector('input[name="nicho"]:checked');
+        console.log('🔧 updateNichoResumo: Nicho encontrado:', selecionado?.value);
         const customDiv = document.querySelector('.nicho-custom');
         const resumoTexto = document.getElementById('nichoSelecionadoTexto');
         
@@ -1420,7 +1376,7 @@ class CanvasAutomatizado {
     }
     
     calcularPrecificacao() {
-        console.log('🔧 calcularPrecificacao: Iniciando...');
+        console.log('🔧 calcularPrecificacao: CHAMADO!');
         console.log('🔧 calcularPrecificacao: Capacidade financeira:', this.capacidadeFinanceira);
         
         if (!this.capacidadeFinanceira) {

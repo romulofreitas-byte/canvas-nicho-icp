@@ -2516,10 +2516,10 @@ class TriadaGamification {
             setTimeout(() => {
                 this.showSuccessMessage();
                 
-                // Delay adicional de 500ms para o som de vitória (mais dramático)
+                // Delay adicional de 1000ms para o som de vitória (mais dramático)
                 setTimeout(() => {
                     this.playVictorySound();
-                }, 500);
+                }, 1000);
             }, 300);
         }
     }

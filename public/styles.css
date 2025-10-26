@@ -635,7 +635,7 @@ body {
     box-sizing: border-box; /* ADICIONADO */
     
     /* Estilo premium */
-    padding: 28px;
+    padding: 24px; /* Reduzido de 28px */
     border-radius: 20px;
     border: 1px solid rgba(242, 183, 5, 0.3);
     box-shadow: 
@@ -649,7 +649,7 @@ body {
 .lead-modal-logo {
     display: flex;
     justify-content: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px; /* Reduzido de 20px */
 }
 
 .lead-modal-logo img {
@@ -660,15 +660,15 @@ body {
 
 .lead-modal-header {
     text-align: center;
-    margin-bottom: 20px;
+    margin-bottom: 16px; /* Reduzido de 20px */
     border-bottom: 2px solid var(--podium-yellow);
-    padding-bottom: 15px;
+    padding-bottom: 12px; /* Reduzido de 15px */
 }
 
 .lead-modal-header h2 {
     font-family: var(--font-ubuntu);
     color: var(--podium-text-primary);
-    font-size: 1.4rem; /* Reduzido de 22px */
+    font-size: 1.2rem; /* Reduzido de 1.4rem */
     margin-bottom: 8px;
     font-weight: 700;
 }

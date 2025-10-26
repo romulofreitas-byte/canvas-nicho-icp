@@ -2528,6 +2528,11 @@ class TriadaGamification {
         this.progressText = document.querySelector('.progress-text');
         this.successMessage = document.querySelector('.triada-success-message');
         this.lockedSections = document.querySelectorAll('[data-requires-triada="true"]');
+        this.scrollLockOverlay = document.getElementById('scrollLockOverlay');
+        this.scrollAlertCard = document.getElementById('scrollAlertCard');
+        this.scrollAlertTimeout = null;
+        this.isScrollLocked = true;
+        this.triadaSection = document.querySelector('.triada-gamification');
         
         this.unlockedCount = 0;
         this.totalCards = 3;
@@ -2540,6 +2545,7 @@ class TriadaGamification {
         this.bindEvents();
         this.checkExistingState();
         this.lockSections();
+        this.initScrollLock();
     }
     
     bindEvents() {
@@ -2584,6 +2590,7 @@ class TriadaGamification {
             setTimeout(() => {
                 this.showSuccessMessage();
                 this.unlockSections();
+                this.disableScrollLock(); // Desbloquear scroll
                 
                 // Delay adicional de 500ms para o som de vitória (mais dramático)
                 setTimeout(() => {
@@ -2604,7 +2611,7 @@ class TriadaGamification {
         
         // Atualizar texto
         if (this.progressText) {
-            this.progressText.textContent = `${this.unlockedCount}/${this.totalCards} Validados`;
+            this.progressText.textContent = `${this.unlockedCount}/${this.totalCards} Pilares Validados`;
         }
     }
     
@@ -2652,10 +2659,11 @@ class TriadaGamification {
         
         this.updateProgress();
         
-        // Se todos estavam desbloqueados, mostrar mensagem de sucesso e desbloquear seções
+        // Se todos estavam desbloqueados, mostrar mensagem de sucesso e desbloquear
         if (this.unlockedCount === this.totalCards && this.successMessage) {
             this.successMessage.style.display = 'block';
             this.unlockSections();
+            this.disableScrollLock(); // Desbloquear scroll
         }
     }
     
@@ -2711,6 +2719,109 @@ class TriadaGamification {
         } catch (error) {
             console.log('Som de vitória não disponível');
         }
+    }
+    
+    initScrollLock() {
+        if (this.unlockedCount < this.totalCards) {
+            this.enableScrollLock();
+        }
+    }
+    
+    enableScrollLock() {
+        this.isScrollLocked = true;
+        
+        // Mostrar overlay
+        if (this.scrollLockOverlay) {
+            this.scrollLockOverlay.classList.remove('hidden');
+        }
+        
+        // Detectar tentativa de scroll
+        this.wheelHandler = this.handleScrollAttempt.bind(this);
+        this.touchHandler = this.handleScrollAttempt.bind(this);
+        this.keyHandler = this.handleKeyScroll.bind(this);
+        this.clickHandler = this.showScrollAlert.bind(this);
+        
+        window.addEventListener('wheel', this.wheelHandler, { passive: false });
+        window.addEventListener('touchmove', this.touchHandler, { passive: false });
+        window.addEventListener('keydown', this.keyHandler);
+        
+        // Click no overlay também mostra alerta
+        if (this.scrollLockOverlay) {
+            this.scrollLockOverlay.addEventListener('click', this.clickHandler);
+        }
+    }
+    
+    disableScrollLock() {
+        this.isScrollLocked = false;
+        
+        // Esconder overlay
+        if (this.scrollLockOverlay) {
+            this.scrollLockOverlay.classList.add('hidden');
+        }
+        
+        // Remover event listeners
+        if (this.wheelHandler) {
+            window.removeEventListener('wheel', this.wheelHandler);
+        }
+        if (this.touchHandler) {
+            window.removeEventListener('touchmove', this.touchHandler);
+        }
+        if (this.keyHandler) {
+            window.removeEventListener('keydown', this.keyHandler);
+        }
+        if (this.clickHandler && this.scrollLockOverlay) {
+            this.scrollLockOverlay.removeEventListener('click', this.clickHandler);
+        }
+    }
+    
+    handleScrollAttempt(e) {
+        if (!this.isScrollLocked) return;
+        
+        // Verificar se está tentando rolar para baixo da Tríade
+        const triadaBottom = this.triadaSection ? this.triadaSection.getBoundingClientRect().bottom : 0;
+        
+        if (window.scrollY > 100 || triadaBottom < window.innerHeight) {
+            e.preventDefault();
+            e.stopPropagation();
+            this.showScrollAlert();
+            
+            // Scroll suave de volta para a Tríade
+            if (this.triadaSection) {
+                this.triadaSection.scrollIntoView({ 
+                    behavior: 'smooth', 
+                    block: 'center' 
+                });
+            }
+        }
+    }
+    
+    handleKeyScroll(e) {
+        if (!this.isScrollLocked) return;
+        
+        // Bloquear teclas de scroll (setas, page down, space, end)
+        const scrollKeys = ['ArrowDown', 'PageDown', 'Space', 'End'];
+        
+        if (scrollKeys.includes(e.code)) {
+            e.preventDefault();
+            this.showScrollAlert();
+        }
+    }
+    
+    showScrollAlert() {
+        if (!this.scrollAlertCard) return;
+        
+        // Limpar timeout anterior
+        if (this.scrollAlertTimeout) {
+            clearTimeout(this.scrollAlertTimeout);
+        }
+        
+        // Mostrar card
+        this.scrollAlertCard.classList.add('show');
+        
+        // Esconder após 3 segundos
+        this.scrollAlertTimeout = setTimeout(() => {
+            this.scrollAlertCard.classList.remove('show');
+        }, 3000);
     }
 }
 

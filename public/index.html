@@ -84,12 +84,12 @@
             <div class="canvas-wrapper">
                 <!-- TRÍADE DO NICHO - GAMIFICADA -->
                 <div class="canvas-section triada-gamification">
-                    <h2>🎯 A TRÍADE DO NICHO - Validação Fundamental</h2>
-                    <p class="triada-subtitle">Clique em cada card para validar. Desbloqueie os 3 para acessar a calculadora!</p>
+            <h2>🏁 A TRÍADE DO NICHO - Sua Pole Position</h2>
+            <p class="triada-subtitle">Valide os 3 pilares fundamentais para liberar sua pista de sucesso</p>
                     
                     <div class="triada-progress-bar">
                         <div class="progress-fill" data-progress="0"></div>
-                        <span class="progress-text">0/3 Validados</span>
+                        <span class="progress-text">0/3 Pilares Validados</span>
                     </div>
                     
                     <div class="triada-info-premium triada-grid-gamified">
@@ -166,11 +166,11 @@
                         </div>
                     </div>
                     
-                    <div class="triada-success-message" style="display: none;">
-                        <div class="success-icon">🎉</div>
-                        <h3>Parabéns! Tríade Validada</h3>
-                        <p>Você desbloqueou a calculadora de precificação! Continue preenchendo o canvas.</p>
-                    </div>
+            <div class="triada-success-message" style="display: none;">
+                <div class="success-icon">🏁</div>
+                <h3>Sinal Verde! Pista Liberada</h3>
+                <p>Você validou os 3 pilares fundamentais. Agora é acelerar rumo ao pódium!</p>
+            </div>
                 </div>
 
                 <!-- SEÇÃO DE INSTRUÇÕES SOBRE ICP -->
@@ -1116,11 +1116,23 @@
     <!-- Modal de Aviso da Tríade -->
     <div class="modal-backdrop" id="warningBackdrop"></div>
     <div class="triada-warning-modal" id="triadaWarningModal">
-        <div class="warning-modal-icon">⚠️</div>
+        <div class="warning-modal-icon">🏁</div>
         <h3 class="warning-modal-title">Valide a Tríade Primeiro!</h3>
-        <p class="warning-modal-text">Você precisa validar os 3 pilares da Tríade do Nicho antes de acessar esta seção.</p>
+        <p class="warning-modal-text">Complete os 3 pilares fundamentais para liberar esta seção e acelerar no Método Pódium.</p>
         <button class="warning-modal-button" onclick="closeWarningModal()">Entendi</button>
     </div>
+
+    <!-- Card de Alerta de Scroll -->
+    <div class="scroll-alert-card" id="scrollAlertCard">
+        <div class="scroll-alert-icon">🏁</div>
+        <div class="scroll-alert-content">
+            <div class="scroll-alert-title">Pista Bloqueada!</div>
+            <p class="scroll-alert-text">Valide os 3 pilares da Tríade para liberar o acesso</p>
+        </div>
+    </div>
+
+    <!-- Overlay de Bloqueio de Scroll -->
+    <div class="scroll-lock-overlay" id="scrollLockOverlay"></div>
 
     
     <script src="config.js?v=20250124"></script>

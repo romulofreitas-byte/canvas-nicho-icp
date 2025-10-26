@@ -3501,6 +3501,7 @@ body {
     position: relative;
     filter: grayscale(0.3);
     transition: all 0.3s ease;
+    z-index: 1; /* Garantir que fique atrás do overlay */
 }
 
 .section-locked::after {
@@ -3590,6 +3591,96 @@ body {
 .modal-backdrop.show {
     opacity: 1;
     pointer-events: auto;
+}
+
+/* Sistema de Bloqueio de Scroll */
+.scroll-lock-overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: rgba(0, 0, 0, 0.3);
+    backdrop-filter: blur(8px);
+    z-index: 9997;
+    pointer-events: auto;
+    opacity: 1;
+    transition: opacity 0.5s ease;
+}
+
+.scroll-lock-overlay.hidden {
+    opacity: 0;
+    pointer-events: none;
+}
+
+/* Card de alerta de scroll */
+.scroll-alert-card {
+    position: fixed;
+    bottom: 80px;
+    left: 50%;
+    transform: translateX(-50%) translateY(100px);
+    background: rgba(31, 41, 55, 0.98);
+    backdrop-filter: blur(20px);
+    padding: 20px 30px;
+    border-radius: 12px;
+    border: 2px solid var(--podium-yellow);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.8);
+    z-index: 9999;
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    max-width: 400px;
+    opacity: 0;
+    transition: all 0.4s cubic-bezier(0.68, -0.55, 0.265, 1.55);
+}
+
+.scroll-alert-card.show {
+    transform: translateX(-50%) translateY(0);
+    opacity: 1;
+}
+
+.scroll-alert-icon {
+    font-size: 2rem;
+    animation: bounce-subtle 1s ease-in-out infinite;
+}
+
+.scroll-alert-content {
+    flex: 1;
+}
+
+.scroll-alert-title {
+    font-family: var(--font-ubuntu);
+    color: var(--podium-yellow);
+    font-size: 1rem;
+    font-weight: 700;
+    margin-bottom: 4px;
+}
+
+.scroll-alert-text {
+    font-family: var(--font-montserrat);
+    color: var(--podium-text-secondary);
+    font-size: 0.85rem;
+    margin: 0;
+}
+
+@media (max-width: 768px) {
+    .scroll-alert-card {
+        bottom: 60px;
+        max-width: 90%;
+        padding: 16px 20px;
+    }
+    
+    .scroll-alert-icon {
+        font-size: 1.5rem;
+    }
+    
+    .scroll-alert-title {
+        font-size: 0.9rem;
+    }
+    
+    .scroll-alert-text {
+        font-size: 0.8rem;
+    }
 }
 
 /* Responsividade Premium Cards */

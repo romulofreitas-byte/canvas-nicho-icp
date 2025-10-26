@@ -2729,8 +2729,12 @@ function initCardClicks() {
     document.querySelectorAll('.nicho-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            e.preventDefault();
-            const checkbox = this.querySelector('input[type="checkbox"]');
+            // Não processar se clicou diretamente no input ou label
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+                return;
+            }
+            
+            const checkbox = this.querySelector('input[type="checkbox"], input[type="radio"]');
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;
                 checkbox.dispatchEvent(new Event('change', { bubbles: true }));
@@ -2742,7 +2746,11 @@ function initCardClicks() {
     document.querySelectorAll('.dor-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            e.preventDefault();
+            // Não processar se clicou diretamente no input ou label
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+                return;
+            }
+            
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;
@@ -2755,7 +2763,11 @@ function initCardClicks() {
     document.querySelectorAll('.canal-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            e.preventDefault();
+            // Não processar se clicou diretamente no input
+            if (e.target.tagName === 'INPUT') {
+                return;
+            }
+            
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;
@@ -2775,7 +2787,11 @@ function initCardClicks() {
     document.querySelectorAll('.canal-item').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            e.preventDefault();
+            // Não processar se clicou diretamente no input ou label
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+                return;
+            }
+            
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;
@@ -2788,7 +2804,11 @@ function initCardClicks() {
     document.querySelectorAll('.servico-item').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            e.preventDefault();
+            // Não processar se clicou diretamente no input ou label
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+                return;
+            }
+            
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;
@@ -2801,7 +2821,11 @@ function initCardClicks() {
     document.querySelectorAll('.pacote-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            e.preventDefault();
+            // Não processar se clicou diretamente no input ou label
+            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+                return;
+            }
+            
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
                 checkbox.checked = !checkbox.checked;

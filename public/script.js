@@ -1139,7 +1139,8 @@ class CanvasAutomatizado {
                 const custom = document.getElementById('canalCustom')?.value.trim();
                 if (custom) selecionados.push(custom);
             } else {
-                selecionados.push(this.canais[checkbox.value]);
+                // ✅ Usar o valor do input diretamente ao invés de buscar no objeto
+                selecionados.push(checkbox.value);
             }
         });
         

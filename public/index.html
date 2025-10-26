@@ -16,6 +16,11 @@
     <!-- Modal de Captura de Leads -->
     <div id="leadModal" class="lead-modal">
         <div class="lead-modal-content">
+            <!-- Logo do Método Pódium -->
+            <div class="lead-modal-logo">
+                <img src="logo-metodo.png" alt="Método Pódium">
+            </div>
+            
             <div class="lead-modal-header">
                 <h2>🎯 Acesse o Canvas de Nicho e ICP</h2>
                 <p>Preencha seus dados para acessar a ferramenta completa</p>
@@ -64,6 +69,11 @@
     <div class="container canvas-bloqueado">
         <!-- HEADER -->
         <div class="header">
+            <!-- Logo do Método Pódium -->
+            <div class="header-logo">
+                <img src="logo-metodo.png" alt="Método Pódium">
+            </div>
+            
             <h1>🏁 Canvas de Nicho e ICP - Calculadora de Precificação Inteligente</h1>
             <p>Método Pódium - Primeira Fase: Definição de Nicho, ICP e Precificação Baseada na Capacidade Financeira</p>
             
@@ -127,57 +137,79 @@
                 </div>
 
                 <!-- SEÇÃO DE INSTRUÇÕES SOBRE ICP -->
-                <div class="canvas-section icp-instructions">
-                    <h2>🎯 ENTENDENDO SEU ICP - Chave do Sucesso</h2>
-                    <div class="icp-warning">
-                        <div class="warning-content">
-                            <h3>⚠️ A escolha do ICP é CRÍTICA para seu sucesso!</h3>
-                            <p>Entender profundamente seu ICP determinará se você conseguirá resolver o problema deles de forma eficaz.</p>
-                        </div>
-                    </div>
+                <div class="canvas-section icp-instructions-premium">
+                    <h2>🎯 Entendendo seu ICP</h2>
+                    <p class="section-subtitle">Fatores críticos para o sucesso</p>
                     
-                    <div class="icp-factors">
-                        <div class="factor-box">
-                            <h4>🕐 ROTINA DO ICP</h4>
-                            <p>Quando seu ICP está mais disponível e receptivo:</p>
-                            <ul>
-                                <li>Horários de maior atividade</li>
-                                <li>Períodos de stress ou pressão</li>
-                                <li>Momentos de tomada de decisão</li>
-                            </ul>
+                    <div class="icp-accordion">
+                        <!-- Card 1: Rotina -->
+                        <div class="accordion-card" data-expanded="false">
+                            <div class="accordion-header">
+                                <div class="accordion-icon">🕐</div>
+                                <div class="accordion-title">
+                                    <h4>Rotina do ICP</h4>
+                                    <p class="accordion-hint">Quando abordar</p>
+                                </div>
+                                <div class="accordion-toggle">
+                                    <svg class="chevron" width="20" height="20" viewBox="0 0 20 20">
+                                        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <ul class="premium-list">
+                                    <li>Horários de maior atividade</li>
+                                    <li>Períodos de stress ou pressão</li>
+                                    <li>Momentos de tomada de decisão</li>
+                                </ul>
+                            </div>
                         </div>
                         
-                        <div class="factor-box">
-                            <h4>🛒 COMPORTAMENTO DE COMPRA</h4>
-                            <p>Como seu ICP pesquisa, avalia e decide:</p>
-                            <ul>
-                                <li>Onde busca informações</li>
-                                <li>Tempo para decidir</li>
-                                <li>Quem influencia na decisão</li>
-                                <li>Critérios de escolha</li>
-                            </ul>
+                        <!-- Card 2: Comportamento -->
+                        <div class="accordion-card" data-expanded="false">
+                            <div class="accordion-header">
+                                <div class="accordion-icon">🛒</div>
+                                <div class="accordion-title">
+                                    <h4>Comportamento de Compra</h4>
+                                    <p class="accordion-hint">Como decide</p>
+                                </div>
+                                <div class="accordion-toggle">
+                                    <svg class="chevron" width="20" height="20" viewBox="0 0 20 20">
+                                        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <ul class="premium-list">
+                                    <li>Onde busca informações</li>
+                                    <li>Tempo para decidir</li>
+                                    <li>Critérios de escolha</li>
+                                </ul>
+                            </div>
                         </div>
                         
-                        <div class="factor-box">
-                            <h4>🧠 PERFIL DO DECISOR</h4>
-                            <p>Estilo de comunicação ideal:</p>
-                            <ul>
-                                <li><strong>Objetivo:</strong> Direto, dados concretos, ROI claro</li>
-                                <li><strong>Analítico:</strong> Detalhes, processos, evidências</li>
-                                <li><strong>Relacional:</strong> Confiança, relacionamento, referências</li>
-                            </ul>
+                        <!-- Card 3: Perfil -->
+                        <div class="accordion-card" data-expanded="false">
+                            <div class="accordion-header">
+                                <div class="accordion-icon">🧠</div>
+                                <div class="accordion-title">
+                                    <h4>Perfil do Decisor</h4>
+                                    <p class="accordion-hint">Estilo de comunicação</p>
+                                </div>
+                                <div class="accordion-toggle">
+                                    <svg class="chevron" width="20" height="20" viewBox="0 0 20 20">
+                                        <path d="M5 7.5L10 12.5L15 7.5" stroke="currentColor" stroke-width="2" fill="none"/>
+                                    </svg>
+                                </div>
+                            </div>
+                            <div class="accordion-content">
+                                <ul class="premium-list">
+                                    <li><strong>Objetivo:</strong> Direto e ROI claro</li>
+                                    <li><strong>Analítico:</strong> Detalhes e evidências</li>
+                                    <li><strong>Relacional:</strong> Confiança e referências</li>
+                                </ul>
+                            </div>
                         </div>
-                    </div>
-                    
-                    <div class="icp-impact">
-                        <h4>💡 IMPACTO NO SEU SUCESSO</h4>
-                        <p>Entender esses fatores permite:</p>
-                        <ul>
-                            <li>Abordar no momento certo</li>
-                            <li>Usar a linguagem adequada</li>
-                            <li>Apresentar soluções no formato preferido</li>
-                            <li>Aumentar drasticamente as chances de conversão</li>
-                        </ul>
                     </div>
                 </div>
 
@@ -793,30 +825,40 @@
                 </div>
 
                 <!-- OBSERVAÇÕES IMPORTANTES SOBRE PRECIFICAÇÃO -->
-                <div class="observacoes-precificacao full-width">
-                    <div class="observacoes-container">
+                <div class="observacoes-precificacao-premium full-width">
+                    <div class="section-header-inline">
                         <h3>💡 Observações Importantes</h3>
-                        
-                        <div class="observacoes-grid">
-                            <div class="observacao-item">
-                                <div class="observacao-icon">📊</div>
-                                <h4>Precificação Sugerida</h4>
-                                <p>A precificação informada é uma <strong>sugestão</strong> baseada em análise de mercado.</p>
+                        <span class="badge-info">3 pontos-chave</span>
+                    </div>
+                    
+                    <div class="info-cards-grid">
+                        <div class="info-card">
+                            <div class="info-card-header">
+                                <span class="info-number">01</span>
+                                <span class="info-icon">📊</span>
                             </div>
-                            
-                            <div class="observacao-item">
-                                <div class="observacao-icon">🎯</div>
-                                <h4>ICP Determina o Preço</h4>
-                                <p>Seu <strong>ICP determina uma melhor precificação</strong>. Quanto melhor você conhece seu cliente ideal, mais assertivo será o valor.</p>
-                            </div>
-                            
-                            <div class="observacao-item">
-                                <div class="observacao-icon">⚙️</div>
-                                <h4>Múltiplos Fatores</h4>
-                                <p><strong>Outros fatores também podem influenciar</strong> a precificação: experiência, portfólio, urgência do cliente e concorrência.</p>
-                            </div>
+                            <h4>Precificação Sugerida</h4>
+                            <p>Baseada em análise de mercado</p>
                         </div>
                         
+                        <div class="info-card featured">
+                            <div class="info-card-header">
+                                <span class="info-number">02</span>
+                                <span class="info-icon">🎯</span>
+                            </div>
+                            <h4>ICP Determina o Preço</h4>
+                            <p>Quanto melhor você conhece seu cliente, mais assertivo o valor</p>
+                            <div class="featured-badge">Crítico</div>
+                        </div>
+                        
+                        <div class="info-card">
+                            <div class="info-card-header">
+                                <span class="info-number">03</span>
+                                <span class="info-icon">⚙️</span>
+                            </div>
+                            <h4>Múltiplos Fatores</h4>
+                            <p>Experiência, portfólio e urgência influenciam</p>
+                        </div>
                     </div>
                 </div>
 
@@ -933,42 +975,74 @@
                 </div>
 
                 <!-- SEÇÃO DE ANÁLISE -->
-                <div class="analise-section full-width">
-                    <h3>✓ CHECKLIST DE VALIDAÇÃO</h3>
-                    <p style="margin-bottom: 20px; color: #666;">Antes de começar a prospectar, valide esses pontos:</p>
+                <div class="checklist-validation-premium full-width">
+                    <div class="checklist-header">
+                        <div class="checklist-title-group">
+                            <h3>✓ Checklist de Validação</h3>
+                            <div class="progress-indicator">
+                                <span class="progress-count">0/8</span>
+                                <span class="progress-label">completos</span>
+                            </div>
+                        </div>
+                        <div class="progress-bar-container">
+                            <div class="progress-bar-fill" style="width: 0%"></div>
+                        </div>
+                    </div>
                     
-                    <div class="checklist">
-                        <div class="checklist-item">
+                    <div class="checklist-premium">
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check1" name="check1">
-                            <label for="check1">Tríade do nicho validada (3/3)</label>
-                        </div>
-                        <div class="checklist-item">
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Tríade do nicho validada</span>
+                        </label>
+                        
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check2" name="check2">
-                            <label for="check2">Nicho específico e bem definido</label>
-                        </div>
-                        <div class="checklist-item">
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Nicho específico e bem definido</span>
+                        </label>
+                        
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check3" name="check3">
-                            <label for="check3">Dores do mercado claramente identificadas</label>
-                        </div>
-                        <div class="checklist-item">
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Dores do mercado identificadas</span>
+                        </label>
+                        
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check4" name="check4">
-                            <label for="check4">Capacidade financeira validada</label>
-                        </div>
-                        <div class="checklist-item">
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Capacidade financeira validada</span>
+                        </label>
+                        
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check5" name="check5">
-                            <label for="check5">Acesso ao decisor confirmado</label>
-                        </div>
-                        <div class="checklist-item">
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Acesso ao decisor confirmado</span>
+                        </label>
+                        
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check6" name="check6">
-                            <label for="check6">Serviços selecionados e bem definidos</label>
-                        </div>
-                        <div class="checklist-item">
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Serviços selecionados e definidos</span>
+                        </label>
+                        
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check7" name="check7">
-                            <label for="check7">Precificação calculada baseada na capacidade financeira</label>
-                        </div>
-                        <div class="checklist-item">
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Precificação calculada</span>
+                        </label>
+                        
+                        <label class="checklist-item-premium">
                             <input type="checkbox" id="check8" name="check8">
-                            <label for="check8">Pronto para começar a prospectar</label>
+                            <div class="checkbox-custom"></div>
+                            <span class="checklist-text">Pronto para prospectar</span>
+                        </label>
+                    </div>
+                    
+                    <div class="checklist-footer">
+                        <div class="completion-message" style="display: none;">
+                            <span class="completion-icon">🎉</span>
+                            <span class="completion-text">Parabéns! Todos os pontos validados</span>
                         </div>
                     </div>
                 </div>

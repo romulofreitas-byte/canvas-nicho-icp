@@ -2458,4 +2458,59 @@ function exportarJSON() {
     }
 }
 
+// ========================================
+// CARDS PREMIUM - FUNCIONALIDADES INTERATIVAS
+// ========================================
+
+// Accordion functionality para ICP Instructions
+document.addEventListener('DOMContentLoaded', function() {
+    // Accordion functionality
+    document.querySelectorAll('.accordion-header').forEach(header => {
+        header.addEventListener('click', () => {
+            const card = header.parentElement;
+            const isExpanded = card.getAttribute('data-expanded') === 'true';
+            
+            // Close all other cards
+            document.querySelectorAll('.accordion-card').forEach(c => {
+                c.setAttribute('data-expanded', 'false');
+            });
+            
+            // Toggle current card
+            card.setAttribute('data-expanded', !isExpanded);
+        });
+    });
+
+    // Checklist progress tracker
+    const checkboxes = document.querySelectorAll('.checklist-item-premium input[type="checkbox"]');
+    const progressBar = document.querySelector('.progress-bar-fill');
+    const progressCount = document.querySelector('.progress-count');
+    const completionMessage = document.querySelector('.completion-message');
+
+    function updateProgress() {
+        const total = checkboxes.length;
+        const checked = Array.from(checkboxes).filter(cb => cb.checked).length;
+        const percentage = (checked / total) * 100;
+        
+        if (progressBar && progressCount) {
+            progressBar.style.width = `${percentage}%`;
+            progressCount.textContent = `${checked}/${total}`;
+        }
+        
+        if (completionMessage) {
+            if (checked === total) {
+                completionMessage.style.display = 'flex';
+            } else {
+                completionMessage.style.display = 'none';
+            }
+        }
+    }
+
+    checkboxes.forEach(checkbox => {
+        checkbox.addEventListener('change', updateProgress);
+    });
+
+    // Initialize progress on page load
+    updateProgress();
+});
+
 // Inicialização já feita acima - removendo duplicação

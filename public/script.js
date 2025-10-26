@@ -780,7 +780,7 @@ class CanvasNichoICP {
                 }
                 
                 // Atualizar interface após carregar dados
-                this.validarTriada();
+                this.updateAllSelections();
                 
                 // Forçar atualização de todas as automações
                 if (window.canvasAutomatizado) {
@@ -799,7 +799,7 @@ class CanvasNichoICP {
         if (confirm('⚠️ Tem certeza que deseja limpar todos os dados?\n\nEssa ação não pode ser desfeita.')) {
             localStorage.removeItem('canvasNichoICP');
             this.form.reset();
-            this.validarTriada();
+            this.updateAllSelections();
             alert('✅ Todos os dados foram limpos.');
             
             // Track analytics
@@ -839,7 +839,7 @@ function resetarCanvas() {
         // Resetar formulário se canvas existir
         if (window.canvas && window.canvas.form) {
             window.canvas.form.reset();
-            window.canvas.validarTriada();
+            window.canvas.updateAllSelections();
         }
         
         // Scroll suave para o topo

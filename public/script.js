@@ -2585,10 +2585,10 @@ class TriadaGamification {
                 this.showSuccessMessage();
                 this.unlockSections();
                 
-                // Delay adicional de 200ms para o som de vitória
+                // Delay adicional de 500ms para o som de vitória (mais dramático)
                 setTimeout(() => {
                     this.playVictorySound();
-                }, 200);
+                }, 500);
             }, 300);
         }
     }
@@ -2704,10 +2704,10 @@ class TriadaGamification {
             oscillator.type = 'sine';
             
             gainNode.gain.setValueAtTime(0.4, audioContext.currentTime);
-            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.15);
+            gainNode.gain.exponentialRampToValueAtTime(0.01, audioContext.currentTime + 0.4);
             
             oscillator.start(audioContext.currentTime);
-            oscillator.stop(audioContext.currentTime + 0.15);
+            oscillator.stop(audioContext.currentTime + 0.4);
         } catch (error) {
             console.log('Som de vitória não disponível');
         }

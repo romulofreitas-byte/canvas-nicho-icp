@@ -2527,15 +2527,9 @@ class TriadaGamification {
         this.progressFill = document.querySelector('.progress-fill');
         this.progressText = document.querySelector('.progress-text');
         this.successMessage = document.querySelector('.triada-success-message');
-        this.lockedSections = document.querySelectorAll('[data-requires-triada="true"]');
-        this.scrollLockOverlay = document.getElementById('scrollLockOverlay');
         this.scrollAlertCard = document.getElementById('scrollAlertCard');
         this.scrollAlertTimeout = null;
-        this.isScrollLocked = true;
-        this.triadaSection = document.querySelector('.triada-gamification');
-        
-        // Armazenar referência da função para poder remover o listener depois
-        this.boundShowWarningModal = this.showWarningModal.bind(this);
+        this.nichoSection = document.querySelector('.canvas-section.full-width');
         
         this.unlockedCount = 0;
         this.totalCards = 3;
@@ -2547,8 +2541,7 @@ class TriadaGamification {
         this.updateProgress();
         this.bindEvents();
         this.checkExistingState();
-        this.lockSections();
-        this.initScrollLock();
+        this.initScrollDetection();
     }
     
     bindEvents() {
@@ -2592,8 +2585,6 @@ class TriadaGamification {
             // Delay de 300ms para criar suspense
             setTimeout(() => {
                 this.showSuccessMessage();
-                this.unlockSections();
-                this.disableScrollLock(); // Desbloquear scroll
                 
                 // Delay adicional de 500ms para o som de vitória (mais dramático)
                 setTimeout(() => {
@@ -2662,43 +2653,45 @@ class TriadaGamification {
         
         this.updateProgress();
         
-        // Se todos estavam desbloqueados, mostrar mensagem de sucesso e desbloquear
+        // Se todos estavam desbloqueados, mostrar mensagem de sucesso
         if (this.unlockedCount === this.totalCards && this.successMessage) {
             this.successMessage.style.display = 'block';
-            this.unlockSections();
-            this.disableScrollLock(); // Desbloquear scroll
         }
     }
     
-    lockSections() {
-        this.lockedSections.forEach(section => {
-            section.classList.add('section-locked');
-            section.addEventListener('click', this.boundShowWarningModal, true);
-        });
+    initScrollDetection() {
+        // Detectar quando usuário rola até a seção de nichos
+        window.addEventListener('scroll', () => {
+            // Se já validou a tríade, não fazer nada
+            if (this.unlockedCount === this.totalCards) return;
+            
+            // Verificar se chegou na seção de nichos
+            if (this.nichoSection) {
+                const rect = this.nichoSection.getBoundingClientRect();
+                const isVisible = rect.top < window.innerHeight && rect.bottom > 0;
+                
+                if (isVisible) {
+                    this.showScrollAlert();
+                }
+            }
+        }, { passive: true });
     }
     
-    unlockSections() {
-        this.lockedSections.forEach(section => {
-            section.classList.remove('section-locked');
-            section.removeEventListener('click', this.boundShowWarningModal, true);
-        });
-    }
-    
-    showWarningModal(e) {
-        e.preventDefault();
-        e.stopPropagation();
+    showScrollAlert() {
+        if (!this.scrollAlertCard) return;
         
-        const modal = document.getElementById('triadaWarningModal');
-        const backdrop = document.getElementById('warningBackdrop');
+        // Limpar timeout anterior
+        if (this.scrollAlertTimeout) {
+            clearTimeout(this.scrollAlertTimeout);
+        }
         
-        backdrop.classList.add('show');
-        modal.classList.add('show');
+        // Mostrar card
+        this.scrollAlertCard.classList.add('show');
         
-        // Scroll para a tríade
-        document.querySelector('.triada-gamification').scrollIntoView({ 
-            behavior: 'smooth', 
-            block: 'center' 
-        });
+        // Esconder após 3 segundos
+        this.scrollAlertTimeout = setTimeout(() => {
+            this.scrollAlertCard.classList.remove('show');
+        }, 3000);
     }
     
     playVictorySound() {
@@ -2723,117 +2716,6 @@ class TriadaGamification {
             console.log('Som de vitória não disponível');
         }
     }
-    
-    initScrollLock() {
-        if (this.unlockedCount < this.totalCards) {
-            this.enableScrollLock();
-        }
-    }
-    
-    enableScrollLock() {
-        this.isScrollLocked = true;
-        
-        // Mostrar overlay
-        if (this.scrollLockOverlay) {
-            this.scrollLockOverlay.classList.remove('hidden');
-        }
-        
-        // Detectar tentativa de scroll
-        this.wheelHandler = this.handleScrollAttempt.bind(this);
-        this.touchHandler = this.handleScrollAttempt.bind(this);
-        this.keyHandler = this.handleKeyScroll.bind(this);
-        
-        window.addEventListener('wheel', this.wheelHandler, { passive: false });
-        window.addEventListener('touchmove', this.touchHandler, { passive: false });
-        window.addEventListener('keydown', this.keyHandler);
-    }
-    
-    disableScrollLock() {
-        this.isScrollLocked = false;
-        
-        // Esconder overlay
-        if (this.scrollLockOverlay) {
-            this.scrollLockOverlay.classList.add('hidden');
-        }
-        
-        // Remover event listeners
-        if (this.wheelHandler) {
-            window.removeEventListener('wheel', this.wheelHandler);
-        }
-        if (this.touchHandler) {
-            window.removeEventListener('touchmove', this.touchHandler);
-        }
-        if (this.keyHandler) {
-            window.removeEventListener('keydown', this.keyHandler);
-        }
-    }
-    
-    handleScrollAttempt(e) {
-        if (!this.isScrollLocked) return;
-        
-        // Verificar se está tentando rolar para baixo da Tríade
-        const triadaBottom = this.triadaSection ? this.triadaSection.getBoundingClientRect().bottom : 0;
-        
-        if (window.scrollY > 100 || triadaBottom < window.innerHeight) {
-            e.preventDefault();
-            e.stopPropagation();
-            this.showScrollAlert();
-            
-            // Scroll suave de volta para a Tríade
-            if (this.triadaSection) {
-                this.triadaSection.scrollIntoView({ 
-                    behavior: 'smooth', 
-                    block: 'center' 
-                });
-            }
-        }
-    }
-    
-    handleKeyScroll(e) {
-        if (!this.isScrollLocked) return;
-        
-        // Bloquear teclas de scroll (setas, page down, space, end)
-        const scrollKeys = ['ArrowDown', 'PageDown', 'Space', 'End'];
-        
-        if (scrollKeys.includes(e.code)) {
-            e.preventDefault();
-            this.showScrollAlert();
-        }
-    }
-    
-    showScrollAlert() {
-        if (!this.scrollAlertCard) return;
-        
-        // Limpar timeout anterior
-        if (this.scrollAlertTimeout) {
-            clearTimeout(this.scrollAlertTimeout);
-        }
-        
-        // Mostrar card
-        this.scrollAlertCard.classList.add('show');
-        
-        // Esconder após 3 segundos
-        this.scrollAlertTimeout = setTimeout(() => {
-            this.scrollAlertCard.classList.remove('show');
-        }, 3000);
-    }
 }
-
-// Função global para fechar modal de aviso
-function closeWarningModal() {
-    const modal = document.getElementById('triadaWarningModal');
-    const backdrop = document.getElementById('warningBackdrop');
-    
-    modal.classList.remove('show');
-    backdrop.classList.remove('show');
-}
-
-// Fechar modal ao clicar no backdrop
-document.addEventListener('DOMContentLoaded', function() {
-    const backdrop = document.getElementById('warningBackdrop');
-    if (backdrop) {
-        backdrop.addEventListener('click', closeWarningModal);
-    }
-});
 
 // Inicialização já feita acima - removendo duplicação

@@ -608,13 +608,14 @@ body {
     left: 0;
     top: 0;
     width: 100%;
-    height: 100%;
+    min-height: 100vh;
     background-color: rgba(0, 0, 0, 0.75);
-    align-items: center;
+    align-items: flex-start;
     justify-content: center;
     animation: fadeIn 0.3s ease-out;
     backdrop-filter: blur(12px);
-    padding: 40px 20px; /* Espaços superior/inferior */
+    padding: 60px 20px; /* Mais espaços superior/inferior */
+    overflow-y: auto;
 }
 
 .lead-modal.hidden {
@@ -630,6 +631,7 @@ body {
     /* Tamanho otimizado - SEM max-height e overflow */
     max-width: 420px;
     width: 90%;
+    margin-top: 5vh; /* Centraliza melhor o modal */
     
     /* Estilo premium */
     padding: 28px;
@@ -929,12 +931,13 @@ body {
 /* Responsividade do modal - Glassmorfismo */
 @media (max-width: 768px) {
     .lead-modal {
-        padding: 20px 15px;
+        padding: 40px 15px;
     }
     
     .lead-modal-content {
         padding: 24px;
         max-width: 95%;
+        margin-top: 3vh;
     }
     
     .lead-modal-logo img {
@@ -948,12 +951,13 @@ body {
 
 @media (max-width: 480px) {
     .lead-modal {
-        padding: 15px 10px;
+        padding: 30px 10px;
     }
     
     .lead-modal-content {
         padding: 20px;
         max-width: 98%;
+        margin-top: 2vh;
     }
     
     .lead-modal-logo img {

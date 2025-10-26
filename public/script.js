@@ -532,11 +532,9 @@ class CanvasNichoICP {
     }
     
     init() {
-        // Carregar dados salvos
-        this.carregarDados();
-        
-        // Auto-save a cada 30 segundos
-        setInterval(() => this.autoSave(), 30000);
+        // Sempre limpar dados ao inicializar (refresh ou nova sessão)
+        localStorage.removeItem('canvasNichoICP');
+        console.log('🔄 Dados limpos - canvas resetado');
     }
     
     generateFingerprint() {
@@ -2656,14 +2654,12 @@ function initCardClicks() {
     document.querySelectorAll('.nicho-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input
-            if (e.target.tagName === 'INPUT') {
-                return;
-            }
+            if (e.target.tagName === 'INPUT') return;
             
             const radio = this.querySelector('input[type="radio"]');
-            if (radio) {
-                radio.click(); // ✅ Usar .click() para radio buttons
+            if (radio && !radio.checked) {
+                radio.checked = true;
+                radio.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     });
@@ -2672,14 +2668,12 @@ function initCardClicks() {
     document.querySelectorAll('.dor-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input
-            if (e.target.tagName === 'INPUT') {
-                return;
-            }
+            if (e.target.tagName === 'INPUT') return;
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.click(); // ✅ Usar .click() para checkboxes
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     });
@@ -2688,23 +2682,19 @@ function initCardClicks() {
     document.querySelectorAll('.canal-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input
-            if (e.target.tagName === 'INPUT') {
-                return;
-            }
+            if (e.target.tagName === 'INPUT') return;
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.click(); // ✅ Usar .click() para checkboxes
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
                 
-                // Atualizar visual do card após um pequeno delay
-                setTimeout(() => {
-                    if (checkbox.checked) {
-                        this.classList.add('active');
-                    } else {
-                        this.classList.remove('active');
-                    }
-                }, 10);
+                // Atualizar visual do card
+                if (checkbox.checked) {
+                    this.classList.add('active');
+                } else {
+                    this.classList.remove('active');
+                }
             }
         });
     });
@@ -2713,14 +2703,12 @@ function initCardClicks() {
     document.querySelectorAll('.canal-item').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input
-            if (e.target.tagName === 'INPUT') {
-                return;
-            }
+            if (e.target.tagName === 'INPUT') return;
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.click(); // ✅ Usar .click() para checkboxes
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     });
@@ -2729,14 +2717,12 @@ function initCardClicks() {
     document.querySelectorAll('.servico-item').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input
-            if (e.target.tagName === 'INPUT') {
-                return;
-            }
+            if (e.target.tagName === 'INPUT') return;
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.click(); // ✅ Usar .click() para checkboxes
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     });
@@ -2745,14 +2731,12 @@ function initCardClicks() {
     document.querySelectorAll('.pacote-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input
-            if (e.target.tagName === 'INPUT') {
-                return;
-            }
+            if (e.target.tagName === 'INPUT') return;
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.click(); // ✅ Usar .click() para checkboxes
+                checkbox.checked = !checkbox.checked;
+                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
     });

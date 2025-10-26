@@ -2668,7 +2668,12 @@ function initCardClicks() {
     document.querySelectorAll('.dor-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
+            // Não processar se clicou diretamente no input
             if (e.target.tagName === 'INPUT') return;
+            
+            // Prevenir comportamento padrão do label
+            e.preventDefault();
+            e.stopPropagation();
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
@@ -2676,6 +2681,21 @@ function initCardClicks() {
                 checkbox.dispatchEvent(new Event('change', { bubbles: true }));
             }
         });
+        
+        // Também adicionar listener no label para garantir funcionamento
+        const label = card.querySelector('label');
+        if (label) {
+            label.addEventListener('click', function(e) {
+                e.preventDefault();
+                e.stopPropagation();
+                
+                const checkbox = card.querySelector('input[type="checkbox"]');
+                if (checkbox) {
+                    checkbox.checked = !checkbox.checked;
+                    checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                }
+            });
+        }
     });
     
     // Cards de canais (novo layout)

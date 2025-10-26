@@ -2534,6 +2534,9 @@ class TriadaGamification {
         this.isScrollLocked = true;
         this.triadaSection = document.querySelector('.triada-gamification');
         
+        // Armazenar referência da função para poder remover o listener depois
+        this.boundShowWarningModal = this.showWarningModal.bind(this);
+        
         this.unlockedCount = 0;
         this.totalCards = 3;
         
@@ -2670,14 +2673,14 @@ class TriadaGamification {
     lockSections() {
         this.lockedSections.forEach(section => {
             section.classList.add('section-locked');
-            section.addEventListener('click', this.showWarningModal.bind(this));
+            section.addEventListener('click', this.boundShowWarningModal, true);
         });
     }
     
     unlockSections() {
         this.lockedSections.forEach(section => {
             section.classList.remove('section-locked');
-            section.removeEventListener('click', this.showWarningModal.bind(this));
+            section.removeEventListener('click', this.boundShowWarningModal, true);
         });
     }
     

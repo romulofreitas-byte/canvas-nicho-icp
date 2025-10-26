@@ -2656,8 +2656,8 @@ function initCardClicks() {
     document.querySelectorAll('.nicho-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input ou label
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+            // Não processar se clicou diretamente no input
+            if (e.target.tagName === 'INPUT') {
                 return;
             }
             
@@ -2672,8 +2672,8 @@ function initCardClicks() {
     document.querySelectorAll('.dor-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input ou label
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+            // Não processar se clicou diretamente no input
+            if (e.target.tagName === 'INPUT') {
                 return;
             }
             
@@ -2713,8 +2713,8 @@ function initCardClicks() {
     document.querySelectorAll('.canal-item').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input ou label
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+            // Não processar se clicou diretamente no input
+            if (e.target.tagName === 'INPUT') {
                 return;
             }
             
@@ -2729,8 +2729,8 @@ function initCardClicks() {
     document.querySelectorAll('.servico-item').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input ou label
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+            // Não processar se clicou diretamente no input
+            if (e.target.tagName === 'INPUT') {
                 return;
             }
             
@@ -2745,8 +2745,8 @@ function initCardClicks() {
     document.querySelectorAll('.pacote-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
-            // Não processar se clicou diretamente no input ou label
-            if (e.target.tagName === 'INPUT' || e.target.tagName === 'LABEL') {
+            // Não processar se clicou diretamente no input
+            if (e.target.tagName === 'INPUT') {
                 return;
             }
             

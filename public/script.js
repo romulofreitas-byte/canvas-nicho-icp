@@ -535,37 +535,8 @@ class CanvasNichoICP {
         // Carregar dados salvos
         this.carregarDados();
         
-        // Setup da tríade
-        this.setupTriada();
-        
         // Auto-save a cada 30 segundos
         setInterval(() => this.autoSave(), 30000);
-    }
-    
-    setupTriada() {
-        const triada1 = document.getElementById('triada1');
-        const triada2 = document.getElementById('triada2');
-        const triada3 = document.getElementById('triada3');
-        
-        [triada1, triada2, triada3].forEach(checkbox => {
-            checkbox.addEventListener('change', () => this.validarTriada());
-        });
-        
-        this.validarTriada();
-    }
-    
-    validarTriada() {
-        const triada1 = document.getElementById('triada1').checked;
-        const triada2 = document.getElementById('triada2').checked;
-        const triada3 = document.getElementById('triada3').checked;
-        
-        const resultado = document.getElementById('resultadoTriada');
-        
-        if (triada1 && triada2 && triada3) {
-            resultado.classList.add('ativo');
-        } else {
-            resultado.classList.remove('ativo');
-        }
     }
     
     generateFingerprint() {

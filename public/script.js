@@ -2725,7 +2725,7 @@ class TriadaGamification {
 function initCardClicks() {
     console.log('🎯 Inicializando cliques em cards...');
     
-    // Cards de nicho
+    // Cards de nicho (RADIO BUTTONS)
     document.querySelectorAll('.nicho-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
@@ -2734,15 +2734,14 @@ function initCardClicks() {
                 return;
             }
             
-            const checkbox = this.querySelector('input[type="checkbox"], input[type="radio"]');
-            if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+            const radio = this.querySelector('input[type="radio"]');
+            if (radio) {
+                radio.click(); // ✅ Usar .click() para radio buttons
             }
         });
     });
     
-    // Cards de dores
+    // Cards de dores (CHECKBOXES)
     document.querySelectorAll('.dor-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
@@ -2753,8 +2752,7 @@ function initCardClicks() {
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                checkbox.click(); // ✅ Usar .click() para checkboxes
             }
         });
     });
@@ -2770,15 +2768,16 @@ function initCardClicks() {
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                checkbox.click(); // ✅ Usar .click() para checkboxes
                 
-                // Atualizar visual do card
-                if (checkbox.checked) {
-                    this.classList.add('active');
-                } else {
-                    this.classList.remove('active');
-                }
+                // Atualizar visual do card após um pequeno delay
+                setTimeout(() => {
+                    if (checkbox.checked) {
+                        this.classList.add('active');
+                    } else {
+                        this.classList.remove('active');
+                    }
+                }, 10);
             }
         });
     });
@@ -2794,13 +2793,12 @@ function initCardClicks() {
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                checkbox.click(); // ✅ Usar .click() para checkboxes
             }
         });
     });
     
-    // Cards de serviços
+    // Cards de serviços (CHECKBOXES)
     document.querySelectorAll('.servico-item').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
@@ -2811,13 +2809,12 @@ function initCardClicks() {
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                checkbox.click(); // ✅ Usar .click() para checkboxes
             }
         });
     });
     
-    // Cards de pacotes
+    // Cards de pacotes (CHECKBOXES)
     document.querySelectorAll('.pacote-card').forEach(card => {
         card.style.cursor = 'pointer';
         card.addEventListener('click', function(e) {
@@ -2828,8 +2825,7 @@ function initCardClicks() {
             
             const checkbox = this.querySelector('input[type="checkbox"]');
             if (checkbox) {
-                checkbox.checked = !checkbox.checked;
-                checkbox.dispatchEvent(new Event('change', { bubbles: true }));
+                checkbox.click(); // ✅ Usar .click() para checkboxes
             }
         });
     });

@@ -98,44 +98,181 @@ body {
     font-weight: 400;
 }
 
-.triada-info {
-    display: flex;
-    justify-content: center;
-    gap: 30px;
-    flex-wrap: wrap;
-    margin-top: 20px;
+/* Tríade Premium - Design Interativo com Cor Amarela Oficial */
+.triada-info-premium {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 20px;
+    margin-top: 30px;
+    padding: 0 20px;
 }
 
-.triada-item {
+.triada-item-premium {
+    background: linear-gradient(135deg, rgba(242, 183, 5, 0.1) 0%, rgba(242, 183, 5, 0.05) 100%);
+    border: 2px solid rgba(242, 183, 5, 0.3);
+    border-radius: 16px;
+    padding: 24px;
+    position: relative;
+    overflow: hidden;
+    transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+    cursor: pointer;
+    backdrop-filter: blur(10px);
+}
+
+.triada-item-premium::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #f2b705 0%, #e0a500 50%, #f2b705 100%);
+    transform: scaleX(0);
+    transition: transform 0.4s ease;
+}
+
+.triada-item-premium:hover {
+    border-color: #f2b705;
+    transform: translateY(-8px) scale(1.02);
+    box-shadow: 
+        0 20px 40px rgba(242, 183, 5, 0.3),
+        0 0 0 1px rgba(242, 183, 5, 0.2),
+        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+}
+
+.triada-item-premium:hover::before {
+    transform: scaleX(1);
+}
+
+.triada-item-premium[data-step="1"]:hover,
+.triada-item-premium[data-step="2"]:hover,
+.triada-item-premium[data-step="3"]:hover {
+    background: linear-gradient(135deg, rgba(242, 183, 5, 0.15) 0%, rgba(242, 183, 5, 0.08) 100%);
+}
+
+.triada-icon-premium {
     display: flex;
     align-items: center;
-    gap: 12px;
-    background: rgba(242, 183, 5, 0.1);
-    padding: 16px 24px;
-    border-radius: 12px;
-    border: 1px solid rgba(242, 183, 5, 0.3);
-    backdrop-filter: blur(10px);
-    transition: all 0.3s ease;
+    gap: 16px;
+    margin-bottom: 16px;
 }
 
-.triada-item:hover {
-    background: rgba(242, 183, 5, 0.15);
-    border-color: rgba(242, 183, 5, 0.5);
-    transform: translateY(-2px);
-}
-
-.triada-icon {
-    background: var(--podium-yellow);
-    color: var(--podium-black);
-    width: 28px;
-    height: 28px;
+.icon-circle {
+    width: 48px;
+    height: 48px;
+    background: linear-gradient(135deg, #f2b705 0%, #e0a500 100%);
     border-radius: 50%;
     display: flex;
     align-items: center;
     justify-content: center;
+    position: relative;
+    box-shadow: 0 4px 12px rgba(242, 183, 5, 0.4);
+    transition: all 0.3s ease;
+}
+
+.triada-item-premium:hover .icon-circle {
+    transform: scale(1.1) rotate(5deg);
+    box-shadow: 0 6px 20px rgba(242, 183, 5, 0.6);
+}
+
+.icon-check {
+    color: #000000;
+    font-size: 1.5rem;
     font-weight: bold;
-    font-size: 16px;
-    box-shadow: 0 2px 8px rgba(242, 183, 5, 0.3);
+    transition: all 0.3s ease;
+}
+
+.triada-item-premium:hover .icon-check {
+    transform: scale(1.2);
+}
+
+.step-number {
+    font-family: var(--font-ubuntu);
+    font-size: 0.8rem;
+    font-weight: 700;
+    color: #f2b705;
+    background: rgba(242, 183, 5, 0.1);
+    padding: 4px 12px;
+    border-radius: 20px;
+    border: 1px solid rgba(242, 183, 5, 0.3);
+    text-transform: uppercase;
+    letter-spacing: 1px;
+    transition: all 0.3s ease;
+}
+
+.triada-item-premium:hover .step-number {
+    background: rgba(242, 183, 5, 0.2);
+    border-color: #f2b705;
+    transform: translateX(4px);
+}
+
+.triada-content h3 {
+    font-family: var(--font-ubuntu);
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: var(--podium-text-primary);
+    margin: 0 0 8px 0;
+    line-height: 1.3;
+    transition: color 0.3s ease;
+}
+
+.triada-item-premium:hover .triada-content h3 {
+    color: #f2b705;
+}
+
+.triada-content p {
+    font-family: var(--font-montserrat);
+    font-size: 0.9rem;
+    color: var(--podium-text-secondary);
+    margin: 0;
+    line-height: 1.5;
+    opacity: 0.8;
+    transition: all 0.3s ease;
+}
+
+.triada-item-premium:hover .triada-content p {
+    opacity: 1;
+    color: var(--podium-text-primary);
+}
+
+/* Animação de entrada escalonada */
+.triada-item-premium {
+    animation: fadeInUp 0.6s ease-out forwards;
+    opacity: 0;
+    transform: translateY(30px);
+}
+
+.triada-item-premium[data-step="1"] {
+    animation-delay: 0.1s;
+}
+
+.triada-item-premium[data-step="2"] {
+    animation-delay: 0.2s;
+}
+
+.triada-item-premium[data-step="3"] {
+    animation-delay: 0.3s;
+}
+
+@keyframes fadeInUp {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+/* Efeito de pulse no ícone */
+@keyframes pulseIcon {
+    0%, 100% {
+        box-shadow: 0 4px 12px rgba(242, 183, 5, 0.4);
+    }
+    50% {
+        box-shadow: 0 6px 20px rgba(242, 183, 5, 0.6);
+    }
+}
+
+.triada-item-premium:hover .icon-circle {
+    animation: pulseIcon 1.5s ease-in-out infinite;
 }
 
 /* Canvas Wrapper - Dark Theme */
@@ -2147,13 +2284,14 @@ body {
         font-size: 2rem;
     }
     
-    .triada-info {
-        flex-direction: column;
+    .triada-info-premium {
+        grid-template-columns: 1fr;
         gap: 15px;
+        padding: 0 10px;
     }
     
-    .triada-item {
-        padding: 12px 20px;
+    .triada-item-premium {
+        padding: 20px;
     }
     
     .canvas-wrapper {
@@ -3513,13 +3651,36 @@ body {
         font-size: 0.8em;
     }
     
-    .triada-info {
-        flex-direction: column;
-        gap: 15px;
+    .triada-info-premium {
+        grid-template-columns: 1fr;
+        gap: 12px;
+        padding: 0 5px;
     }
     
-    .triada-item {
-        padding: 15px;
+    .triada-item-premium {
+        padding: 16px;
+    }
+    
+    .triada-icon-premium {
+        gap: 12px;
+        margin-bottom: 12px;
+    }
+    
+    .icon-circle {
+        width: 40px;
+        height: 40px;
+    }
+    
+    .icon-check {
+        font-size: 1.2rem;
+    }
+    
+    .triada-content h3 {
+        font-size: 1rem;
+    }
+    
+    .triada-content p {
+        font-size: 0.85rem;
     }
 }
 

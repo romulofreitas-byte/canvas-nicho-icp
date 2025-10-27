@@ -1033,32 +1033,19 @@
                         <div class="resumo-item resumo-download">
                             <h4>💾 EXPORTAR CANVAS:</h4>
                             <div class="resumo-content">
-                                <p style="margin-bottom: 20px; font-size: 0.9em;">Baixe seu canvas em formatos estratégicos:</p>
+                                <p style="margin-bottom: 20px; font-size: 0.9em;">Exporte seu canvas para análise e apresentação:</p>
                                 
-                                <div class="download-buttons">
-                                    <button type="button" class="btn-download btn-pdf" onclick="exportarPDF()">
-                                        <span class="download-icon">📄</span>
-                                        <span class="download-info">
-                                            <strong>PDF Executivo</strong>
-                                            <small>Visual e profissional</small>
-                                        </span>
-                                    </button>
-                                    
-                                    <button type="button" class="btn-download btn-excel" onclick="exportarExcel()">
-                                        <span class="download-icon">📊</span>
-                                        <span class="download-info">
-                                            <strong>Planilha Excel</strong>
-                                            <small>Para análise e tracking</small>
-                                        </span>
-                                    </button>
-                                    
-                                    <button type="button" class="btn-download btn-json" onclick="exportarJSON()">
-                                        <span class="download-icon">💻</span>
-                                        <span class="download-info">
-                                            <strong>JSON/Dados</strong>
-                                            <small>Para integração técnica</small>
-                                        </span>
-                                    </button>
+                                <button type="button" class="btn-download btn-pdf-single" onclick="exportarPDF()">
+                                    <span class="download-icon">📄</span>
+                                    <span class="download-info">
+                                        <strong>Exportar PDF</strong>
+                                        <small>Visual e profissional</small>
+                                    </span>
+                                </button>
+                                
+                                <div class="coming-soon-badge">
+                                    <span class="badge-icon">🚀</span>
+                                    <span class="badge-text">Em Breve: Excel e JSON</span>
                                 </div>
                                 
                                 <p style="margin-top: 15px; font-size: 0.8em; opacity: 0.8;">
@@ -1074,20 +1061,24 @@
                 </div>
 
                 <!-- COMUNIDADE PÓDIUM -->
-                <div class="observacoes-precificacao full-width">
-                    <div class="observacao-destaque">
-                        <div class="destaque-header">
-                            <span class="destaque-icon">📱</span>
-                            <h4>Comunidade Pódium no WhatsApp</h4>
+                <div class="comunidade-podium-glass full-width">
+                    <div class="glass-card">
+                        <div class="glass-header">
+                            <span class="glass-icon">📱</span>
+                            <h3>Comunidade Pódium no WhatsApp</h3>
                         </div>
-                        <p>Junte-se à nossa comunidade gratuita e conecte-se com outros empreendedores que estão aplicando o <strong>Método Pódium</strong> para acelerar seus resultados comerciais.</p>
-                        <div class="cta-comunidade">
-                            <p>✨ <strong>Comunidade 100% gratuita</strong> • Troca de experiências • Networking • Dicas exclusivas</p>
-                            <a href="https://chat.whatsapp.com/L4camOPOJMxDb8et6M80oN" target="_blank" rel="noopener noreferrer" class="btn-comunidade">
-                                📱 Entrar na Comunidade WhatsApp
-                            </a>
-                            <p class="cta-subtitle">Conecte-se com outros pilotos do Método Pódium</p>
+                        <p class="glass-text">Junte-se à nossa comunidade gratuita e conecte-se com outros empreendedores que estão aplicando o <strong>Método Pódium</strong> para acelerar seus resultados comerciais.</p>
+                        <div class="glass-features">
+                            <span class="feature-badge">✨ 100% Gratuita</span>
+                            <span class="feature-badge">🤝 Networking</span>
+                            <span class="feature-badge">💡 Dicas Exclusivas</span>
                         </div>
+                        <a href="https://chat.whatsapp.com/L4camOPOJMxDb8et6M80oN" target="_blank" rel="noopener noreferrer" class="btn-comunidade-glass">
+                            <span class="btn-icon">📱</span>
+                            <span class="btn-text">Entrar na Comunidade WhatsApp</span>
+                            <span class="btn-arrow">→</span>
+                        </a>
+                        <p class="glass-subtitle">Conecte-se com outros pilotos do Método Pódium</p>
                     </div>
                 </div>
 
@@ -1167,18 +1158,22 @@
         </form>
 
         <!-- SEÇÃO DE PRECIFICAÇÃO ESTRATÉGICA -->
-        <div class="community-section full-width">
-            <div class="community-content">
-                <div class="community-icon">📅</div>
-                <div class="community-text">
-                    <h3>Valores Mensais vs. Projeto Completo</h3>
-                    <p>As propostas acima estão apresentadas em <strong>valores mensais</strong> para facilitar a compreensão. Porém, bons empresários pensam no <strong>valor do projeto como um todo</strong>, pois esse valor influencia diretamente em <strong>quantas ligações você precisará fazer</strong> para atingir sua meta de faturamento.</p>
+        <div class="calculadora-ligacoes-glass full-width">
+            <div class="glass-card">
+                <div class="glass-header">
+                    <span class="glass-icon">📞</span>
+                    <h3>Calculadora de Ligações Pódium</h3>
+                </div>
+                <p class="glass-text">As propostas acima estão apresentadas em <strong>valores mensais</strong> para facilitar a compreensão. Porém, bons empresários pensam no <strong>valor do projeto como um todo</strong>, pois esse valor influencia diretamente em <strong>quantas ligações você precisará fazer</strong> para atingir sua meta de faturamento.</p>
+                <div class="glass-highlight">
                     <p>💡 <strong>Quer saber exatamente quantas ligações fazer para bater sua meta?</strong></p>
                 </div>
+                <a href="https://calculadora-contratos-podium.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-calculadora-glass">
+                    <span class="btn-icon">📊</span>
+                    <span class="btn-text">Acessar Calculadora de Ligações</span>
+                    <span class="btn-arrow">→</span>
+                </a>
             </div>
-            <a href="https://calculadora-contratos-podium.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-calculadora-footer">
-                📊 Acessar Calculadora de Contratos Pódium
-            </a>
         </div>
 
         <!-- FOOTER -->

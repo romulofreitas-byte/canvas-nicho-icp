@@ -2290,12 +2290,13 @@ body {
 /* ===== SEÇÃO DE RESUMO ===== */
 
 .resumo-section {
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-    color: white;
-    padding: 30px;
-    border-radius: 12px;
+    background: var(--podium-dark-tertiary);
+    border: 1px solid var(--podium-gray-700);
+    color: var(--podium-text-primary);
+    padding: 35px;
+    border-radius: 16px;
     margin: 30px 0;
-    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
     width: 100%;
     max-width: none;
     margin-left: 0;
@@ -2304,9 +2305,11 @@ body {
 
 .resumo-section h3 {
     text-align: center;
-    margin-bottom: 25px;
-    font-size: 1.5em;
+    margin-bottom: 28px;
+    font-size: 1.5rem;
     font-weight: 600;
+    color: var(--podium-text-primary);
+    font-family: var(--font-ubuntu);
 }
 
 .resumo-container {
@@ -2316,25 +2319,26 @@ body {
 }
 
 .resumo-item {
-    background: rgba(255, 255, 255, 0.1);
-    border-radius: 8px;
-    padding: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background: var(--podium-dark-secondary);
+    border-radius: 12px;
+    padding: 22px;
+    border: 1px solid var(--podium-gray-700);
 }
 
 .resumo-item h4 {
-    color: #fff;
-    margin-bottom: 15px;
-    font-size: 1em;
+    color: var(--podium-text-primary);
+    margin-bottom: 12px;
+    font-size: 0.95rem;
     font-weight: 600;
-    border-bottom: 2px solid rgba(255, 255, 255, 0.3);
+    border-bottom: 1px solid var(--podium-gray-700);
     padding-bottom: 8px;
+    font-family: var(--font-montserrat);
 }
 
 .resumo-content {
-    color: rgba(255, 255, 255, 0.9);
-    font-size: 0.9em;
-    line-height: 1.5;
+    color: var(--podium-text-secondary);
+    font-size: 0.9rem;
+    line-height: 1.6;
 }
 
 .resumo-jornada {
@@ -4189,107 +4193,64 @@ body {
     }
 }
 
-/* WhatsApp Float Button */
-.whatsapp-float {
+/* WhatsApp Badge */
+.whatsapp-badge {
     position: fixed;
     bottom: 20px;
     right: 20px;
-    width: 60px;
-    height: 60px;
-    background-color: #25D366;
-    border-radius: 50%;
-    display: flex;
+    background: linear-gradient(135deg, #25D366 0%, #128C7E 100%);
+    color: white;
+    padding: 10px 18px;
+    border-radius: 30px;
+    display: inline-flex;
     align-items: center;
-    justify-content: center;
-    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.5);
+    gap: 10px;
+    font-family: var(--font-montserrat);
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
     z-index: 9999;
     transition: all 0.3s ease;
-    text-decoration: none;
-    cursor: pointer;
+    max-width: calc(100vw - 40px);
 }
 
-.whatsapp-float:hover {
-    transform: scale(1.05);
-    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.7);
+.whatsapp-badge:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.6);
 }
 
-.whatsapp-icon {
-    font-size: 30px;
-    display: block;
+.whatsapp-badge .badge-icon {
+    font-size: 1.2rem;
     line-height: 1;
 }
 
-/* WhatsApp Tooltip */
-.whatsapp-tooltip {
-    position: absolute;
-    right: 75px;
-    top: 50%;
-    transform: translateY(-50%);
-    background: var(--podium-dark-primary);
-    color: var(--podium-text-primary);
-    padding: 10px 14px;
-    border-radius: 8px;
-    font-size: 0.8rem;
-    font-weight: 500;
+.whatsapp-badge .badge-text {
     white-space: nowrap;
-    opacity: 0;
-    pointer-events: none;
-    transition: all 0.3s ease;
-    border: 1px solid var(--podium-yellow);
-    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.4);
-    z-index: 10000;
 }
 
-.whatsapp-tooltip::after {
-    content: '';
-    position: absolute;
-    right: -6px;
-    top: 50%;
-    transform: translateY(-50%);
-    width: 0;
-    height: 0;
-    border-left: 6px solid var(--podium-yellow);
-    border-top: 6px solid transparent;
-    border-bottom: 6px solid transparent;
-}
-
-.whatsapp-float:hover .whatsapp-tooltip {
-    opacity: 1;
-    right: 70px;
-}
-
-/* Mobile WhatsApp Button */
 @media (max-width: 768px) {
-    .whatsapp-float {
-        width: 56px;
-        height: 56px;
+    .whatsapp-badge {
         bottom: 15px;
         right: 15px;
-    }
-    
-    .whatsapp-icon {
-        font-size: 28px;
-    }
-    
-    .whatsapp-tooltip {
-        display: none;
+        padding: 8px 14px;
+        font-size: 0.8rem;
     }
 }
 
 @media (max-width: 480px) {
-    .whatsapp-float {
-        width: 52px;
-        height: 52px;
+    .whatsapp-badge {
         bottom: 12px;
         right: 12px;
+        padding: 8px 12px;
+        font-size: 0.75rem;
     }
     
-    .whatsapp-icon {
-        font-size: 26px;
-    }
-    
-    .whatsapp-tooltip {
-        display: none;
+    .whatsapp-badge .badge-text {
+        white-space: nowrap;
+        overflow: hidden;
+        text-overflow: ellipsis;
+        max-width: 200px;
     }
 }
 
@@ -4301,38 +4262,36 @@ body {
 }
 
 .glass-card {
-    background: rgba(31, 41, 55, 0.6); /* podium-dark-tertiary with transparency */
-    backdrop-filter: blur(20px) saturate(180%);
-    -webkit-backdrop-filter: blur(20px) saturate(180%);
-    border: 1px solid rgba(242, 183, 5, 0.3);
-    border-radius: 20px;
-    padding: 40px;
+    background: rgba(31, 41, 55, 0.8); /* podium-dark-tertiary with less transparency for more professional look */
+    backdrop-filter: blur(15px) saturate(180%);
+    -webkit-backdrop-filter: blur(15px) saturate(180%);
+    border: 1px solid rgba(242, 183, 5, 0.2);
+    border-radius: 16px;
+    padding: 35px;
     box-shadow: 
-        0 20px 60px rgba(0, 0, 0, 0.4),
-        0 0 0 1px rgba(255, 255, 255, 0.05),
-        inset 0 1px 0 rgba(255, 255, 255, 0.1);
+        0 10px 40px rgba(0, 0, 0, 0.3),
+        0 0 0 1px rgba(255, 255, 255, 0.05);
 }
 
 .glass-header {
     display: flex;
     align-items: center;
-    gap: 15px;
+    gap: 12px;
     margin-bottom: 20px;
-    padding-bottom: 20px;
-    border-bottom: 2px solid var(--podium-yellow);
+    padding-bottom: 15px;
+    border-bottom: 1px solid rgba(242, 183, 5, 0.25);
 }
 
 .glass-icon {
-    font-size: 2.5rem;
-    filter: drop-shadow(0 2px 8px rgba(242, 183, 5, 0.4));
+    font-size: 1.8rem;
 }
 
 .glass-header h3 {
     font-family: var(--font-ubuntu);
-    font-size: 1.8rem;
+    font-size: 1.5rem;
     color: var(--podium-text-primary);
     margin: 0;
-    font-weight: 700;
+    font-weight: 600;
 }
 
 .glass-text {
@@ -4351,13 +4310,13 @@ body {
 }
 
 .feature-badge {
-    background: linear-gradient(135deg, rgba(242, 183, 5, 0.15) 0%, rgba(242, 183, 5, 0.05) 100%);
-    border: 1px solid rgba(242, 183, 5, 0.3);
-    padding: 8px 16px;
-    border-radius: 20px;
-    font-size: 0.9rem;
-    color: var(--podium-yellow);
-    font-weight: 600;
+    background: rgba(242, 183, 5, 0.08);
+    border: 1px solid rgba(242, 183, 5, 0.2);
+    padding: 6px 14px;
+    border-radius: 8px;
+    font-size: 0.85rem;
+    color: var(--podium-text-secondary);
+    font-weight: 500;
 }
 
 .glass-highlight {

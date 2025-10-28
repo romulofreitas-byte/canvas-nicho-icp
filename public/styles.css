@@ -2088,16 +2088,26 @@ body {
 /* Responsividade para jornadas */
 @media (max-width: 768px) {
     .jornadas-section {
-        padding: 30px 20px;
+        padding: 20px 15px;
+        margin: 20px 0;
+    }
+    
+    .jornadas-header {
+        margin-bottom: 20px;
     }
     
     .jornadas-header h2 {
-        font-size: 1.8rem;
+        font-size: 1.4rem;
+        line-height: 1.3;
+    }
+    
+    .jornadas-header p {
+        font-size: 0.95rem;
     }
     
     .jornadas-grid {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 15px;
     }
     
     .jornada-recomendada {
@@ -2109,19 +2119,37 @@ body {
     }
     
     .jornada-card {
-        padding: 25px 20px;
+        padding: 20px 15px;
     }
     
     .jornada-icon {
-        font-size: 3rem;
+        width: 50px;
+        height: 50px;
+        font-size: 2rem;
+        margin-bottom: 12px;
+    }
+    
+    .jornada-card h3 {
+        font-size: 1.2rem;
+        margin-bottom: 12px;
     }
     
     .jornada-preco {
-        font-size: 1.4rem;
+        font-size: 1.3rem;
     }
     
     .jornada-preco small {
-        font-size: 0.6em;
+        font-size: 0.55em;
+    }
+    
+    .jornada-badge {
+        padding: 4px 12px;
+        font-size: 0.75rem;
+        margin-bottom: 15px;
+    }
+    
+    .jornada-servicos {
+        font-size: 0.8rem;
     }
 }
 
@@ -2509,95 +2537,244 @@ body {
 
 @media (max-width: 768px) {
     .container {
-        padding: 15px;
+        padding: 12px;
     }
     
     .header {
-        padding: 30px 20px;
+        padding: 25px 15px;
+        margin-bottom: 20px;
     }
     
     .header h1 {
-        font-size: 2rem;
+        font-size: 1.6rem;
+        line-height: 1.4;
+    }
+    
+    .header p {
+        font-size: 0.95rem;
+        margin-bottom: 15px;
+    }
+    
+    .canvas-section h2 {
+        font-size: 1.4rem;
+        line-height: 1.4;
     }
     
     .triada-info-premium {
         grid-template-columns: 1fr;
-        gap: 15px;
-        padding: 0 10px;
+        gap: 12px;
+        padding: 0 8px;
+        margin-top: 20px;
     }
     
     .triada-item-premium {
-        padding: 20px;
+        padding: 16px 12px;
+    }
+    
+    .icon-circle {
+        width: 35px;
+        height: 35px;
+    }
+    
+    .icon-check {
+        font-size: 1.2rem;
+    }
+    
+    .step-number {
+        font-size: 0.7rem;
+        padding: 3px 10px;
+    }
+    
+    .triada-content h3 {
+        font-size: 0.95rem;
+    }
+    
+    .triada-content p {
+        font-size: 0.8rem;
     }
     
     .canvas-wrapper {
-        padding: 20px;
+        padding: 18px 15px;
+        margin-bottom: 20px;
     }
     
     .canvas-section {
-        padding: 20px;
+        padding: 18px 15px;
+        margin-bottom: 20px;
     }
     
     .nichos-grid, .dores-grid, .canais-grid {
-        grid-template-columns: 1fr;
-        gap: 15px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 8px;
     }
     
     .nicho-card label, .dor-card label {
-        padding: 20px 15px;
+        padding: 12px 8px;
     }
     
     .nicho-card .card-icon, .dor-card .card-icon {
-        font-size: 2rem;
+        font-size: 1.3rem;
+        margin-bottom: 8px;
+    }
+    
+    .nicho-card .card-title, .dor-card .card-title {
+        font-size: 0.75em;
     }
     
     .servicos-grid {
         grid-template-columns: 1fr;
-        gap: 20px;
+        gap: 12px;
     }
     
     .servico-item {
-        padding: 20px;
+        padding: 16px 12px;
     }
     
     .servico-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1.5rem;
+        width: 35px;
+        height: 35px;
+        font-size: 1.3rem;
+    }
+    
+    .servico-nome {
+        font-size: 0.95rem;
     }
     
     .radio-group {
         grid-template-columns: 1fr;
+        gap: 8px;
+    }
+    
+    .radio-group label {
+        padding: 10px 12px;
+        font-size: 0.85rem;
     }
     
     .capacidade-toggle {
         flex-direction: column;
+        gap: 8px;
+    }
+    
+    .toggle-btn {
+        padding: 10px 16px;
+    }
+    
+    .capacidade-estrutura, .capacidade-direto {
+        padding: 18px 12px;
+    }
+    
+    .estrutura-pergunta h5 {
+        font-size: 0.95rem;
     }
     
     .resumo-container {
         grid-template-columns: 1fr;
+        gap: 12px;
     }
     
     .resumo-section {
-        padding: 20px;
+        padding: 18px 12px;
+        margin: 20px 0;
     }
     
-    .alerta-precificacao, .alerta-jornadas {
-        padding: 20px;
+    .resumo-section h3 {
+        font-size: 1.3rem;
+        margin-bottom: 18px;
+    }
+    
+    .resumo-item {
+        padding: 15px 10px;
+    }
+    
+    .resumo-item h4 {
+        font-size: 0.85rem;
+    }
+    
+    .resumo-content {
+        font-size: 0.8rem;
+    }
+    
+    .alerta-precificacao {
+        padding: 15px 12px;
+        margin-bottom: 20px;
+    }
+    
+    .alerta-header h4 {
+        font-size: 1rem;
+    }
+    
+    .alerta-content p {
+        font-size: 0.85rem;
+        margin-bottom: 8px;
+    }
+    
+    .alerta-content ul {
+        margin: 8px 0;
+        padding-left: 18px;
+    }
+    
+    .alerta-content li {
+        font-size: 0.8rem;
+        margin-bottom: 4px;
+    }
+    
+    .alerta-dica {
+        padding: 12px;
+        margin-top: 15px;
     }
     
     .tabela-container {
-        font-size: 0.85rem;
+        font-size: 0.7rem;
+        overflow-x: auto;
     }
     
     #tabelaPrecos th,
     #tabelaPrecos td {
-        padding: 10px 6px;
+        padding: 8px 4px;
+    }
+    
+    #tabelaPrecos th {
+        font-size: 0.75rem;
+    }
+    
+    .capacidade-badge {
+        padding: 8px 16px;
+        font-size: 0.85rem;
+    }
+    
+    .precificacao-container {
+        padding: 15px 12px;
+    }
+    
+    .capacidade-info {
+        padding: 18px 12px;
+    }
+    
+    .precificacao-tabela {
+        padding: 15px 12px;
+    }
+    
+    .precificacao-tabela h4 {
+        font-size: 1rem;
+        margin-bottom: 12px;
+    }
+    
+    .resultado-precificacao {
+        padding: 15px 12px;
+    }
+    
+    .resultado-box {
+        padding: 15px 12px;
     }
     
     .btn-primary, .btn-secondary, .btn-print {
-        padding: 10px 24px;
-        font-size: 13px;
+        padding: 10px 20px;
+        font-size: 0.85rem;
+    }
+    
+    .alerta-jornadas {
+        padding: 15px 12px;
+        margin-bottom: 20px;
     }
 }
 
@@ -3782,15 +3959,48 @@ body {
 
 @media (max-width: 768px) {
     .mundo-podium-cta {
-        padding: 30px 20px;
+        padding: 25px 15px;
+        margin: 30px 0;
+    }
+    
+    .cta-icon {
+        font-size: 3rem;
+        margin-bottom: 15px;
     }
     
     .mundo-podium-cta h2 {
-        font-size: 1.5rem;
+        font-size: 1.3rem;
+        line-height: 1.3;
+        margin-bottom: 12px;
+    }
+    
+    .mundo-podium-cta > p {
+        font-size: 0.95rem;
+        margin-bottom: 20px;
     }
     
     .cta-features {
-        gap: 15px;
+        gap: 12px;
+        flex-direction: column;
+        margin-bottom: 20px;
+    }
+    
+    .cta-feature {
+        font-size: 0.85rem;
+    }
+    
+    .feature-icon {
+        font-size: 1rem;
+    }
+    
+    .btn-mundo-podium {
+        padding: 14px 28px;
+        font-size: 0.95rem;
+    }
+    
+    .cta-disclaimer {
+        font-size: 0.8rem;
+        margin-top: 15px;
     }
 }
 
@@ -3798,12 +4008,35 @@ body {
 @media (max-width: 768px) {
     .info-cards-grid {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .info-card {
+        padding: 18px 12px;
+    }
+    
+    .info-card h4 {
+        font-size: 1rem;
+    }
+    
+    .info-card p {
+        font-size: 0.85rem;
     }
     
     .section-header-inline {
         flex-direction: column;
         align-items: flex-start;
-        gap: 12px;
+        gap: 8px;
+        margin-bottom: 18px;
+    }
+    
+    .section-header-inline h3 {
+        font-size: 1.2rem;
+    }
+    
+    .badge-info {
+        font-size: 0.65rem;
+        padding: 5px 10px;
     }
     
     .checklist-title-group {
@@ -3812,20 +4045,61 @@ body {
         gap: 8px;
     }
     
+    .checklist-title-group h3 {
+        font-size: 1.2rem;
+    }
+    
+    .progress-count {
+        font-size: 1.2rem;
+    }
+    
     .accordion-header {
-        padding: 16px;
+        padding: 14px 12px;
     }
     
     .accordion-icon {
-        width: 40px;
-        height: 40px;
-        font-size: 1.5rem;
+        width: 38px;
+        height: 38px;
+        font-size: 1.3rem;
     }
     
-    .icp-instructions-premium,
-    .observacoes-precificacao-premium,
+    .accordion-title h4 {
+        font-size: 1rem;
+    }
+    
+    .accordion-hint {
+        font-size: 0.8rem;
+    }
+    
+    .premium-list {
+        padding: 0 12px 18px 12px;
+    }
+    
+    .premium-list li {
+        font-size: 0.85rem;
+        padding: 8px 0 8px 24px;
+    }
+    
+    .icp-instructions-premium {
+        padding: 20px 15px;
+    }
+    
+    .observacoes-precificacao-premium {
+        padding: 20px 15px;
+        margin: 20px 0;
+    }
+    
     .checklist-validation-premium {
-        padding: 24px;
+        padding: 20px 15px;
+        margin: 20px 0;
+    }
+    
+    .checklist-item-premium {
+        padding: 12px 15px;
+    }
+    
+    .checklist-text {
+        font-size: 0.85rem;
     }
 }
 
@@ -4156,83 +4430,102 @@ body {
 @media (max-width: 768px) {
     .servicos-grid {
         grid-template-columns: 1fr;
+        gap: 10px;
     }
     
-    .canais-grid {
+    .canais-grid-cards {
         grid-template-columns: 1fr;
+        gap: 12px;
+    }
+    
+    .canal-card {
+        padding: 16px 12px;
+    }
+    
+    .canal-icon {
+        font-size: 2rem;
+        margin-bottom: 10px;
+    }
+    
+    .canal-card h4 {
+        font-size: 1rem;
+        margin-bottom: 6px;
+    }
+    
+    .canal-card p {
+        font-size: 0.85rem;
     }
     
     /* Cards de Nicho e Dores */
     .nichos-grid {
-        grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
-        gap: 10px;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 8px;
     }
     
     .dores-grid {
-        grid-template-columns: repeat(auto-fill, minmax(160px, 1fr));
-        gap: 10px;
-    }
-    
-    .nicho-card label, .dor-card label {
-        padding: 15px 10px;
-    }
-    
-    .nicho-card .card-icon, .dor-card .card-icon {
-        font-size: 1.5em;
-    }
-    
-    .nicho-card .card-title, .dor-card .card-title {
-        font-size: 0.8em;
+        grid-template-columns: repeat(auto-fill, minmax(140px, 1fr));
+        gap: 8px;
     }
     
     .triada-info-premium {
         grid-template-columns: 1fr;
-        gap: 12px;
-        padding: 0 5px;
-    }
-    
-    .triada-item-premium {
-        padding: 16px;
-    }
-    
-    .triada-icon-premium {
-        gap: 12px;
-        margin-bottom: 12px;
-    }
-    
-    .icon-circle {
-        width: 40px;
-        height: 40px;
-    }
-    
-    .icon-check {
-        font-size: 1.2rem;
-    }
-    
-    .triada-content h3 {
-        font-size: 1rem;
-    }
-    
-    .triada-content p {
-        font-size: 0.85rem;
+        gap: 10px;
+        padding: 0;
     }
 }
 
 @media (max-width: 480px) {
     .container {
-        padding: 10px;
+        padding: 10px 8px;
     }
     
     .header {
-        padding: 20px;
+        padding: 20px 12px;
+        margin-bottom: 15px;
     }
     
     .header h1 {
-        font-size: 2rem;
+        font-size: 1.4rem;
+        line-height: 1.3;
+    }
+    
+    .header p {
+        font-size: 0.85rem;
+        margin-bottom: 12px;
+    }
+    
+    .canvas-wrapper {
+        padding: 15px 12px;
     }
     
     .canvas-section {
-        padding: 15px;
+        padding: 15px 12px;
+        margin-bottom: 15px;
+    }
+    
+    .canvas-section h2 {
+        font-size: 1.2rem;
+    }
+    
+    .triada-box {
+        padding: 12px;
+    }
+    
+    .nichos-grid, .dores-grid {
+        gap: 6px;
+    }
+    
+    .nicho-card label, .dor-card label {
+        padding: 10px 6px;
+    }
+    
+    .nicho-card .card-icon, .dor-card .card-icon {
+        font-size: 1.2rem;
+        margin-bottom: 6px;
+    }
+    
+    .nicho-card .card-title, .dor-card .card-title {
+        font-size: 0.7em;
     }
 }
 
@@ -4274,26 +4567,32 @@ body {
 
 @media (max-width: 768px) {
     .whatsapp-badge {
-        bottom: 15px;
-        right: 15px;
-        padding: 8px 14px;
-        font-size: 0.8rem;
+        bottom: 10px;
+        right: auto;
+        left: 50%;
+        transform: translateX(-50%);
+        padding: 8px 16px;
+        font-size: 0.7rem;
+        max-width: 90%;
+        width: auto;
     }
 }
 
 @media (max-width: 480px) {
     .whatsapp-badge {
-        bottom: 12px;
-        right: 12px;
-        padding: 8px 12px;
-        font-size: 0.75rem;
+        bottom: 10px;
+        left: 50%;
+        right: auto;
+        transform: translateX(-50%);
+        padding: 8px 14px;
+        font-size: 0.65rem;
+        max-width: 95%;
     }
     
     .whatsapp-badge .badge-text {
         white-space: nowrap;
         overflow: hidden;
         text-overflow: ellipsis;
-        max-width: 200px;
     }
 }
 
@@ -4535,48 +4834,93 @@ body {
 /* Responsive Glassmorphism Sections */
 @media (max-width: 768px) {
     .glass-card {
-        padding: 30px 20px;
+        padding: 20px 15px;
+        margin: 20px 0;
     }
     
-    .glass-header h3 {
+    .glass-header {
+        margin-bottom: 15px;
+        padding-bottom: 12px;
+    }
+    
+    .glass-icon {
         font-size: 1.5rem;
     }
     
+    .glass-header h3 {
+        font-size: 1.2rem;
+    }
+    
     .glass-text {
-        font-size: 1rem;
+        font-size: 0.9rem;
+        margin-bottom: 18px;
+        line-height: 1.6;
+    }
+    
+    .glass-features {
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .feature-badge {
+        padding: 5px 12px;
+        font-size: 0.8rem;
+    }
+    
+    .glass-highlight {
+        padding: 15px 12px;
+        margin-bottom: 20px;
+    }
+    
+    .glass-highlight p {
+        font-size: 0.9rem;
     }
     
     .btn-comunidade-glass,
     .btn-calculadora-glass {
-        padding: 14px 24px;
-        font-size: 1rem;
+        padding: 12px 20px;
+        font-size: 0.9rem;
+    }
+    
+    .btn-icon {
+        font-size: 1.1rem;
+    }
+    
+    .glass-subtitle {
+        font-size: 0.8rem;
+        margin-top: 15px;
     }
 }
 
 @media (max-width: 480px) {
     .glass-card {
-        padding: 25px 18px;
+        padding: 18px 12px;
     }
     
     .glass-header {
         flex-direction: column;
-        gap: 10px;
+        gap: 8px;
         text-align: center;
     }
     
     .glass-header h3 {
-        font-size: 1.3rem;
+        font-size: 1.1rem;
     }
     
     .glass-features {
         justify-content: center;
+        flex-wrap: wrap;
     }
     
     .btn-comunidade-glass,
     .btn-calculadora-glass {
         width: 100%;
         justify-content: center;
-        padding: 12px 20px;
-        font-size: 0.95rem;
+        padding: 12px 18px;
+        font-size: 0.85rem;
+    }
+    
+    .glass-subtitle {
+        font-size: 0.75rem;
     }
 }

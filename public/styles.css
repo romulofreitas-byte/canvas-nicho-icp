@@ -4413,23 +4413,80 @@ body {
     width: 100%;
     display: flex;
     align-items: center;
-    gap: 15px;
-    background: var(--podium-dark-tertiary);
+    gap: 18px;
+    background: linear-gradient(135deg, rgba(242, 183, 5, 0.1) 0%, var(--podium-dark-tertiary) 100%);
     border: 2px solid var(--podium-yellow);
     border-radius: 12px;
-    padding: 18px 24px;
+    padding: 20px 24px;
     color: var(--podium-text-primary);
     font-family: var(--font-ubuntu);
     font-size: 1rem;
     font-weight: 600;
     cursor: pointer;
-    transition: all 0.3s ease;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-download.btn-pdf-single::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(90deg, transparent, rgba(242, 183, 5, 0.2), transparent);
+    transition: left 0.5s ease;
 }
 
 .btn-download.btn-pdf-single:hover {
-    background: linear-gradient(135deg, rgba(242, 183, 5, 0.15) 0%, var(--podium-dark-tertiary) 100%);
-    transform: translateY(-2px);
-    box-shadow: 0 8px 20px rgba(242, 183, 5, 0.3);
+    background: linear-gradient(135deg, rgba(242, 183, 5, 0.2) 0%, var(--podium-dark-tertiary) 100%);
+    transform: translateY(-3px);
+    box-shadow: 0 12px 32px rgba(242, 183, 5, 0.35);
+    border-color: var(--podium-yellow-hover);
+}
+
+.btn-download.btn-pdf-single:hover::before {
+    left: 100%;
+}
+
+.btn-download.btn-pdf-single .download-icon {
+    font-size: 2.2rem;
+    filter: drop-shadow(0 2px 4px rgba(242, 183, 5, 0.4));
+    transition: transform 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-download.btn-pdf-single:hover .download-icon {
+    transform: scale(1.1) rotate(5deg);
+}
+
+.btn-download.btn-pdf-single .download-info {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    position: relative;
+    z-index: 1;
+}
+
+.btn-download.btn-pdf-single .download-info strong {
+    color: var(--podium-yellow);
+    font-size: 1.05rem;
+    display: block;
+    transition: color 0.3s ease;
+}
+
+.btn-download.btn-pdf-single:hover .download-info strong {
+    color: var(--podium-yellow-hover);
+}
+
+.btn-download.btn-pdf-single .download-info small {
+    color: var(--podium-text-muted);
+    font-size: 0.85rem;
+    display: block;
+    font-weight: 400;
+    font-family: var(--font-montserrat);
 }
 
 /* Responsive Glassmorphism Sections */

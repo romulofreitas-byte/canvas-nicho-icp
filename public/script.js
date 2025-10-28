@@ -1411,7 +1411,7 @@ class CanvasAutomatizado {
         
         // Atualizar interface
         this.atualizarResultadoPrecificacao(servicosMensais, servicosUnicos, totalMensal, totalUnico);
-        this.atualizarJornadas(enxuta, padrao, completa);
+        this.atualizarJornadas(enxuta, padrao, completa, totalUnico);
         this.atualizarResumoJornadas(enxuta, padrao, completa);
         
         console.log('✅ calcularPrecificacao: Concluído');
@@ -1476,24 +1476,45 @@ class CanvasAutomatizado {
         console.log('✅ atualizarResultadoPrecificacao: Precificação atualizada');
     }
     
-    atualizarJornadas(enxuta, padrao, completa) {
+    atualizarJornadas(enxuta, padrao, completa, totalUnico = 0) {
         const pacoteBasico = document.getElementById('pacoteBasico');
         const pacoteIntermediario = document.getElementById('pacoteIntermediario');
         const pacotePremium = document.getElementById('pacotePremium');
         
+        // Check if there's a one-time cost (sites/landing pages)
+        const hasOneTimeCost = totalUnico > 0;
+        
         if (pacoteBasico) {
             const precoElement = pacoteBasico.querySelector('.jornada-preco');
-            if (precoElement) precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+            if (precoElement) {
+                if (hasOneTimeCost) {
+                    precoElement.innerHTML = `<div>R$ ${enxuta.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} implementação</small>`;
+                } else {
+                    precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
+                }
+            }
         }
         
         if (pacoteIntermediario) {
             const precoElement = pacoteIntermediario.querySelector('.jornada-preco');
-            if (precoElement) precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+            if (precoElement) {
+                if (hasOneTimeCost) {
+                    precoElement.innerHTML = `<div>R$ ${padrao.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} implementação</small>`;
+                } else {
+                    precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
+                }
+            }
         }
         
         if (pacotePremium) {
             const precoElement = pacotePremium.querySelector('.jornada-preco');
-            if (precoElement) precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+            if (precoElement) {
+                if (hasOneTimeCost) {
+                    precoElement.innerHTML = `<div>R$ ${completa.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} implementação</small>`;
+                } else {
+                    precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
+                }
+            }
         }
     }
     
@@ -1841,19 +1862,19 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
                 margin: 0 auto;
             }
             h1 { 
-                color: #F2b705; 
+                color: #000000; 
                 font-size: 24px; 
                 margin-bottom: 10px;
                 text-align: center;
-                border-bottom: 3px solid #F2b705;
+                border-bottom: 2px solid #000000;
                 padding-bottom: 15px;
             }
             h2 { 
-                color: #F2b705; 
+                color: #000000; 
                 font-size: 18px; 
                 margin-top: 30px;
                 margin-bottom: 15px;
-                border-left: 4px solid #F2b705;
+                border-left: 3px solid #666666;
                 padding-left: 10px;
             }
             h3 { 
@@ -1878,10 +1899,11 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
                 margin-bottom: 25px;
             }
             .metrics {
-                background: #f8f9fa;
+                background: #ffffff;
                 padding: 15px;
                 margin: 20px 0;
                 border-radius: 5px;
+                border: 1px solid #dddddd;
             }
             .metric-row {
                 display: flex;
@@ -1894,7 +1916,7 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
                 color: #666;
             }
             .metric-value {
-                color: #F2b705;
+                color: #000000;
                 font-weight: bold;
             }
             ul {
@@ -1902,9 +1924,9 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
                 margin-top: 10px;
             }
             .highlight {
-                background: #fff9e6;
+                background: #f9f9f9;
                 padding: 15px;
-                border-left: 4px solid #F2b705;
+                border-left: 3px solid #666666;
                 margin: 15px 0;
             }
             .footer {
@@ -1915,8 +1937,8 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
                 color: #999;
                 font-size: 10px;
             }
-            .status-ok { color: #4CAF50; font-weight: bold; }
-            .status-pending { color: #f44336; font-weight: bold; }
+            .status-ok { color: #000000; font-weight: bold; }
+            .status-pending { color: #666666; font-weight: bold; }
             .page-break { page-break-after: always; }
         </style>
     </head>
@@ -1955,11 +1977,11 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
             <h2>1. TRÍADE DO NICHO</h2>
             <p><strong>Status da Tríade:</strong></p>
             <ul>
-                <li class="${dados.triada1 ? 'status-ok' : 'status-pending'}">${dados.triada1 ? '✓' : '✗'} Sei Prestar o Serviço</li>
-                <li class="${dados.triada2 ? 'status-ok' : 'status-pending'}">${dados.triada2 ? '✓' : '✗'} Mercado Precisa</li>
-                <li class="${dados.triada3 ? 'status-ok' : 'status-pending'}">${dados.triada3 ? '✓' : '✗'} Mercado Paga</li>
+                <li class="${dados.triada1 ? 'status-ok' : 'status-pending'}">${dados.triada1 ? 'VALIDADO' : 'PENDENTE'} Sei Prestar o Serviço</li>
+                <li class="${dados.triada2 ? 'status-ok' : 'status-pending'}">${dados.triada2 ? 'VALIDADO' : 'PENDENTE'} Mercado Precisa</li>
+                <li class="${dados.triada3 ? 'status-ok' : 'status-pending'}">${dados.triada3 ? 'VALIDADO' : 'PENDENTE'} Mercado Paga</li>
             </ul>
-            ${triadaScore === 3 ? '<p class="status-ok">✓ Tríade completamente validada - você está pronto para prosseguir!</p>' : '<p class="status-pending">⚠ Complete a tríade antes de avançar na prospecção.</p>'}
+            ${triadaScore === 3 ? '<p class="status-ok">Tríade completamente validada - você está pronto para prosseguir!</p>' : '<p class="status-pending">Complete a tríade antes de avançar na prospecção.</p>'}
         </div>
         
         <div class="section">
@@ -2017,14 +2039,14 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
             
             <h3>Checklist de Validação:</h3>
             <ul>
-                <li class="${dados.checks?.check1 ? 'status-ok' : 'status-pending'}">${dados.checks?.check1 ? '✓' : '○'} Tríade do nicho validada</li>
-                <li class="${dados.checks?.check2 ? 'status-ok' : 'status-pending'}">${dados.checks?.check2 ? '✓' : '○'} Nicho específico e bem definido</li>
-                <li class="${dados.checks?.check3 ? 'status-ok' : 'status-pending'}">${dados.checks?.check3 ? '✓' : '○'} Dores do mercado claramente identificadas</li>
-                <li class="${dados.checks?.check4 ? 'status-ok' : 'status-pending'}">${dados.checks?.check4 ? '✓' : '○'} Capacidade financeira validada</li>
-                <li class="${dados.checks?.check5 ? 'status-ok' : 'status-pending'}">${dados.checks?.check5 ? '✓' : '○'} Acesso ao decisor confirmado</li>
-                <li class="${dados.checks?.check6 ? 'status-ok' : 'status-pending'}">${dados.checks?.check6 ? '✓' : '○'} Serviços selecionados e bem definidos</li>
-                <li class="${dados.checks?.check7 ? 'status-ok' : 'status-pending'}">${dados.checks?.check7 ? '✓' : '○'} Precificação calculada baseada na capacidade financeira</li>
-                <li class="${dados.checks?.check8 ? 'status-ok' : 'status-pending'}">${dados.checks?.check8 ? '✓' : '○'} Pronto para começar a prospectar</li>
+                <li class="${dados.checks?.check1 ? 'status-ok' : 'status-pending'}">${dados.checks?.check1 ? 'COMPLETO' : 'PENDENTE'} Tríade do nicho validada</li>
+                <li class="${dados.checks?.check2 ? 'status-ok' : 'status-pending'}">${dados.checks?.check2 ? 'COMPLETO' : 'PENDENTE'} Nicho específico e bem definido</li>
+                <li class="${dados.checks?.check3 ? 'status-ok' : 'status-pending'}">${dados.checks?.check3 ? 'COMPLETO' : 'PENDENTE'} Dores do mercado claramente identificadas</li>
+                <li class="${dados.checks?.check4 ? 'status-ok' : 'status-pending'}">${dados.checks?.check4 ? 'COMPLETO' : 'PENDENTE'} Capacidade financeira validada</li>
+                <li class="${dados.checks?.check5 ? 'status-ok' : 'status-pending'}">${dados.checks?.check5 ? 'COMPLETO' : 'PENDENTE'} Acesso ao decisor confirmado</li>
+                <li class="${dados.checks?.check6 ? 'status-ok' : 'status-pending'}">${dados.checks?.check6 ? 'COMPLETO' : 'PENDENTE'} Serviços selecionados e bem definidos</li>
+                <li class="${dados.checks?.check7 ? 'status-ok' : 'status-pending'}">${dados.checks?.check7 ? 'COMPLETO' : 'PENDENTE'} Precificação calculada baseada na capacidade financeira</li>
+                <li class="${dados.checks?.check8 ? 'status-ok' : 'status-pending'}">${dados.checks?.check8 ? 'COMPLETO' : 'PENDENTE'} Pronto para começar a prospectar</li>
             </ul>
             
             <h3>Próximos Passos Imediatos:</h3>
@@ -2040,7 +2062,7 @@ Investe em Marketing: ${cf.investeMarketing || 'N/A'}`;
         
         <div class="section">
             <div class="highlight">
-                <h2>📊 PRÓXIMO PASSO: CALCULADORA DE CONTRATOS PÓDIUM</h2>
+                <h2>PROXIMO PASSO: CALCULADORA DE CONTRATOS PODIUM</h2>
                 <p><strong>Métricas para sua Calculadora:</strong></p>
                 <ul>
                     <li><strong>Ticket Médio Estimado:</strong> R$ ${ticketMedioNumero.toLocaleString('pt-BR')}</li>

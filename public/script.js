@@ -1434,7 +1434,7 @@ class CanvasAutomatizado {
         
         // Serviços mensais (recorrentes)
         if (servicosMensais.length > 0) {
-            html += '<h5 style="margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">📅 Serviços Mensais (Recorrentes):</h5>';
+            html += '<h5 style="margin-bottom: 10px; color: #ffffff; border-bottom: 1px solid #eee; padding-bottom: 5px;">📅 Serviços Mensais (Recorrentes):</h5>';
             servicosMensais.forEach(servico => {
                 html += `
                     <div class="item-precificacao">
@@ -1453,7 +1453,7 @@ class CanvasAutomatizado {
         
         // Serviços únicos (implementação)
         if (servicosUnicos.length > 0) {
-            html += '<h5 style="margin-top: 20px; margin-bottom: 10px; color: #333; border-bottom: 1px solid #eee; padding-bottom: 5px;">💻 Implementação (Parcela Única):</h5>';
+            html += '<h5 style="margin-top: 20px; margin-bottom: 10px; color: #ffffff; border-bottom: 1px solid #eee; padding-bottom: 5px;">💻 Implementação (Parcela Única):</h5>';
             servicosUnicos.forEach(servico => {
                 html += `
                     <div class="item-precificacao">
@@ -1488,7 +1488,7 @@ class CanvasAutomatizado {
             const precoElement = pacoteBasico.querySelector('.jornada-preco');
             if (precoElement) {
                 if (hasOneTimeCost) {
-                    precoElement.innerHTML = `<div>R$ ${enxuta.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
+                    precoElement.innerHTML = `<div>R$ ${enxuta.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; color: rgba(255, 255, 255, 0.9);">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
                 } else {
                     precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
                 }
@@ -1499,7 +1499,7 @@ class CanvasAutomatizado {
             const precoElement = pacoteIntermediario.querySelector('.jornada-preco');
             if (precoElement) {
                 if (hasOneTimeCost) {
-                    precoElement.innerHTML = `<div>R$ ${padrao.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
+                    precoElement.innerHTML = `<div>R$ ${padrao.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; color: rgba(255, 255, 255, 0.9);">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
                 } else {
                     precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
                 }
@@ -1510,7 +1510,7 @@ class CanvasAutomatizado {
             const precoElement = pacotePremium.querySelector('.jornada-preco');
             if (precoElement) {
                 if (hasOneTimeCost) {
-                    precoElement.innerHTML = `<div>R$ ${completa.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
+                    precoElement.innerHTML = `<div>R$ ${completa.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; color: rgba(255, 255, 255, 0.9);">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
                 } else {
                     precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
                 }

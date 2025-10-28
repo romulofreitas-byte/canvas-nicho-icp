@@ -509,6 +509,9 @@ class LeadCapture {
         // Fechar modal com animação
         this.modal.classList.add('hidden');
         
+        // Scroll suave para o topo da página
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+        
         // Chamar função global para liberar canvas
         liberarCanvas();
         
@@ -834,27 +837,19 @@ function resetarCanvas() {
     
     try {
         // Verifica se o usuário confirma
-        const confirmacao = confirm('⚠️ Tem certeza que deseja resetar o canvas?\n\nTodos os dados serão apagados e você retornará ao início.');
+        const confirmacao = confirm('⚠️ Tem certeza que deseja resetar o canvas?\n\nSeu canvas será limpo, mas você não precisará preencher os dados novamente.');
         
         if (confirmacao) {
             console.log('✅ Usuário confirmou o reset');
             
-            // Limpar todos os dados do canvas
+            // Limpar apenas os dados do canvas (preservar dados do lead)
             localStorage.removeItem('canvasNichoICP');
             localStorage.removeItem('canvasDados');
             localStorage.removeItem('canvasNicho');
             console.log('🗑️ Dados do canvas limpos');
             
-            // Limpar todos os dados do lead
-            localStorage.removeItem('leadIP');
-            localStorage.removeItem('leadLastAttempt');
-            localStorage.removeItem('leadSubmitted');
-            localStorage.removeItem('leadData');
-            console.log('🗑️ Dados do lead limpos');
-            
-            // Limpar sessionStorage
-            sessionStorage.removeItem('leadCaptured');
-            console.log('🗑️ SessionStorage limpo');
+            // Dados do lead são preservados para não precisar preencher novamente
+            console.log('💾 Dados do lead preservados - usuário não precisará preencher novamente');
             
             // Track analytics
             if (typeof window.va === 'function') {

@@ -1488,7 +1488,7 @@ class CanvasAutomatizado {
             const precoElement = pacoteBasico.querySelector('.jornada-preco');
             if (precoElement) {
                 if (hasOneTimeCost) {
-                    precoElement.innerHTML = `<div>R$ ${enxuta.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} implementação</small>`;
+                    precoElement.innerHTML = `<div>R$ ${enxuta.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
                 } else {
                     precoElement.textContent = `R$ ${enxuta.toLocaleString('pt-BR')}`;
                 }
@@ -1499,7 +1499,7 @@ class CanvasAutomatizado {
             const precoElement = pacoteIntermediario.querySelector('.jornada-preco');
             if (precoElement) {
                 if (hasOneTimeCost) {
-                    precoElement.innerHTML = `<div>R$ ${padrao.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} implementação</small>`;
+                    precoElement.innerHTML = `<div>R$ ${padrao.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
                 } else {
                     precoElement.textContent = `R$ ${padrao.toLocaleString('pt-BR')}`;
                 }
@@ -1510,7 +1510,7 @@ class CanvasAutomatizado {
             const precoElement = pacotePremium.querySelector('.jornada-preco');
             if (precoElement) {
                 if (hasOneTimeCost) {
-                    precoElement.innerHTML = `<div>R$ ${completa.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} implementação</small>`;
+                    precoElement.innerHTML = `<div>R$ ${completa.toLocaleString('pt-BR')}/mês</div><small style="font-size: 0.7em; opacity: 0.8;">+ R$ ${totalUnico.toLocaleString('pt-BR')} (site/landing)</small>`;
                 } else {
                     precoElement.textContent = `R$ ${completa.toLocaleString('pt-BR')}`;
                 }

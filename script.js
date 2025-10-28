@@ -65,9 +65,12 @@ class LeadCaptureModal {
         
         const formData = new FormData(this.form);
         const leadData = {
-            nome: formData.get('nomeCompleto'),
-            telefone: formData.get('telefone'),
+            // Mapear para os campos corretos da tabela leads
+            name: formData.get('nomeCompleto'),
             email: formData.get('email'),
+            phone: formData.get('telefone'),
+            terms: true, // Aceita termos por padrão
+            source: 'canvas-nicho-icp',
             timestamp: new Date().toISOString(),
             userAgent: navigator.userAgent
         };
@@ -107,6 +110,15 @@ class LeadCaptureModal {
         }
         
         try {
+            // Preparar dados apenas com os campos aceitos pela tabela leads
+            const dataToSend = {
+                name: leadData.name,
+                email: leadData.email,
+                phone: leadData.phone,
+                terms: leadData.terms,
+                source: leadData.source
+            };
+            
             const response = await fetch(
                 `${window.SUPABASE_CONFIG.URL}/rest/v1/leads`,
                 {
@@ -116,11 +128,13 @@ class LeadCaptureModal {
                         'apikey': window.SUPABASE_CONFIG.ANON_KEY,
                         'Authorization': `Bearer ${window.SUPABASE_CONFIG.ANON_KEY}`
                     },
-                    body: JSON.stringify(leadData)
+                    body: JSON.stringify(dataToSend)
                 }
             );
             
             if (!response.ok) {
+                const errorData = await response.json();
+                console.error('Erro na resposta do Supabase:', errorData);
                 throw new Error(`HTTP error! status: ${response.status}`);
             }
             

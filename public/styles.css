@@ -1256,8 +1256,9 @@ body {
 /* Responsividade do modal - Glassmorfismo */
 @media (max-width: 768px) {
     .lead-modal {
-        padding: 15px; /* REDUZIDO de 40px 15px */
+        padding: 0; /* Remover padding para background ocupar 100% da tela */
         background-color: rgba(0, 0, 0, 0.3); /* REDUZIDO dark background no mobile */
+        backdrop-filter: blur(6px); /* Reduzir blur em 50% (de 12px para 6px) */
     }
     
     .lead-modal-content {
@@ -1277,8 +1278,9 @@ body {
 
 @media (max-width: 480px) {
     .lead-modal {
-        padding: 10px; /* REDUZIDO de 30px 10px */
+        padding: 0; /* Remover padding para background ocupar 100% da tela */
         background-color: rgba(0, 0, 0, 0.25); /* AINDA MAIS CLARO no mobile */
+        backdrop-filter: blur(6px); /* Reduzir blur em 50% (de 12px para 6px) */
     }
     
     .lead-modal-content {

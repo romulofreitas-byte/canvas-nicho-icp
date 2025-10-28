@@ -886,7 +886,6 @@
                             <div class="jornada-icon">🥉</div>
                             <h3>Proposta Enxuta</h3>
                             <div class="jornada-preco">R$ 0</div>
-                            <div class="jornada-badge">Mensal</div>
                             <div class="jornada-servicos"></div>
                         </div>
                         <div class="jornada-card jornada-recomendada" id="pacoteIntermediario">
@@ -894,15 +893,32 @@
                             <div class="recomendado-badge">⭐ RECOMENDADO</div>
                             <h3>Proposta Padrão</h3>
                             <div class="jornada-preco">R$ 0</div>
-                            <div class="jornada-badge">Mensal</div>
                             <div class="jornada-servicos"></div>
                         </div>
                         <div class="jornada-card" id="pacotePremium">
                             <div class="jornada-icon">🥇</div>
                             <h3>Proposta Completa</h3>
                             <div class="jornada-preco">R$ 0</div>
-                            <div class="jornada-badge">Mensal</div>
                             <div class="jornada-servicos"></div>
+                        </div>
+                    </div>
+                    
+                    <!-- BADGE INFORMATIVA SOBRE APRESENTAÇÃO DA PROPOSTA -->
+                    <div class="info-apresentacao-proposta" id="infoApresentacao" style="display: none;">
+                        <div class="info-apresentacao-header">
+                            <span class="info-icon">💼</span>
+                            <h6>COMO APRESENTAR ESSA PROPOSTA AO CLIENTE</h6>
+                        </div>
+                        <div class="info-apresentacao-content">
+                            <p><strong>Na hora de apresentar o projeto</strong>, você incluirá o valor total em uma proposta única (incluindo o trabalho da landing page).</p>
+                            <div class="opcoes-cobranca">
+                                <div class="opcao-cobranca">
+                                    <strong>Opção 1:</strong> Incluir o valor do site no projeto e dividir <strong>tudo em parcelas mensais iguais</strong>
+                                </div>
+                                <div class="opcao-cobranca">
+                                    <strong>Opção 2:</strong> Cobrar o site separadamente (parcela única ou início + entrega) + serviços recorrentes mensais
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
@@ -1156,9 +1172,9 @@
                     <span class="glass-icon">📞</span>
                     <h3>Calculadora de Ligações Pódium</h3>
                 </div>
-                <p class="glass-text">As propostas acima estão apresentadas em <strong>valores mensais</strong> para facilitar a compreensão. Porém, bons empresários pensam no <strong>valor do projeto como um todo</strong>, pois esse valor influencia diretamente em <strong>quantas ligações você precisará fazer</strong> para atingir sua meta de faturamento.</p>
+                <p class="glass-text">O mercado <strong>nunca soube quantas ligações fazer</strong> para atingir metas. Esta ferramenta traz clareza para times comerciais - do autônomo às grandes equipes - calculando exatamente <strong>quantas ligações você precisa</strong> para atingir sua meta de faturamento.</p>
                 <div class="glass-highlight">
-                    <p>💡 <strong>Quer saber exatamente quantas ligações fazer para bater sua meta?</strong></p>
+                    <p>💡 <strong>Descubra quantas ligações precisará fazer para bater sua meta</strong></p>
                 </div>
                 <a href="https://calculadora-contratos-podium.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn-calculadora-glass">
                     <span class="btn-icon">📊</span>
@@ -1170,11 +1186,13 @@
 
         <!-- FOOTER -->
         <div class="footer">
-            <p>Calculadora de Precificação Inteligente - Método Pódium</p>
-            <p>Desenvolvido para definir Nicho, ICP e Precificação Baseada na Capacidade Financeira</p>
-            <p style="margin-top: 10px; color: #999;">Seus dados são salvos localmente e no Supabase</p>
+            <div class="footer-content">
+                <p>Calculadora de Precificação Inteligente - Método Pódium</p>
+                <p>Desenvolvido para definir Nicho, ICP e Precificação Baseada na Capacidade Financeira</p>
+                <p style="margin-top: 10px; color: #999;">Seus dados são salvos localmente e no Supabase</p>
+            </div>
             
-            <button type="button" class="btn-reset-canvas" onclick="resetarCanvas()">
+            <button type="button" class="btn-reset-canvas" id="btnResetCanvas">
                 🔄 Resetar Canvas
             </button>
         </div>

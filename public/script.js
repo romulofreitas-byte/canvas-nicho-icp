@@ -830,31 +830,46 @@ function limparDados() {
 }
 
 function resetarCanvas() {
-    if (confirm('⚠️ Tem certeza que deseja resetar o canvas?\n\nTodos os dados serão apagados e você retornará ao início.')) {
-        // Limpar localStorage
-        localStorage.removeItem('canvasNichoICP');
+    console.log('🔄 Função resetarCanvas chamada');
+    
+    try {
+        // Verifica se o usuário confirma
+        const confirmacao = confirm('⚠️ Tem certeza que deseja resetar o canvas?\n\nTodos os dados serão apagados e você retornará ao início.');
         
-        // Resetar formulário se canvas existir
-        if (window.canvas && window.canvas.form) {
-            window.canvas.form.reset();
-            window.canvas.updateAllSelections();
-        }
-        
-        // Scroll suave para o topo
-        window.scrollTo({
-            top: 0,
-            behavior: 'smooth'
-        });
-        
-        // Recarregar página após scroll
-        setTimeout(() => {
+        if (confirmacao) {
+            console.log('✅ Usuário confirmou o reset');
+            
+            // Limpar todos os dados do canvas
+            localStorage.removeItem('canvasNichoICP');
+            localStorage.removeItem('canvasDados');
+            localStorage.removeItem('canvasNicho');
+            console.log('🗑️ Dados do canvas limpos');
+            
+            // Limpar todos os dados do lead
+            localStorage.removeItem('leadIP');
+            localStorage.removeItem('leadLastAttempt');
+            localStorage.removeItem('leadSubmitted');
+            localStorage.removeItem('leadData');
+            console.log('🗑️ Dados do lead limpos');
+            
+            // Limpar sessionStorage
+            sessionStorage.removeItem('leadCaptured');
+            console.log('🗑️ SessionStorage limpo');
+            
+            // Track analytics
+            if (typeof window.va === 'function') {
+                window.va('track', 'Canvas Reset');
+            }
+            
+            // Recarregar página imediatamente
+            console.log('🔄 Recarregando página...');
             location.reload();
-        }, 500);
-        
-        // Track analytics
-        if (typeof window.va === 'function') {
-            window.va('track', 'Canvas Reset');
+        } else {
+            console.log('❌ Usuário cancelou o reset');
         }
+    } catch (error) {
+        console.error('❌ Erro ao resetar canvas:', error);
+        alert('Erro ao resetar o canvas. Por favor, recarregue a página manualmente.');
     }
 }
 
@@ -1483,6 +1498,12 @@ class CanvasAutomatizado {
         
         // Check if there's a one-time cost (sites/landing pages)
         const hasOneTimeCost = totalUnico > 0;
+        
+        // Mostrar/esconder badge informativa
+        const infoApresentacao = document.getElementById('infoApresentacao');
+        if (infoApresentacao) {
+            infoApresentacao.style.display = hasOneTimeCost ? 'block' : 'none';
+        }
         
         if (pacoteBasico) {
             const precoElement = pacoteBasico.querySelector('.jornada-preco');
@@ -2420,6 +2441,18 @@ function exportarJSON() {
 
 // Accordion functionality para ICP Instructions
 document.addEventListener('DOMContentLoaded', function() {
+    // Event listener para botão reset
+    const btnReset = document.getElementById('btnResetCanvas');
+    if (btnReset) {
+        btnReset.addEventListener('click', function(e) {
+            e.preventDefault();
+            e.stopPropagation();
+            console.log('🔘 Botão reset clicado via event listener');
+            resetarCanvas();
+        });
+        console.log('✅ Event listener para botão reset adicionado');
+    }
+    
     // Accordion functionality
     document.querySelectorAll('.accordion-header').forEach(header => {
         header.addEventListener('click', () => {

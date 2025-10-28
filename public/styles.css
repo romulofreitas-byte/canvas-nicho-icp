@@ -2610,6 +2610,7 @@ body {
     
     .nicho-card label, .dor-card label {
         padding: 12px 8px;
+        min-height: 90px;
     }
     
     .nicho-card .card-icon, .dor-card .card-icon {
@@ -4232,6 +4233,8 @@ body {
     background: var(--podium-dark-tertiary);
     position: relative;
     overflow: hidden;
+    min-height: 120px;
+    line-height: 1.4;
 }
 
 .nicho-card label::before {
@@ -4279,6 +4282,8 @@ body {
     color: var(--podium-text-primary);
     position: relative;
     z-index: 1;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 /* Dor Cards - Dark Theme with Animations */
@@ -4320,6 +4325,8 @@ body {
     background: var(--podium-dark-tertiary);
     position: relative;
     overflow: hidden;
+    min-height: 120px;
+    line-height: 1.4;
 }
 
 .dor-card label::before {
@@ -4367,6 +4374,8 @@ body {
     color: var(--podium-text-primary);
     position: relative;
     z-index: 1;
+    word-wrap: break-word;
+    hyphens: auto;
 }
 
 /* Resumos */
@@ -4517,6 +4526,7 @@ body {
     
     .nicho-card label, .dor-card label {
         padding: 10px 6px;
+        min-height: 80px;
     }
     
     .nicho-card .card-icon, .dor-card .card-icon {
